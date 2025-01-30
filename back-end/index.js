@@ -1,0 +1,41 @@
+//index.js
+const express = require('express');
+const app = express();
+const cors = require('cors');
+
+app.use(cors())
+
+app.get('/', (req, res) => {
+    date = new Date();
+    month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
+    day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
+    today = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
+    console.log(today)
+    //maybe add a timeout?
+
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + today); //YYYY-MM-DD
+    fetch(apiUrl)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        //console.log(response.json());
+        return response.json();
+    })
+    .then(data => {
+        res.send(data)
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        res.send('Error!')
+    });
+    /*
+    fetch("https://api.nhle.com/stats/rest/en/players")
+    .then((response) => response.json())
+    .then((json) => console.log(json));
+    */
+})
+
+app.listen(8080, () => {
+      console.log('server listening on port 8080')
+})

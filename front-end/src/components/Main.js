@@ -1,0 +1,89 @@
+import React, {useState} from 'react';
+import '../styles.css';
+import axios from 'axios';
+
+
+function Main(props)
+{
+    const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
+    const [gameArr, setGameArr] = useState([]); //if true score reaction is displayed,
+    //var gameArr = [];
+
+    function handleClick()
+    {
+        props.scored(true)
+    }
+
+
+     //data will be the string we send from our server
+  const apiCall = () => {
+    axios.get('http://localhost:8080').then((data) => {
+      //this console.log will be in our frontend console
+      console.log(data)
+      //might crash if no games that day
+      //might need to go 'data.data'
+      data.data.gameWeek[0].games.forEach(element => {
+         let temp = gameArr;
+         temp.push(element);
+         setGameArr(temp);
+    
+      });
+   })
+   setTimeout(() => {
+    setShowGames(true);
+    console.log("Delayed for 3 second.");
+  }, 3000);
+   
+  }
+  let gameList;
+  if (showGames)
+  { 
+    console.log(gameArr[0])
+    gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
+  }
+  else
+  {
+    gameList = <p> No Games Today</p> ;
+  }
+
+/*
+    fetch("https://api.nhle.com/stats/rest/en/players", {mode: "no-cors"})
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+    /*
+    const apiUrl = 'https://api-web.nhle.com/v1/schedule/now ';
+    const outputElement = document.getElementById('output');
+
+
+    const requestOptions = {
+        mode: 'no-cors',
+        method: 'get',
+      };
+
+    fetch(apiUrl,requestOptions)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        console.log(response.json());
+        return response.json();
+    })
+    .then(data => {
+        // Display data in an HTML element
+        outputElement.textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    */
+    return(
+        <div>
+            <p>This is the main component</p>
+            <button className="main-button" onClick={handleClick}></button>
+            <button className="main-button" onClick={apiCall}>Test Api call</button>
+            <p id="output"></p>
+            {gameList}
+        </div>
+    );
+}
+export default Main;
