@@ -1,0 +1,1 @@
+A web app that displays data Live Sports Data in a user friendly way. Ideally to be run on a secondary monitor while you are watching the game. Perfect for man-caves. Currently only using NHL data as the API is free. 
