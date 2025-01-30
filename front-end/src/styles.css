@@ -3,14 +3,41 @@
     height: 50px;
 }
 
+.gameList{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    margin-bottom: 50px;
+}
+
 .gameCard{
 
     background-color: gray;
     border-radius: 25px;
     border: 3px solid black;
-    margin-top: 15px;
+    width: 70%;
+    min-width: 200px;
+    margin: auto;
+    box-shadow: 5px 5px 10px 1px;
+    
+}
+.cardContainer{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    width:fit-content;
+    gap:20px;
+    line-height: 40px;
+    font-weight: bold;
+    color:white;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
 }
 
 .gameCard:hover{
     background-color: rgba(128, 128, 128, 0.7);
+}
+
+.logo{
+    width: 80px;
+    height: 80px;
 }

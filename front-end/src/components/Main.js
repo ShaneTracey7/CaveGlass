@@ -15,6 +15,7 @@ function Main(props)
     }
 
 
+
      //data will be the string we send from our server
   const apiCall = () => {
     axios.get('http://localhost:8080').then((data) => {
@@ -31,15 +32,27 @@ function Main(props)
    })
    setTimeout(() => {
     setShowGames(true);
-    console.log("Delayed for 3 second.");
-  }, 3000);
+    console.log("Delayed for 2 seconds.");
+  }, 2000);
    
   }
   let gameList;
   if (showGames)
   { 
+    //will show start time, "live", or "Ended"
+
     console.log(gameArr[0])
-    gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
+    //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
+    gameList = <div className='gameList'> {gameArr.map((game, index) => (
+      <div className='gameCard'>
+        <div className='cardContainer'>
+          <img className="logo" src={ require("../logos/" + String(game.homeTeam.abbrev) + ".svg")} alt={game.homeTeam.abbrev}/> 
+          <p>vs.</p> 
+          <img className="logo" src={ require("../logos/" + String(game.awayTeam.abbrev) + ".svg")} alt={game.awayTeam.abbrev}/>
+        </div>
+      </div>))}
+      </div>;
+  
   }
   else
   {
@@ -78,8 +91,9 @@ function Main(props)
     */
     return(
         <div>
-            <p>This is the main component</p>
-            <button className="main-button" onClick={handleClick}></button>
+            <p>CaveGlass</p>
+            <p>{new Date().toDateString()}</p>
+            <button className="main-button" onClick={handleClick}>score</button>
             <button className="main-button" onClick={apiCall}>Test Api call</button>
             <p id="output"></p>
             {gameList}
