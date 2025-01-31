@@ -1,3 +1,4 @@
+
 .main-button{
     width: 100px;
     height: 50px;
@@ -46,6 +47,11 @@
     width: 80px;
     height: 40px;
     margin-top: 10px;
+}
+#whistle-img{
+    width: 50px;
+    height: 30px;
+    margin-top: 5px;
 }
 
 .game-status{
@@ -97,17 +103,123 @@
 .playList{
     display: flex;
     flex-direction: column;
-    gap:15px;
     margin-bottom: 50px;
 }
 
-.playCard{
-
-    border: 3px solid black;
-    width: 70%;
+.play-card{
+    display: flex;
+    flex-direction: row;
+    width: 80%;
     min-width: 200px;
     margin: auto;
+    color: gray;
+    height: 90px;
     
+}
+.right-card{
+    text-align: left;
+    height: fit-content;
+    margin-top:auto;
+    margin-bottom: auto;
+    margin-left:5%;
+}
+.left-card{
+    margin-left: 20px;
+    height: fit-content;
+    margin-top:auto;
+    margin-bottom: auto;
+    margin-right:5%;
+}
+.card-description{
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: black;
+}
+
+.card-description-goal{
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+}
+
+.time-remaining-text{
+    border-radius: 10px;
+    border: 2px solid rgb(200, 200, 200);
+    padding:5px 10px;
+
+    font-weight: bold;
+    color: black;
+}
+.time-remaining-text-goal{
+    border-radius: 10px;
+    padding:5px 10px;
+    background-color: white;
+
+    font-weight: bold;
+    color: black;
+}
+
+.play-card-basic{
+    display: flex;
+    background-color: rgba(128, 128, 128, 0.1);
+    width: 80%;
+    min-width: 200px;
+    margin: auto;
+    height: 90px;
+}
+.middle-basic-card{
+    height: fit-content;
+    margin:auto
+}
+.play-logo{
+    width: 80px;
+    height: 80px;
+    margin-top:auto;
+    margin-bottom: auto;
+}
+.bottom-goal-card{
+    border-top: 1px solid gray;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: auto;
+    color: gray;
+    height: 90px;
+}
+.top-goal-card{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: auto;
+    color: gray;
+    height: 90px;
+}
+.play-card-goal{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    min-width: 200px;
+    margin: auto;
+    color: gray;
+    height: 180px;
+    border: 1px solid black;
+}
+p{
+    /*margin: 0;*/
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding-bottom: 5px;
+}
+#goal-period{
+    color: white;
+}
+
+/* need to add the rest */
+#color-WPG{
+    background-color: rgba(4,30,66);
+}
+#color-BOS{
+    background-color: rgba(252, 181, 20);
 }
 
 
