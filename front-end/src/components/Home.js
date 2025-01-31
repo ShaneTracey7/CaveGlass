@@ -9,9 +9,50 @@ function Main(props)
     const [gameArr, setGameArr] = useState([]); //if true score reaction is displayed,
     //var gameArr = [];
 
-    function handleClick()
+    function gameClick(index)
     {
-        props.scored(true)
+      console.log("test" + index)
+      if(gameArr[index].gameState == "LIVE")
+      {
+        console.log("live");
+        props.setgame(gameArr[index]);
+        props.setingame(true);
+      }
+      else // will move to 'live; condition after testing
+      {
+        console.log("isn't live");
+        props.setgame(gameArr[index]);
+        props.setingame(true);
+      }
+    }
+
+    //formats UTC date into {hh:mm {AM/PM}}
+    function formatTime(date)
+    {
+      var d = new Date(date);
+      var h = d.getHours();
+      let min = d.getMinutes();
+      let min_str = min < 10? "0" + String(min): String(min);
+      var m = "AM";
+      if(h < 10)
+      {
+        if(h == 0)
+        {
+          h = 12;
+        }
+      }
+      else if (h == 12)
+      {
+        m = "PM"
+      }
+      else
+      {
+        h = h - 12;
+        m = "PM"
+      }
+      let date_str = h + ":" + min_str + " " + m;
+
+      return date_str;
     }
 
 
@@ -40,15 +81,35 @@ function Main(props)
   if (showGames)
   { 
     //will show start time, "live", or "Ended"
-
-    console.log(gameArr[0])
+    let status = []
+    //possible gameState's: PRE(right b4 game start), FUT(future), OFF, LIVE, FINAL
+    gameArr.forEach(game => {
+      
+      if(game.gameState == 'LIVE') //if(game.startTimeUTC)
+      {
+        let live = <img id="live-img" src={ require("../pics/live-icon.png")} alt="LIVE"/>
+        status.push(live)
+      }
+      else if(game.gameState == 'FINAL' || game.gameState == 'OFF')
+      {
+        let final = <p className='game-status'> {game.homeTeam.score}-{game.awayTeam.score} FINAL</p>
+        status.push(final)
+      }
+      else  // 'FUT' aka game hasn't started yet
+      {
+        
+        let fut = <p className='game-status'>{formatTime(game.startTimeUTC)}</p>
+        status.push(fut)
+      }
+    });
     //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
     gameList = <div className='gameList'> {gameArr.map((game, index) => (
-      <div className='gameCard'>
+      <div className='gameCard' onClick={() => gameClick(index)}>
+        {status[index]}
         <div className='cardContainer'>
-          <img className="logo" src={ require("../logos/" + String(game.homeTeam.abbrev) + ".svg")} alt={game.homeTeam.abbrev}/> 
+          <img className="logo" src={ require("../pics/logos/" + String(game.homeTeam.abbrev) + ".svg")} alt={game.homeTeam.abbrev}/> 
           <p>vs.</p> 
-          <img className="logo" src={ require("../logos/" + String(game.awayTeam.abbrev) + ".svg")} alt={game.awayTeam.abbrev}/>
+          <img className="logo" src={ require("../pics/logos/" + String(game.awayTeam.abbrev) + ".svg")} alt={game.awayTeam.abbrev}/>
         </div>
       </div>))}
       </div>;
@@ -93,7 +154,6 @@ function Main(props)
         <div>
             <p>CaveGlass</p>
             <p>{new Date().toDateString()}</p>
-            <button className="main-button" onClick={handleClick}>score</button>
             <button className="main-button" onClick={apiCall}>Test Api call</button>
             <p id="output"></p>
             {gameList}

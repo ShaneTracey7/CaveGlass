@@ -1,21 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
 import React, {useState} from 'react';
-import ScoreReaction from './components/ScoreReaction';
-import Main from './components/Main';
+import Game from './components/Game';
+import Home from './components/Home';
 
 function App() {
   
-  const [score, setScore] = useState(false); //if true score reaction is displayed,
+  const [inGame, setInGame] = useState(false); //if true score reaction is displayed,
+  const [game, setGame] = useState([]); 
 
   let display;
-  if (score)
+  if (inGame)
   {
-    display = <ScoreReaction scored={setScore}/>;
+    display = <Game game={game} setgame={setGame} setingame={setInGame}/>;
   }
   else
   {
-    display = <Main scored={setScore}/>;
+    display = <Home setgame={setGame} setingame={setInGame}/>;
   }
 
     return (

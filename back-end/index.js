@@ -3,9 +3,42 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-app.use(cors())
+app.use(cors());
+
+app.use(express.json());
+
+app.post("/", (req, res) => {
+    console.log("req.body.type: " + req.body.type);
+    if(req.body.type == "pbp")
+    {   let gameID = req.body.game;
+        console.log("gameid: " +gameID)
+        const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); 
+        fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            //console.log(response.json());
+            return response.json();
+        })
+        .then(data => {
+            res.send(data)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            res.send('Error!')
+        });
+    }
+    else
+    {   
+        console.log("error");
+        res.send('Error! in post');
+    }
+    
+  });
 
 app.get('/', (req, res) => {
+
     date = new Date();
     month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
     day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
