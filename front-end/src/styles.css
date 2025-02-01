@@ -141,6 +141,11 @@
     font-weight: bold;
     color: white;
 }
+.card-description-assist{
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+}
 
 .time-remaining-text{
     border-radius: 10px;
@@ -193,6 +198,17 @@
     margin: auto;
     color: gray;
     height: 90px;
+    background-repeat: no-repeat;
+    background-size: 300px 300px;
+    background-position: 0 50%;
+    opacity: 0.9;
+}
+.top-goal-card-container{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: 90px;
 }
 .play-card-goal{
     display: flex;
@@ -202,8 +218,38 @@
     margin: auto;
     color: gray;
     height: 180px;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
 }
+
+.play-card-goal-score{
+    font-size: 2rem;
+    color: white;
+    line-height: 90px;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+    
+}
+.play-card-goal-score2{
+    font-size: 2rem;
+    color: white;
+    line-height: 90px;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+    opacity: 0.65;
+    
+}
+
+#play-logo-score2{
+    opacity: 0.65;
+}
+
+#goal-light-img{
+    width: 40px;
+    height: 40px;
+}
+
 p{
     /*margin: 0;*/
     margin-top: 5px;
@@ -214,13 +260,117 @@ p{
     color: white;
 }
 
+#goal-light-container{
+    height:fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+    color:white;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 /* need to add the rest */
-#color-WPG{
-    background-color: rgba(4,30,66);
+#color-ANA{
+    background-color: rgba(252, 76, 2);
 }
 #color-BOS{
     background-color: rgba(252, 181, 20);
 }
+#color-BUF{
+    background-color: rgba(0, 48, 135);
+}
+#color-CAR{
+    background-color: rgba(206, 17, 38);
+}
+#color-CBJ{
+    background-color: rgba(0,38,84);
+}
+#color-CGY{
+    background-color: rgba(210, 0, 28);
+}
+#color-CHI{
+    background-color: rgba(207,10,44);
+}
+#color-COL{
+    background-color: rgba(111, 38, 61);
+}
+#color-DAL{
+    background-color: rgba(0, 104, 71);
+}
+#color-DET{
+    background-color: rgba(206,17,38);
+}
+#color-EDM{
+    background-color: rgba(252, 76, 0);
+}
+#color-FLA{
+    background-color: rgba(4,30,66);
+}
+#color-LAK{
+    background-color: rgba(162,170,173);
+}
+#color-MIN{
+    background-color: rgba(2, 73, 48);
+}
+#color-MTL{
+    background-color: rgba(175, 30, 45);
+}
+#color-NJD{
+    background-color: rgba(206, 17, 38);
+}
+#color-NSH{
+    background-color: rgba(255,184,28);
+}
+#color-NYI{
+    background-color: rgba(0,83,155);
+}
+#color-NYR{
+    background-color: rgba(0,56,168);
+}
+#color-OTT{
+    background-color: rgba(218, 26, 50);
+}
+#color-PHI{
+    background-color: rgba(247, 73, 2);
+}
+#color-PIT{
+    background-color: rgba(252,181,20);
+}
+#color-SEA{
+    background-color: rgba(153, 217, 217);
+}
+#color-SJS{
+    background-color: rgba(0, 109, 117);
+}
+#color-STL{
+    background-color: rgba(0, 47, 135);
+}
+#color-TBL{
+    background-color: rgba(0, 40, 104);
+}
+#color-TOR{
+    background-color: rgba(0, 32, 91);
+}
+#color-UTA{     
+    background-color: rgba(105, 179, 231);
+}
+#color-VAN{
+    background-color: rgba(0, 32, 91);
+}
+#color-VGK{
+    background-color: rgba(185,151,91);
+}
+#color-WPG{
+    background-color: rgba(4,30,66);
+}
+#color-WSH{
+    background-color: rgba(4 30 66);
+}
+
+
+
+
 
 
 

@@ -29,6 +29,27 @@ app.post("/", (req, res) => {
             res.send('Error!')
         });
     }
+    else if(req.body.type == "nfl")
+        {  
+            console.log("in nfl")
+            const apiUrl = String("https://api.sleeper.app/v1/league/1125318770018463744/rosters"); 
+            fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                //console.log(response.json());
+                return response.json();
+            })
+            .then(data => {
+                res.send(data)
+                console.log(data)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                res.send('Error!')
+            });
+        }
     else
     {   
         console.log("error");
@@ -45,8 +66,8 @@ app.get('/', (req, res) => {
     today = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
     console.log(today)
     //maybe add a timeout?
-
-    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-30"); //YYYY-MM-DD
+                                                                    //today
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + today); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
         if (!response.ok) {
