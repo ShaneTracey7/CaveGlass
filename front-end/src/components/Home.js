@@ -1,31 +1,34 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../styles.css';
 import axios from 'axios';
 
 
 function Main(props)
 {
-    const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
+    //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
     const [gameArr, setGameArr] = useState([]); //if true score reaction is displayed,
     //var gameArr = [];
 
     function gameClick(index)
     {
       console.log("test" + index)
-      if(gameArr[index].gameState == "LIVE")
+      if(gameArr[index].gameState == "FUT" || gameArr[index].gameState == "PRE")
       {
-        console.log("live");
+        console.log("hasn't started");
+
+        //only availible rn for testing
         props.setgame(gameArr[index]);
         props.setingame(true);
       }
-      else // will move to 'live; condition after testing
+      else // 'LIVE', 'FINAL', 'END' or etc
       {
-        console.log("isn't live");
+        console.log("live or ended");
         props.setgame(gameArr[index]);
         props.setingame(true);
       }
     }
 
+    
     //formats UTC date into {hh:mm {AM/PM}}
     function formatTime(date)
     {
@@ -58,27 +61,40 @@ function Main(props)
 
 
      //data will be the string we send from our server
-  const apiCall = () => {
+  const apiGetGames = () => {
     axios.get('http://localhost:8080').then((data) => {
       //this console.log will be in our frontend console
       console.log(data)
       //might crash if no games that day
       //might need to go 'data.data'
-      data.data.gameWeek[0].games.forEach(element => {
-         let temp = gameArr;
+      let temp = [];
+      let games = data.data.gameWeek[0].games;
+      games.forEach((element, index)=> {
          temp.push(element);
-         setGameArr(temp);
-    
+         if(index == (games.length - 1))
+         {
+            setGameArr(temp);
+         }
       });
+      
    })
    setTimeout(() => {
-    setShowGames(true);
-    console.log("Delayed for 2 seconds.");
-  }, 2000);
+    //setShowGames((gameArr.length > 0));
+    console.log("Delayed for 1 seconds.");
+  }, 1000);
    
   }
+
+  //getting today's game data from NHL api
+   // This function will called only once
+   useEffect(() => {
+    console.log("useEffect");
+    apiGetGames();
+  }, [])
+
+
   let gameList;
-  if (showGames)
+  if (gameArr.length > 0) //showGames
   { 
     //will show start time, "live", or "Ended"
     let status = []
@@ -104,7 +120,7 @@ function Main(props)
     });
     //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
     gameList = <div className='gameList'> {gameArr.map((game, index) => (
-      <div className='gameCard' onClick={() => gameClick(index)}>
+      <div className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
         {status[index]}
         <div className='cardContainer'>
           <img className="logo" src={ require("../pics/logos/" + String(game.homeTeam.abbrev) + ".svg")} alt={game.homeTeam.abbrev}/> 
@@ -154,8 +170,7 @@ function Main(props)
         <div>
             <p>CaveGlass</p>
             <p>{new Date().toDateString()}</p>
-            <button className="main-button" onClick={apiCall}>Test Api call</button>
-            <p id="output"></p>
+            <button className="main-button" onClick={apiGetGames}>Test Api call</button>
             {gameList}
         </div>
     );

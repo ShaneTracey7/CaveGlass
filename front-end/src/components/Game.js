@@ -7,10 +7,15 @@ function Game(props) {
   
   const [score, setScore] = useState(false); //if true score reaction is displayed
   const [infoType, setInfoType] = useState('XXX'); //3 States: Summary(SUM), Box-score(BOX), and Play-by-Play(PBP)
-  const [playArr, setPlayArr] = useState([]); //if true score reaction is displayed,
-  const [roster, setRoster] = useState([]); //if true score reaction is displayed,
-  const [isRunning, setIsRunning] = useState(false); //just a toggle (true or false doesn't mean anything)
-
+  const [playArr, setPlayArr] = useState([]); //local instance of plays taken from api (for play-by-play view)
+  const [roster, setRoster] = useState([]); //set once and used to get names/numbers/pics from api playerIds
+  const [isRunning, setIsRunning] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls
+  const [period, setPeriod] = useState(props.game.periodDescriptor.number); //current period the game is in
+  const [darkMode, setDarkMode] = useState(false); //light and dark mode toggle
+  const [homeScore, setHomeScore] = useState(props.game.homeTeam.score) //score displayed in scoreboard
+  const [awayScore, setAwayScore] = useState(props.game.awayTeam.score) //score displayed in scoreboard
+  const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard
+  const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard
   useEffect(() => {
 
     if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
@@ -52,12 +57,35 @@ function Game(props) {
         
           });
           setIsRunning(!isRunning);
+          setHomeSOG(data.data.homeTeam.sog);
+          setAwaySOG(data.data.awayTeam.sog);
+          //setPeriod(data.data.periodDescriptor.number);
           console.log("empty")
           }
           else //to be called every 10secs
           {
             
             setIsRunning(!isRunning);
+            setPeriod(data.data.periodDescriptor.number);
+            
+            //Update scoreboard
+            //not tested
+            if(homeSOG != data.data.homeTeam.sog)
+            {
+                setHomeSOG(data.data.homeTeam.sog);
+            }
+            if(awayScore != data.data.awayTeam.sog)
+            {
+                setAwaySOG(data.data.awayTeam.sog);
+            }
+            if(homeScore != data.data.homeTeam.score)
+            {
+                setHomeScore(data.data.homeTeam.score);
+            }
+            if(awayScore != data.data.awayTeam.score)
+            {
+                setAwayScore(data.data.awayTeam.score);
+            }
 
             //check difference 
             let apiPlays = data.data.plays;
@@ -129,7 +157,16 @@ function Game(props) {
             }
     }*/
 
-          
+    //formats UTC date into {mm/dd/yyyy}
+    function formatDate(date)
+    {
+      var d = new Date(date);
+      var mon = d.getMonth() + 1;
+      var day = d.getDate();
+      var year = d.getFullYear();
+
+      return mon + '/' + day + '/' + year;
+    }
 
     function toolbarClick(type)
     {
@@ -223,14 +260,39 @@ function Game(props) {
   }
   else
   {
-    display = <div>
-        <p>Game</p>
-        <button onClick={() => props.setingame(false)}>Back</button>
+    display = <div id='display'>
+        
+        <div id='score-board'> 
+        <div id='score-board-container'> 
+            <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.homeTeam.abbrev) + ".svg")} alt={props.game.homeTeam.abbrev}/>
+                <div className='score-board-info'>
+                    <p className='score-board-location'>{props.game.homeTeam.placeName.default}</p>
+                    <p className='score-board-name'>{props.game.homeTeam.commonName.default}</p>
+                    <p className='score-board-sog'> SOG: {homeSOG}</p>
+                </div>
+            <p className='score-board-score'>{homeScore}</p>
+            <div className='score-board-info'>
+            <p id="score-board-period">{props.game.gameState == 'LIVE' ? (period < 4 ? formatPeriod(period) + " Period" : formatPeriod(period)) : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType)}</p>
+                
+            <p>{props.game.gameState == 'LIVE' ? "gameclock time" : formatDate(props.game.startTimeUTC)}</p>
+            </div>
+            <p className='score-board-score'>{awayScore}</p>
+            <div className='score-board-info'>
+                <p className='score-board-location'>{props.game.awayTeam.placeName.default}</p>
+                <p className='score-board-name'>{props.game.awayTeam.commonName.default}</p>
+                <p className='score-board-sog'> SOG: {awaySOG}</p>
+            </div>
+            <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.awayTeam.abbrev) + ".svg")} alt={props.game.awayTeam.abbrev}/>
+        </div>
+        </div>
         <div id="toolbar">
+            <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
             <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}}>Summary</div>
             <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}}>Box Score</div>
             <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}}>Play-by-Play</div>
+            <div className={darkMode ? 'mode-button-light': 'mode-button-dark'} onClick={() => {setDarkMode(!darkMode)}}>{darkMode ? "Light Mode" : "Dark Mode"}</div>
         </div>
+        
     </div> ;
 
     if(infoType == 'SUM')
@@ -252,17 +314,19 @@ function Game(props) {
             {
                 //catch weird case
             }
+            
             if(play.typeDescKey == 'stoppage' || play.typeDescKey == 'period-start'|| play.typeDescKey == 'period-end'  || play.typeDescKey == 'game-end')
             {
                 var desc = capitalizeEachWord(play.typeDescKey.replaceAll('-', ' '));
                 if(play.typeDescKey == 'stoppage')
                 {
-                    desc = capitalizeEachWord(play.details.reason.replaceAll('-', ' '));
+                    let reason = (play.details.hasOwnProperty("reason") ? String(play.details.reason).replaceAll('-', ' ') : "Stoppage");
+                    desc = capitalizeEachWord(reason);
                 }
-               let p =  <div className='play-card-basic'>
+               let p =  <div className={darkMode ? 'play-card-basic-dark': 'play-card-basic'}>
                             <div className='middle-basic-card'>
-                                <img id="whistle-img" src={ require("../pics/whistle.png")} alt="whistle"/> 
-                                <p>{desc}</p>
+                                <img id="whistle-img" src={ darkMode ? (require("../pics/whistle-white.png")): (require("../pics/whistle.png"))} alt="whistle"/> 
+                                <p className={darkMode ? 'card-description-basic-dark': 'card-description-basic'}>{desc}</p>
                             </div>
                         </div>; 
                 pArr.push(p);
@@ -274,12 +338,14 @@ function Game(props) {
                 let assistStr;
                 let score1;
                 let score2;
+                
                 if(play.details.eventOwnerTeamId == props.game.homeTeam.id)
                 {
                     pic = props.game.homeTeam.abbrev;
                     score1 = play.details.homeScore;
                     pic2 = props.game.awayTeam.abbrev
                     score2 = play.details.awayScore;
+                    
                 }
                 else
                 {
@@ -341,17 +407,22 @@ function Game(props) {
             {   let description = " ";
                 let playType = capitalizeEachWord(play.typeDescKey.replaceAll('-', ' '));
                 let pic;
+                let pic_url;
                 if(play.details.eventOwnerTeamId == props.game.homeTeam.id)
                 {
                     pic = props.game.homeTeam.abbrev;
+                    pic_url = darkMode ? props.game.homeTeam.darkLogo : props.game.homeTeam.logo;
                 }
                 else
                 {
                     pic = props.game.awayTeam.abbrev;
+                    pic_url = darkMode ? props.game.awayTeam.darkLogo : props.game.awayTeam.logo;
                 }
                 
                 let player1;
                 let player2;
+                let shotType;
+                let reason;
                 switch(play.typeDescKey) {
                     case 'faceoff':
                         if (play.details.hasOwnProperty("winningPlayerId") && play.details.hasOwnProperty("losingPlayerId"))
@@ -368,51 +439,116 @@ function Game(props) {
                         playType = 'Face-off';
                         break;
                     case 'hit':
-                        player1 = roster.find(p1 => {return p1.playerId == play.details.hittingPlayerId});
-                        player2 = roster.find(p1 => {return p1.playerId == play.details.hitteePlayerId});
-                        description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " hit " + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
-                        break;
-                    case 'shot-on-goal':
-                        player1 = roster.find(p1 => {return p1.playerId == play.details.shootingPlayerId});
-                        player2 = roster.find(p1 => {return p1.playerId == play.details.goalieInNetId});
-                        description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " +play.details.shotType + " shot saved by " + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
-                        break;
-                    case 'missed-shot':
-                        if(play.hasOwnProperty("shootingPlayerId"))
+                        if (play.details.hasOwnProperty("hittingPlayerId") && play.details.hasOwnProperty("hitteePlayerId"))
                         {
-                            player1 = roster.find(p1 => {return p1.playerId == play.details.shootingPlayerId});
-                            description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " +play.details.shotType + " shot " + play.details.reason.replaceAll('-', ' ');
-                           
+                            player1 = roster.find(p1 => {return p1.playerId == play.details.hittingPlayerId});
+                            player2 = roster.find(p1 => {return p1.playerId == play.details.hitteePlayerId});
+                            description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " hit " + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
                         }
                         else
                         {
-                            player1 = roster.find(p1 => {return p1.playerId == play.details.goalieInNetId});
-                            description = "shot misses on " + player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber;
-                           
+                            description = 'Hit';
+                        }
+                            break;
+                    case 'shot-on-goal':
+                        shotType = (play.details.hasOwnProperty("shotType") ? String(play.details.shotType) : "");
+                        if(play.details.hasOwnProperty("shootingPlayerId"))
+                        {
+                            player1 = roster.find(p1 => {return p1.playerId == play.details.shootingPlayerId});
+                            if(play.details.hasOwnProperty("goalieInNetId"))
+                            {
+                                player2 = roster.find(p1 => {return p1.playerId == play.details.goalieInNetId});
+                                description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + shotType + " shot saved by " + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
+                            }
+                            else
+                            {
+                                description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + shotType + " shot";
+                            }
+                        }
+                        else
+                        {
+                            if(play.details.hasOwnProperty("goalieInNetId"))
+                            {
+                                player2 = roster.find(p1 => {return p1.playerId == play.details.goalieInNetId});
+                                description = shotType + " shot saved by " + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
+                            }
+                            else   
+                            {
+                                description = shotType + " shot";
+                            }
+                        }
+                        break;
+                    case 'missed-shot':
+                        reason = (play.details.hasOwnProperty("reason") ? String(play.details.reason).replaceAll('-', ' ') : "");
+                        shotType = (play.details.hasOwnProperty("shotType") ? String(play.details.shotType) : "");
+                        if(play.details.hasOwnProperty("shootingPlayerId"))
+                        {
+                            player1 = roster.find(p1 => {return p1.playerId == play.details.shootingPlayerId});
+                            description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + shotType + " shot " + reason;
+                        }
+                        else
+                        {
+                            description = shotType + " shot misses";
                         }
                          break;
                     case 'giveaway':
-                        player1 = roster.find(p1 => {return p1.playerId == play.details.playerId});
-                        description = "Giveaway by " + player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber;
-                        break;
-                    case 'takeaway':
-                        player1 = roster.find(p1 => {return p1.playerId == play.details.playerId});
-                        description = "Takeaway by " + player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber;
-                        break;
-                    case 'penalty':
-                        player1 = roster.find(p1 => {return p1.playerId == play.details.committedByPlayerId});
-                        if (play.details.hasOwnProperty("drawnByPlayerId"))
+                        if(play.details.hasOwnProperty("playerId"))
                         {
-                            player2 = roster.find(p1 => {return p1.playerId == play.details.drawnByPlayerId});
-                            description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + play.details.duration+ " minutes for "+play.details.descKey + " " + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
+                            player1 = roster.find(p1 => {return p1.playerId == play.details.playerId});
+                            description = "Giveaway by " + player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber;
                         }
                         else
                         {
-                            description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + play.details.duration+ " minutes for "+play.details.descKey;
+                            description = "Giveaway";
+                        }
+                        break;
+                    case 'takeaway':
+                        if(play.details.hasOwnProperty("playerId"))
+                        {
+                            player1 = roster.find(p1 => {return p1.playerId == play.details.playerId});
+                            description = "Takeaway by " + player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber;
+                        }
+                        else
+                        {
+                            description = "Takeaway";
+                        }
+                        break;
+                    case 'penalty':
+                        //player1 undefined
+                        let penaltyType = (play.details.hasOwnProperty("descKey") ? ("for " + String(play.details.descKey) + " "): "");
+                        if (play.details.hasOwnProperty("committedByPlayerId"))
+                        {
+                            player1 = roster.find(p1 => {return p1.playerId == play.details.committedByPlayerId});
+                            if (play.details.hasOwnProperty("drawnByPlayerId"))
+                            {
+                                player2 = roster.find(p1 => {return p1.playerId == play.details.drawnByPlayerId});
+                                description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + play.details.duration+ " minutes "+penaltyType+ player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
+                            }
+                            else
+                            {
+                                description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " " + play.details.duration+ " minutes "+penaltyType;
+                            }
+                        }
+                        else
+                        {
+                            if (play.details.hasOwnProperty("drawnByPlayerId"))
+                            {
+                                player2 = roster.find(p1 => {return p1.playerId == play.details.drawnByPlayerId});
+                                description = play.details.duration+ " minutes "+penaltyType + player2.firstName.default + " " + player2.lastName.default + " #" + player2.sweaterNumber;
+                            }
+                            else
+                            {
+                                description = 'Penalty';
+                            }
+                        }
+                        break;
+                    case 'delayed-penalty':
+                        {
+                            description =  "Delayed Penalty";
                         }
                         break;
                     case 'blocked-shot':
-                        
+                        reason = (play.details.hasOwnProperty("reason") ? String(play.details.reason).replaceAll('-', ' ') : "");
                         if (play.details.hasOwnProperty("shootingPlayerId"))
                         {
                             player1 = roster.find(p1 => {return p1.playerId == play.details.shootingPlayerId});
@@ -424,7 +560,7 @@ function Game(props) {
                             }
                             else
                             {
-                                description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " shot blocked";// + play.details.reason.replaceAll('-', ' ');
+                                description = player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " shot blocked " + reason;// + play.details.reason.replaceAll('-', ' ');
                         
                             }
                         }
@@ -438,23 +574,22 @@ function Game(props) {
                             }
                             else
                             {
-                                description = "Shot blocked";// + play.details.reason.replaceAll('-', ' ');
+                                description = "Shot blocked " + reason;// + play.details.reason.replaceAll('-', ' ');
                             }
                         }
                         break;
                     default:
-                      // code block
                   }
-
-                let p = <div className='play-card'>
+                  //<img className="play-logo" src={ require("../pics/logos/" + String(pic) + ".svg")} alt={pic}/> 
+                let p = <div className={darkMode ? 'play-card-dark': 'play-card'}>
                             <div className='left-card'>
-                                <p className='time-remaining-text'>{play.timeRemaining}</p>
+                                <p className={darkMode ? 'time-remaining-text-dark': 'time-remaining-text'}>{play.timeRemaining}</p>
                                 <p>{formatPeriod(play.periodDescriptor.number)}</p>
-                            </div>
-                            <img className="play-logo" src={ require("../pics/logos/" + String(pic) + ".svg")} alt={pic}/> 
+                            </div>                              
+                            <img className="play-logo" src={pic_url} alt={pic}/> 
                             <div className='right-card'>
-                                <p className='card-description'>{playType}</p>     
-                                <p>{description}</p>
+                                <p className={darkMode ? 'card-description-dark': 'card-description'}>{playType}</p>     
+                                <p className={darkMode ? 'card-description-body-dark': 'card-description-body'}>{description}</p>
                             </div>
                             
                         </div>; 
@@ -465,11 +600,13 @@ function Game(props) {
 
 
             let arrlength = playArr.length -1;
-            info = <div className='playList'> {playArr.map((play,index) => (
+            info = <div id='playList-container'>
+                <p id="period-indicator">{props.game.gameState == 'LIVE' ? (period < 4 ? formatPeriod(period) + " Period" : formatPeriod(period)) : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType)}</p>
+                <div className='playList'> {playArr.map((play,index) => (
                     <div>{pArr[(arrlength - index)]}</div>
                 ))}
-                </div>;
-        
+                </div>
+            </div>;
     }
     else
     {
@@ -478,7 +615,7 @@ function Game(props) {
   }
 
     return (
-      <div className="Game">
+      <div className={darkMode ? 'Game-dark': 'Game'}>
       {display}
       {info}
       </div>
