@@ -166,11 +166,15 @@ function Main(props)
         console.error('Error:', error);
     });
     */
+
+
+   /* <button className="main-button" onClick={apiGetGames}>Test Api call</button> */
     return(
         <div>
-            <p>CaveGlass</p>
-            <p>{new Date().toDateString()}</p>
-            <button className="main-button" onClick={apiGetGames}>Test Api call</button>
+            <img className="cg-logo-1" src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
+            <div id='home-date-container'>
+                <p id="home-date">{new Date().toDateString()}</p>
+            </div>
             {gameList}
         </div>
     );
