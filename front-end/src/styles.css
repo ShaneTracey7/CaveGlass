@@ -7,9 +7,14 @@
 }
 .Game{
     background-color: white;
+    height: 100%;
 }
 .Game-dark{
     background-color: black;
+    height: 100%;
+}
+.App{
+    height: 100vh;
 }
 
 
@@ -224,7 +229,7 @@
 .playList{
     display: flex;
     flex-direction: column;
-    margin-bottom: 50px;
+    margin-bottom: 150px;
 }
 #playList-container{
     max-height: 80vh;
@@ -538,6 +543,9 @@ p{
     margin-left: auto;
     margin-right: auto;
     color: red;
+    border-right: 4px solid gray;
+    border-left: 4px solid gray;
+    border-bottom: 4px solid gray;
 }
 
 .score-board-score-retro{

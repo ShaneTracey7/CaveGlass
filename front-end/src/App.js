@@ -3,6 +3,7 @@ import './App.css';
 import React, {useState} from 'react';
 import Game from './components/Game';
 import Home from './components/Home';
+import './styles.css';
 
 function App() {
   

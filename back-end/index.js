@@ -31,8 +31,10 @@ app.post("/", (req, res) => {
     }
     else if(req.body.type == "nfl")
         {  
-            console.log("in nfl")
-            const apiUrl = String("https://api.sleeper.app/v1/league/1125318770018463744/rosters"); 
+            let gameID = req.body.game;
+            console.log("gameid: " +gameID)
+            console.log("in nfl") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
+            const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/feed/live"); 
             fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
@@ -67,7 +69,7 @@ app.get('/', (req, res) => {
     console.log(today)
     //maybe add a timeout?
                                                                     //today
-    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + today); //YYYY-MM-DD
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-30"); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
         if (!response.ok) {

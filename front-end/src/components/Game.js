@@ -2,6 +2,7 @@ import '../styles.css';
 import React, {useState,useEffect} from 'react';
 import ScoreReaction from './ScoreReaction';
 import axios from 'axios';
+import PlayerHighlight from './PlayerHighlight';
 
 function Game(props) {
   
@@ -120,6 +121,7 @@ function Game(props) {
     const getNFL = () => {
         axios.post('http://localhost:8080', {
             type: 'nfl',
+            game: props.game.id,
           }, {
             headers: {
             'content-type': 'application/json'
@@ -184,7 +186,7 @@ function Game(props) {
         {
             if(infoType != 'BOX')
             {
-                getNFL();
+                //getNFL();
                 setInfoType('BOX');
             }
             console.log('BOX')
@@ -262,8 +264,8 @@ function Game(props) {
   }
   else
   {
-    display = <div id='display'>
-        
+
+    /*
         <div id='score-board'> 
         <div id='score-board-container'> 
             <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.homeTeam.abbrev) + ".svg")} alt={props.game.homeTeam.abbrev}/>
@@ -274,9 +276,8 @@ function Game(props) {
                 </div>
             <p className='score-board-score'>{homeScore}</p>
             <div className='score-board-info'>
-            <p id="score-board-period">{props.game.gameState == 'LIVE' ? (period < 4 ? formatPeriod(period) + " Period" : formatPeriod(period)) : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType)}</p>
-                
-            <p>{props.game.gameState == 'LIVE' ? gameClock : formatDate(props.game.startTimeUTC)}</p>
+            <p id="score-board-period">{props.game.gameState == 'LIVE' ? (period < 4 ? formatPeriod(period) + " Period" : formatPeriod(period)) : (props.game.gameState == 'FUT' ? formatPeriod(1) + " Period" : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType))}</p>
+            <p>{props.game.gameState == 'LIVE' ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : formatDate(props.game.startTimeUTC))}</p>
             </div>
             <p className='score-board-score'>{awayScore}</p>
             <div className='score-board-info'>
@@ -287,9 +288,9 @@ function Game(props) {
             <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.awayTeam.abbrev) + ".svg")} alt={props.game.awayTeam.abbrev}/>
         </div>
         </div>
+        */
 
-
-
+    display = <div id='display'>
         
         <div id='score-board-retro'> 
         
@@ -301,10 +302,10 @@ function Game(props) {
                 </div>
             
             <div className='score-board-info'>
-            <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : formatDate(props.game.startTimeUTC)}</p>
+            <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
             <div className='score-board-period-container-retro'>
                 <p className='score-board-period-label-retro'> Period </p>
-                <p id="score-board-period-retro">{props.game.gameState == 'LIVE' ? (period) : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType)}</p>
+                <p id="score-board-period-retro">{props.game.gameState == 'LIVE' ? (period) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
             </div>
             </div>
             
@@ -316,8 +317,6 @@ function Game(props) {
             <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.awayTeam.abbrev) + ".svg")} alt={props.game.awayTeam.abbrev}/>
         
         </div>
-
-
 
 
 
@@ -340,7 +339,7 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <p> no plays</p>
+        info = <PlayerHighlight></PlayerHighlight>
     }
     else if(infoType == 'PBP')
     {
