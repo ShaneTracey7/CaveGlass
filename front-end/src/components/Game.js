@@ -12,10 +12,11 @@ function Game(props) {
   const [isRunning, setIsRunning] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls
   const [period, setPeriod] = useState(props.game.periodDescriptor.number); //current period the game is in
   const [darkMode, setDarkMode] = useState(false); //light and dark mode toggle
-  const [homeScore, setHomeScore] = useState(props.game.homeTeam.score) //score displayed in scoreboard
-  const [awayScore, setAwayScore] = useState(props.game.awayTeam.score) //score displayed in scoreboard
+  const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
+  const [awayScore, setAwayScore] = useState(props.game.awayTeam.hasOwnProperty("score") ? props.game.awayTeam.score : 0) //score displayed in scoreboard
   const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard
   const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard
+  const [gameClock, setGameClock] = useState("") //gameClock
   useEffect(() => {
 
     if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
@@ -59,6 +60,7 @@ function Game(props) {
           setIsRunning(!isRunning);
           setHomeSOG(data.data.homeTeam.sog);
           setAwaySOG(data.data.awayTeam.sog);
+          setGameClock(data.data.clock.timeRemaining);
           //setPeriod(data.data.periodDescriptor.number);
           console.log("empty")
           }
@@ -67,7 +69,7 @@ function Game(props) {
             
             setIsRunning(!isRunning);
             setPeriod(data.data.periodDescriptor.number);
-            
+            setGameClock(data.data.clock.timeRemaining);
             //Update scoreboard
             //not tested
             if(homeSOG != data.data.homeTeam.sog)
@@ -274,7 +276,7 @@ function Game(props) {
             <div className='score-board-info'>
             <p id="score-board-period">{props.game.gameState == 'LIVE' ? (period < 4 ? formatPeriod(period) + " Period" : formatPeriod(period)) : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType)}</p>
                 
-            <p>{props.game.gameState == 'LIVE' ? "gameclock time" : formatDate(props.game.startTimeUTC)}</p>
+            <p>{props.game.gameState == 'LIVE' ? gameClock : formatDate(props.game.startTimeUTC)}</p>
             </div>
             <p className='score-board-score'>{awayScore}</p>
             <div className='score-board-info'>
@@ -285,12 +287,48 @@ function Game(props) {
             <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.awayTeam.abbrev) + ".svg")} alt={props.game.awayTeam.abbrev}/>
         </div>
         </div>
+
+
+
+        
+        <div id='score-board-retro'> 
+        
+            <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.homeTeam.abbrev) + ".svg")} alt={props.game.homeTeam.abbrev}/>
+                <div className='score-board-info'>
+                    <p className='score-board-location'>{props.game.homeTeam.placeName.default}</p>
+                    <p className='score-board-name'>{props.game.homeTeam.commonName.default}</p>
+                    <p className='score-board-score-retro'>{homeScore}</p>
+                </div>
+            
+            <div className='score-board-info'>
+            <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : formatDate(props.game.startTimeUTC)}</p>
+            <div className='score-board-period-container-retro'>
+                <p className='score-board-period-label-retro'> Period </p>
+                <p id="score-board-period-retro">{props.game.gameState == 'LIVE' ? (period) : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType)}</p>
+            </div>
+            </div>
+            
+            <div className='score-board-info'>
+                <p className='score-board-location'>{props.game.awayTeam.placeName.default}</p>
+                <p className='score-board-name'>{props.game.awayTeam.commonName.default}</p>
+                <p className='score-board-score-retro'>{awayScore}</p>
+            </div>
+            <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.awayTeam.abbrev) + ".svg")} alt={props.game.awayTeam.abbrev}/>
+        
+        </div>
+
+
+
+
+
         <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
             <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
             <img className="cg-logo-small" src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
-            <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Summary</div>
-            <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } >Box Score</div>
-            <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Play-by-Play</div>
+            <div id='toolbar-button-group' >
+                <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Summary</div>
+                <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } >Box Score</div>
+                <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Play-by-Play</div>
+            </div>
             <div className={darkMode ? 'mode-button-light': 'mode-button-dark'} onClick={() => {setDarkMode(!darkMode)}}>{darkMode ? "Light Mode" : "Dark Mode"}</div>
         </div>
         

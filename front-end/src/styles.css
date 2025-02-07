@@ -1,4 +1,6 @@
 
+@font-face { font-family: Scoreboard; src: url('scoreboard.ttf'); } 
+
 .main-button{
     width: 100px;
     height: 50px;
@@ -115,31 +117,36 @@
 #toolbar{
     display: flex;
     flex-direction: row;
-    gap: 20px;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    width: fit-content;
+    gap: 5px;
+    width: 80%;
+    min-width: fit-content;
     background-color: white; 
     border: 2px solid black;
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 150px;
-    padding-left: 40px;
-    padding-right: 40px;
     border-radius: 10px;
+    
     /*background-position: 0 50%;*/
 
 }
 #back-arrow{
-    width: auto;
-    height: 50%;
+    width: 10%;
+    min-width: 40px;
+    max-width: 70px;
+    height: auto;
     margin-top: auto;
     margin-bottom: auto;
     border-radius: 50%;
     border: 2px solid white;
+    margin-left: auto;
+    margin-right: auto;
 }
 .toolbar-button{
+    border: 1px solid green;
     margin-top: auto;
     margin-bottom: auto;
     width: 120px;
@@ -152,6 +159,14 @@
     background-size: 100% 100%;
     font-size: 1.25rem;
     
+}
+#toolbar-button-group{
+    display: flex;
+    flex-direction: row;
+    gap:5px;
+    margin-right: auto;
+    margin-left: auto;
+
 }
 
 .toolbar-button:hover{
@@ -186,6 +201,8 @@
     border-radius: 15px;
     line-height: 40px;
     font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
     
 }
 
@@ -200,6 +217,8 @@
     border-radius: 15px;
     line-height: 40px;
     font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .playList{
@@ -452,13 +471,99 @@ p{
     font-size: 1.25rem;
 }
 
+#score-board-retro{
+    margin: auto;
+    border-radius: 10px;
+    border: 4px solid gray;
+    width: 80%;
+    min-width: fit-content;
+    background-color: rgb(30, 30, 30);
+    display: flex;
+    flex-direction: row;
+}
+.score-board-retro-home{
 
+}
+#score-board-period-retro{
+    font-weight: 800;
+    font-size: 3rem;
+    font-family: Scoreboard;
+    text-align: right;
+    width:fit-content;
+    /*padding-left: 50px;*/
+    padding-right: 10px;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    color: yellow;
+}
+.score-board-period-container-retro{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.score-board-period-label-retro{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 20px;
+    font-weight: bold;
+    font-size: 2rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic
+}
+
+.score-board-retro-away{
+
+}
+
+#game-clock{
+    font-weight: 800;
+    font-size: 3.5rem;
+    font-family: Scoreboard;
+    text-align: right;
+    width:fit-content;
+    /*padding-left: 50px;*/
+    padding-right: 10px;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    color: red;
+}
+
+.score-board-score-retro{
+    font-weight: 800;
+    font-size: 3.5rem;
+    font-family: Scoreboard;
+    text-align: right;
+   /*padding-left: 8%;*/
+    /*padding-right: 8%;*/
+    width:fit-content;
+    padding-left: 50px;
+    padding-right: 10px;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 #score-board{
     margin: auto;
     border-radius: 5px;
     border: 1px solid gray;
     width: 80%;
+    min-width: fit-content;
     background-color: rgb(241, 241, 241);
 }
 .score-board-info{
@@ -466,9 +571,15 @@ p{
     flex-direction: column;
     margin-top: auto;
     margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
     height: fit-content;
-    color: black;
+    color: white;
     font-size: 1rem;
+
+    /* mainly for retro*/
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic
 }
 .score-board-location{
     margin-top: 0;
@@ -486,14 +597,15 @@ p{
 #score-board-container{
     display: flex;
     flex-direction: row;
-    width:fit-content;
+    width:90%;
+    min-width: fit-content;
     margin: auto;
 }
 .score-board-score{
     font-weight: 800;
     font-size: 3.5rem;
-    padding-left: 8%;
-    padding-right: 8%;
+   /*padding-left: 8%;*/
+    /*padding-right: 8%;*/
     margin-top: auto;
     margin-bottom: auto;
 }
@@ -503,6 +615,8 @@ p{
     height: 100px;
     margin-top:auto;
     margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 .cg-logo-1{
     width: 300px;
@@ -510,8 +624,10 @@ p{
     padding-top: 20px;
 }
 .cg-logo-small{
-    width: auto;
-    height: 60%;
+    width: 10%;
+    min-width: 40px;
+    max-width: 115px;
+    height: auto;
     margin-top: auto;
     margin-bottom: auto;
 }
