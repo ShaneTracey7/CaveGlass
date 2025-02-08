@@ -339,7 +339,7 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight></PlayerHighlight>
+        info = <PlayerHighlight roster={roster}></PlayerHighlight>
     }
     else if(infoType == 'PBP')
     {

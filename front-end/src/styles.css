@@ -101,6 +101,110 @@
     color: black;
     padding-bottom: 0;
 }
+/* * * * * * * * * * * * * * * * * * * * * * * * PlayerHighlight.js Component * * * * * * * * * * * * * * * * * * * * * * * */
+
+.player-form{
+    display: none;
+    flex-direction: column;
+    border: 2px solid gray;
+    background-color: white;
+    width: 60%;
+    height: fit-content;
+    min-height: 300px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    margin-top: -100px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2;
+    position: relative;
+    border-radius: 15px;
+}
+
+.player-select-container{
+    position: relative;
+    display: inline-block;
+    width: 60%;
+    min-width: 300px;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.player-select{
+    position: absolute;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 2;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    height: fit-content;
+    max-height: 400px;
+}
+.player-select-selected{
+    background-color: rgb(245, 245, 245);
+    color: black;
+    cursor: pointer;
+    height:50px;
+    line-height: 50px;
+    border-radius: 5px;
+}
+
+.player-option{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    height:70px;
+    background-color: white;
+    border-top: 1px solid gray;
+}
+
+.player-option-img{
+    height: 70px;
+    width:70px;
+    margin-right: 20px;
+    margin-left: auto;
+    object-fit: cover
+}
+.player-option-text{
+    line-height: 50px;
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.player-option:hover {
+    background-color: rgba(227, 227, 227);
+}
+
+#player-form-cancel{
+    width: auto;
+    height: 30px;
+    margin-left: auto;
+    margin-right: 20px;
+    
+}
+
+#player-form-add{
+    width: auto;
+    height: 30px;
+    margin-top: auto;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    color: white;
+    background-color: green;
+}
+
+
+
+
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * Game.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 
