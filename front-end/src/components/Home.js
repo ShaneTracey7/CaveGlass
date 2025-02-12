@@ -123,9 +123,9 @@ function Main(props)
       <div className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
         {status[index]}
         <div className='cardContainer'>
-          <img className="logo" src={ require("../pics/logos/" + String(game.homeTeam.abbrev) + ".svg")} alt={game.homeTeam.abbrev}/> 
+          <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
           <p>vs.</p> 
-          <img className="logo" src={ require("../pics/logos/" + String(game.awayTeam.abbrev) + ".svg")} alt={game.awayTeam.abbrev}/>
+          <img className="logo" src={game.awayTeam.logo} alt={game.awayTeam.abbrev}/>
         </div>
       </div>))}
       </div>;

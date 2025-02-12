@@ -3,6 +3,15 @@ import React, {useState,useEffect} from 'react';
 import ScoreReaction from './ScoreReaction';
 import axios from 'axios';
 import PlayerHighlight from './PlayerHighlight';
+import downArrow from '../pics/down-arrow.svg';
+import upArrow from '../pics/up-arrow.svg';
+import downArrowWhite from '../pics/down-arrow-white.png';
+import upArrowWhite from '../pics/up-arrow-white.png';
+import playByPlayLogo from '../pics/play-by-play.png';
+import playerFocusLogo from '../pics/player-focus.png';
+import darkModeLogo from '../pics/dark-mode.png';
+import lightModeLogo from '../pics/light-mode.png';
+
 
 function Game(props) {
   
@@ -15,9 +24,14 @@ function Game(props) {
   const [darkMode, setDarkMode] = useState(false); //light and dark mode toggle
   const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
   const [awayScore, setAwayScore] = useState(props.game.awayTeam.hasOwnProperty("score") ? props.game.awayTeam.score : 0) //score displayed in scoreboard
-  const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard
-  const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard
+  const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
+  const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
   const [gameClock, setGameClock] = useState("") //gameClock
+  const [players, setPlayers] = useState([]); //players active inside player focus
+
+  const [showToolbar, setShowToolbar] = useState(true) //determines if toolbar should be hidden or not
+  const [showScoreBoard, setShowScoreBoard] = useState(true) //determines if scoreboard should be hidden or not
+
   useEffect(() => {
 
     if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
@@ -188,6 +202,12 @@ function Game(props) {
             {
                 //getNFL();
                 setInfoType('BOX');
+                if(roster.length < 1)
+                {
+                    getPlaybyPlay();
+                    console.log('called pbp')
+                }
+                
             }
             console.log('BOX')
         }
@@ -257,6 +277,8 @@ function Game(props) {
 
   let display;
   let info;
+  let toolbar;
+  let scoreboard;
   if (score)
   {
     display = <ScoreReaction scored={setScore}/>;
@@ -289,47 +311,72 @@ function Game(props) {
         </div>
         </div>
         */
+    if(showToolbar)
+    {
+        toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
+                <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
+                <img className="cg-logo-small" src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
+                <div id='toolbar-button-group' >
+                    <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Summary</div>
+                    <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={playerFocusLogo} alt="player focus"/></div>
+                    <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='toolbar-logo' src={playByPlayLogo} alt="play-by-play"/></div>
+                </div>
+                <img id="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
+                <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
+            </div>
+    }
+    else
+    {
+        toolbar = <div id="toolbar-hidden" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
+            <img id="show-arrow" onClick={() => {setShowToolbar(true)}} src={downArrow} alt="show"/>
+                
+        </div>
+        
+    }
 
+    if(showScoreBoard)
+    {
+        scoreboard = <div id='score-board-retro'> 
+        
+        <img className="score-board-logo" src={ props.game.homeTeam.darkLogo} alt={props.game.homeTeam.abbrev}/>
+            <div className='score-board-info'>
+                <p className='score-board-location'>{props.game.homeTeam.placeName.default}</p>
+                <p className='score-board-name'>{props.game.homeTeam.commonName.default}</p>
+                <p className='score-board-score-retro'>{homeScore}</p>
+            </div>
+        
+        <div className='score-board-info'>
+        <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
+        <div className='score-board-period-container-retro'>
+            <p className='score-board-period-label-retro'> Period </p>
+            <p id="score-board-period-retro">{props.game.gameState == 'LIVE' ? (period) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
+        </div>
+        </div>
+        
+        <div className='score-board-info'>
+            <p className='score-board-location'>{props.game.awayTeam.placeName.default}</p>
+            <p className='score-board-name'>{props.game.awayTeam.commonName.default}</p>
+            <p className='score-board-score-retro'>{awayScore}</p>
+        </div>
+        <img className="score-board-logo" src={props.game.awayTeam.darkLogo} alt={props.game.awayTeam.abbrev}/>
+        <img id="hide-arrow" className='ha-white' onClick={() => {setShowScoreBoard(false)}} src={upArrowWhite} alt="hide"/>
+        </div>
+
+    }
+    else
+    {
+        scoreboard = <div id='score-board-retro-hidden'>
+            <img id="show-arrow" className='ha-white' onClick={() => {setShowScoreBoard(true)}} src={downArrowWhite} alt="show"/>
+        </div>
+    }
     display = <div id='display'>
         
-        <div id='score-board-retro'> 
         
-            <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.homeTeam.abbrev) + ".svg")} alt={props.game.homeTeam.abbrev}/>
-                <div className='score-board-info'>
-                    <p className='score-board-location'>{props.game.homeTeam.placeName.default}</p>
-                    <p className='score-board-name'>{props.game.homeTeam.commonName.default}</p>
-                    <p className='score-board-score-retro'>{homeScore}</p>
-                </div>
-            
-            <div className='score-board-info'>
-            <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
-            <div className='score-board-period-container-retro'>
-                <p className='score-board-period-label-retro'> Period </p>
-                <p id="score-board-period-retro">{props.game.gameState == 'LIVE' ? (period) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
-            </div>
-            </div>
-            
-            <div className='score-board-info'>
-                <p className='score-board-location'>{props.game.awayTeam.placeName.default}</p>
-                <p className='score-board-name'>{props.game.awayTeam.commonName.default}</p>
-                <p className='score-board-score-retro'>{awayScore}</p>
-            </div>
-            <img className="score-board-logo" src={ require("../pics/logos/" + String(props.game.awayTeam.abbrev) + ".svg")} alt={props.game.awayTeam.abbrev}/>
+        {scoreboard}
+        {toolbar}
+
+
         
-        </div>
-
-
-
-        <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
-            <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
-            <img className="cg-logo-small" src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
-            <div id='toolbar-button-group' >
-                <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Summary</div>
-                <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } >Box Score</div>
-                <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Play-by-Play</div>
-            </div>
-            <div className={darkMode ? 'mode-button-light': 'mode-button-dark'} onClick={() => {setDarkMode(!darkMode)}}>{darkMode ? "Light Mode" : "Dark Mode"}</div>
-        </div>
         
     </div> ;
 
@@ -339,7 +386,8 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight roster={roster}></PlayerHighlight>
+        info = <PlayerHighlight roster={roster} players={[players,setPlayers]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>
+
     }
     else if(infoType == 'PBP')
     {
@@ -372,7 +420,9 @@ function Game(props) {
             else if (play.typeDescKey == 'goal')
             {
                 let pic;
+                let pic_url;
                 let pic2;
+                let pic2_url;
                 let assistStr;
                 let score1;
                 let score2;
@@ -380,16 +430,20 @@ function Game(props) {
                 if(play.details.eventOwnerTeamId == props.game.homeTeam.id)
                 {
                     pic = props.game.homeTeam.abbrev;
+                    pic_url = props.game.homeTeam.darkLogo;
                     score1 = play.details.homeScore;
                     pic2 = props.game.awayTeam.abbrev
+                    pic2_url = props.game.awayTeam.darkLogo;
                     score2 = play.details.awayScore;
                     
                 }
                 else
                 {
                     pic = props.game.awayTeam.abbrev;
+                    pic_url = props.game.awayTeam.darkLogo;
                     score1 = play.details.awayScore;
                     pic2 = props.game.homeTeam.abbrev;
+                    pic2_url = props.game.homeTeam.darkLogo;
                     score2 = play.details.homeScore;
                 }
                 if (play.details.hasOwnProperty("assist1PlayerId"))
@@ -415,16 +469,16 @@ function Game(props) {
                 let player1 = roster.find(p1 => {return p1.playerId == play.details.scoringPlayerId});
 
                 let p =  <div className='play-card-goal'>
-                            <div id={"color-"+ pic} className='top-goal-card' style={{backgroundImage: "url(" + require('../pics/logos/' + String(pic) + ".svg") + ")"}}>
+                            <div id={"color-"+ pic} className='top-goal-card' style={{backgroundImage: "url(" + pic_url + ")"}}>
                                 <div className='top-goal-card-container'>
-                                    <img className="play-logo" src={ require("../pics/logos/" + String(pic) + ".svg")} alt={pic}/>
+                                    <img className="play-logo" src={pic_url} alt={pic}/>
                                     <p className='play-card-goal-score' >{score1}</p>
                                     <div id="goal-light-container">
                                         <img id='goal-light-img' className="play-logo" src={ require("../pics/goal-light.png")} alt={pic}/>
                                         <p>{pic} GOAL</p>
                                     </div>
                                     <p className='play-card-goal-score2'>{score2}</p>
-                                    <img id="play-logo-score2" className="play-logo" src={ require("../pics/logos/" + String(pic2) + ".svg")} alt={pic2}/> 
+                                    <img id="play-logo-score2" className="play-logo" src={ pic2_url} alt={pic2}/> 
                                 </div>
                             </div>
                             <div id={"color-"+ pic} className='bottom-goal-card'>
@@ -432,7 +486,7 @@ function Game(props) {
                                     <p className='time-remaining-text-goal'>{play.timeRemaining}</p>
                                     <p id="goal-period">{formatPeriod(play.periodDescriptor.number)}</p>
                                 </div>
-                                <img className="play-logo" src={ require("../pics/logos/" + String(pic) + ".svg")} alt={pic}/> 
+                                <img className="play-logo" src={player1.headshot} alt={pic}/> 
                                 <div className='right-card'>
                                     <p className='card-description-goal'>{player1.firstName.default + " " + player1.lastName.default + " #" + player1.sweaterNumber + " (" + play.details.scoringPlayerTotal + ")"}</p>     
                                     <p className='card-description-assist'>{assistStr}</p>

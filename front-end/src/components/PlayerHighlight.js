@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import '../styles.css';
 import redx from "../pics/red-x.png"
+import PlayerCard from './PlayerCard';
 
 function PlayerHighlight(props)
 {
 
 
 
-    const [players, setPlayers] = useState([]);
+    
     const [showForm, setShowForm] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
-    const [selectedPlayer, setSelectedPlayer] = useState([0,"Select a Player"]); //default (empty) value
+    const [selectedPlayer, setSelectedPlayer] = useState([0,"Select a Player","","",0,"",0]); //format: [playerId, fullname + number, firstname, lastname, number, headshot,teamId]
     
     //called when the add button from player form is clicked
     function addPlayer()
@@ -20,8 +21,13 @@ function PlayerHighlight(props)
         {
             console.log("selected player: " + selectedPlayer)
 
+            //add selected player to hightlighted players array
+            let temp = props.players[0];
+            temp.push(selectedPlayer);
+            props.players[1](temp);
+
             //CLEAR selectedPlayer
-            setSelectedPlayer([0,"Select a Player"]);
+            setSelectedPlayer([0,"Select a Player","","",0,"",0]);
         }
         else
         {
@@ -32,23 +38,32 @@ function PlayerHighlight(props)
     function cancelAdd()
     {
         //CLEAR selectedPlayer
-        setSelectedPlayer([0,"Select a Player"]);
+        setSelectedPlayer([0,"Select a Player","","",0,"",0]);
         //hide modal
         setShowForm(false);
     }
 
-    function playerOptionClick(id,text)
+    function playerOptionClick(id,text,fn,ln,n,hs,tid)
     {
-        setSelectedPlayer([id,text]);
+        setSelectedPlayer([id,text,fn,ln,n,hs,tid]);
         setShowOptions(false);
         
     }
 
     let display;
-    if (players.length != 0)
+    if (props.players[0].length != 0)
     {
+        const playerCards = [];
+        for (let i = 0; i < props.players[0].length; i++) 
+        {   
+            
+            playerCards.push( <PlayerCard playerData={props.players[0][i]} teamInfo={props.players[0][i][6] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} players={[props.players[0],props.players[1]]}></PlayerCard>);
+        }
+
+
         display = 
-        <div>
+        <div id="player-focus-container" >
+            {playerCards}
             <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
             
         </div>
@@ -85,7 +100,7 @@ function PlayerHighlight(props)
         for (let i = 0; i < props.roster.length; i++) 
         {   
             playerDesc = props.roster[i].firstName.default + " " + props.roster[i].lastName.default + " #" + props.roster[i].sweaterNumber;
-            playerOptions.push( <li class="player-option" onClick={() => {playerOptionClick(props.roster[i].playerId,props.roster[i].firstName.default + " " + props.roster[i].lastName.default + " #" + props.roster[i].sweaterNumber)}} key={i} ><p class='player-option-text'>{playerDesc}</p><img className='player-option-img' src={props.roster[i].headshot} alt=""/></li>);
+            playerOptions.push( <li class="player-option" onClick={() => {playerOptionClick(props.roster[i].playerId,props.roster[i].firstName.default + " " + props.roster[i].lastName.default + " #" + props.roster[i].sweaterNumber,props.roster[i].firstName.default,props.roster[i].lastName.default,props.roster[i].sweaterNumber,props.roster[i].headshot,props.roster[i].teamId)}} key={i} ><p class='player-option-text'>{playerDesc}</p><img className='player-option-img' src={props.roster[i].headshot} alt=""/></li>);
         }
 
         let playerForm = <form className='player-form' style={{display: showForm ? "flex": "none"}}>

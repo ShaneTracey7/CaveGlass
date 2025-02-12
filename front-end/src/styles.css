@@ -201,9 +201,98 @@
     background-color: green;
 }
 
+#player-focus-container{
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    gap:10px;
+}
 
+/* * * * * * * * * * * * * * * * * * * * * * * * PlayerCard.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 
+.PlayerCard{
+    height:fit-content;
+    width: 80%;
+    background-color: white;
+    border-radius: 15px;
+    border: 4px solid black;
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    z-index: 1;
+}
+#player-card-layer2{
+    height:fit-content;
+    width: 100%;
+    background-color: transparent;
+    border-radius: 15px;
+    border: 3px solid green;
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    background-repeat: no-repeat;
+    background-size: 700px 700px;
+    background-position: -20% 40%;
+    opacity: 0.9;
+}
+#bg-player-card-text{
+    font-size: 4rem;
+    font-weight: 800;
+    color: transparent;
+    font-style: italic;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: 75px;
+    -webkit-text-stroke: 2px white;
 
+}
+#player-card-layer3{
+    height:fit-content;
+    width: 100%;
+    background-color: transparent;
+    border-radius: 15px;
+    border: 2px solid blue;
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    position: absolute;
+    z-index: 3;
+}
+.PlayerCard-dark{
+    height:fit-content;
+    width: 80%;
+    background-color: black;
+    border-radius: 15px;
+    border: 4px solid white;
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+}
+.player-card-delete{
+    height: 25px;
+    width: 20px;
+    margin-left: auto;
+    margin-right: 20px;
+    margin-top: 20px;
+    padding: 5px 8px 5px 8px;
+    object-fit:contain;
+    border-radius: 50%;
+    background-color: white;
+}
+.player-card-delete:hover{
+    background-color: rgba(128, 128, 128, 0.2);
+}
+.player-card-img{
+    height: 200px;
+    width:200px;
+    margin:auto;
+}
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * Game.js Component * * * * * * * * * * * * * * * * * * * * * * * */
@@ -242,6 +331,60 @@
     /*background-position: 0 50%;*/
 
 }
+#toolbar-hidden{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    height: 29px;
+    background-color: red; 
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-repeat: no-repeat;
+    background-size: 100% 150px;
+    object-fit: cover;
+}
+
+#hide-arrow{
+    height:25px;
+    width:25px;
+    margin-left: auto;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: auto;
+    padding:2px;
+    border-radius: 50%;
+}
+#hide-arrow:hover{
+    background-color: rgba(128, 128, 128, 0.3);
+}
+#show-arrow{
+    height:25px;
+    width:25px;
+    margin-left: auto;
+    margin-right: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding:2px;
+    border-radius: 50%;
+}
+#show-arrow:hover{
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+#mode-button-img{
+    width: 100px;
+    height:50%;
+    margin: auto;
+    padding: 5px;
+    border-radius: 15px;
+}
+#mode-button-img:hover{
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
 #back-arrow{
     width: 10%;
     min-width: 40px;
@@ -250,12 +393,16 @@
     margin-top: auto;
     margin-bottom: auto;
     border-radius: 50%;
-    border: 2px solid white;
+    padding: 5px;
+    /*border: 5px solid white;*/
     margin-left: auto;
     margin-right: auto;
 }
+#back-arrow:hover{
+    background-color: rgba(128, 128, 128, 0.2);
+}
 .toolbar-button{
-    border: 1px solid green;
+   /* border: 1px solid green; */
     margin-top: auto;
     margin-bottom: auto;
     width: 120px;
@@ -267,19 +414,28 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     font-size: 1.25rem;
-    
+    display: flex;
+    flex-direction: row;
+}
+
+.toolbar-logo{
+    width: 60%;
+    height:50%;
+    padding:5px;
+    border-radius: 5px;
+    margin:auto;
 }
 #toolbar-button-group{
     display: flex;
     flex-direction: row;
-    gap:5px;
+    gap:10px;
     margin-right: auto;
     margin-left: auto;
 
 }
 
-.toolbar-button:hover{
-    background-color: rgba(128, 128, 128, 0.7);
+.toolbar-button:hover .toolbar-logo{
+    background-color: rgba(128, 128, 128, 0.2);
 }
 
 .toolbar-button-selected{
@@ -298,6 +454,7 @@
 .toolbar-button-selected:hover{
     background-color: rgb(159, 164, 255,0.7); 
 }
+
 
 .mode-button-light{
     color: black;
@@ -329,6 +486,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+
 
 .playList{
     display: flex;
@@ -590,8 +748,15 @@ p{
     display: flex;
     flex-direction: row;
 }
-.score-board-retro-home{
-
+#score-board-retro-hidden{
+    margin: auto;
+    border-radius: 10px;
+    height:29px;
+    border: 4px solid gray;
+    width: 80%;
+    background-color: rgb(30, 30, 30);
+    display: flex;
+    flex-direction: row;
 }
 #score-board-period-retro{
     font-weight: 800;
@@ -628,9 +793,6 @@ p{
     font-style: italic
 }
 
-.score-board-retro-away{
-
-}
 
 #game-clock{
     font-weight: 800;
