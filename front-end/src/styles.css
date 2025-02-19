@@ -173,6 +173,9 @@
     margin-left: 20px;
     font-weight: bold;
     font-size: 1.1rem;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 .player-option:hover {
     background-color: rgba(227, 227, 227);
@@ -182,8 +185,7 @@
     width: auto;
     height: 30px;
     margin-left: auto;
-    margin-right: 20px;
-    
+    margin-right: 20px
 }
 
 #player-form-add{
@@ -206,6 +208,84 @@
     flex-direction: column;
     margin:auto;
     gap:10px;
+}
+
+.stat-select-container{
+    position: relative;
+    display: inline-block;
+    width: 60%;
+    min-width: 300px;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stat-option{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    height:40px;
+    background-color: white;
+    border-top: 1px solid gray;
+}
+.stat-option:hover {
+    background-color: rgba(227, 227, 227);
+}
+
+.stat-option-text{
+    line-height: 40px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding-bottom: 0;
+    margin: auto;
+
+}
+
+.selected-stat-element{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    height:60px;
+    background-color: rgb(191, 217, 250);
+    border-radius: 15px;
+}
+
+/*.stat-option:hover {
+    background-color: rgb(191, 217, 250);
+}*/
+
+#custom-options-container{
+    display: flex;
+    flex-direction: column;
+
+}
+
+#custom-stats-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 60%;
+    min-width: 300px;
+    height: fit-content;
+    gap: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stat-delete-img{
+    height: 25px;
+    width: 25px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: 10px;
+}
+#form-element{
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 60%;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * PlayerCard.js Component * * * * * * * * * * * * * * * * * * * * * * * */
@@ -909,6 +989,117 @@ p{
 #display{
     padding-top: 20px;
 }
+
+/*********************** Toggle Switch *************************/
+
+.toggle-right-label{
+    margin-left: 35px;
+}
+
+.toggle-switch-container{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    margin-left: 10px;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.toggle-switch-container-big{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    margin: auto;
+}
+
+/* Container for the toggle */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#small-toggle-switch{
+    width: 50px;
+    height: 24px;
+}
+
+/* Hide default checkbox */
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The track */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: rgb(225, 225, 225);
+    border-radius: 24px;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.3s;
+}
+
+/* The circular slider */
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+#small-slider::before{
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 2px;
+}
+
+/* Toggled state */
+.toggle-switch input:checked+.slider {
+    background-color: rgb(191, 217, 250);
+}
+.toggle-switch input:checked+.slider::before {
+    transform: translateX(28px);
+}
+#small-toggle-switch input:checked+.slider{
+    background-color: gray;
+}
+#small-toggle-switch input:checked+.slider::before {
+    transform: translateX(22px);
+}
+
+.toggle-label{
+    padding-bottom: 0;
+    margin: auto;
+}
+
+.toggle-left-label{
+    margin-right: -10px;
+}
+
+.line-input{
+    font-size: 15px;
+    line-height: 30px;
+    height: fit-content;
+    width: 60px;
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 5px;
+    border: 0;
+}
+
+
 /* need to add the rest */
 #color-ANA{
     background-color: rgba(252, 76, 2);
