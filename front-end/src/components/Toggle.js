@@ -8,12 +8,24 @@ function Toggle(props) {
 
     function setLineState(value)
     {
-        let temp = props.statState[0];
-        temp[props.index][1] = value; //changes value to line input
-        props.statState[1](temp);
+        let temp;
+        if(value == 'Over' || value == 'Under')
+        {
+            temp = props.statState[0];
+            temp[props.index][2] = value; //changes value to line input
+            props.statState[1](temp);
+            setOUState(value);
+        }
+        else
+        {
+            temp = props.statState[0];
+            temp[props.index][1] = value; //changes value to line input
+            props.statState[1](temp);
+        }
     }
 
     const [checked, setChecked] = useState(props.state[0]); //for toggle switch in form
+    const [oUState, setOUState] = useState(""); //for toggle switch in form
 
     let textBefore;
     let textAfterTrue;
@@ -30,8 +42,19 @@ function Toggle(props) {
     }
     else
     {
-        lineInput = <input class="line-input" type='number' style={{display: checked ? "flex": "none"}}
-        onChange={(e) => setLineState(e.target.value)} /> //working on this part
+        lineInput = <div className='line-container' style={{display: checked ? "flex": "none"}}>
+                <input class="line-input" type='number'  onChange={(e) => setLineState(e.target.value)} /> 
+                <div className='over-under-container'>
+                <div onClick={() => setLineState('Over')} >
+                        Over
+                        <div className='over-under-tab' style={{display: oUState == 'Over' ? "block": "none"}}></div>
+                    </div>
+                    <div onClick={() => setLineState('Under')} >
+                        Under
+                        <div className='over-under-tab' style={{display: oUState == 'Under' ? "block": "none"}}></div>
+                    </div>
+                </div>
+            </div>
 
         textBefore = "Display Style:"
         textAfterTrue = "Line:";
@@ -42,7 +65,10 @@ function Toggle(props) {
     {
         if(props.type == 'statList')
         {
-            //props.
+            let temp = props.statState[0];
+            temp[props.index][1] = 0; //changes value to line input back to default
+            props.statState[1](temp);
+
             setChecked(!checked)
         }
         else if(props.type == 'default')

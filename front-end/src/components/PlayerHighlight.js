@@ -17,7 +17,7 @@ function PlayerHighlight(props)
     const [checked, setChecked] = useState(false); //for toggle switch in form
     const [skaterStatList, setSkaterStatList] = useState(ssl);
     const [goalieStatList, setGoalieStatList] = useState(gsl);
-    const [customStats, setCustomStats] = useState([]); // list of user selected stats in custom form
+    const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under"]
     const [showStatOptions, setShowStatOptions] = useState(false); //shows dropdown stat options
     //called when the add button from player form is clicked
     function addPlayer()
@@ -25,12 +25,29 @@ function PlayerHighlight(props)
         console.log("Add player")
         if(selectedPlayer[0] != 0)
         {
-            
+            let temp;
+            let tempSP;
+            if(checked == false)
+            {
+                let list = (selectedPlayer[7] == 'G' ? gsl : ssl);
+                let defaultStats = [];
+                for (let i = 0; i < list.length; i++){
+                    defaultStats.push([list[i],0]);
+                    console.log("stat: " + list[i])
+                }
+
+                //add selected player to hightlighted players array
+                temp = props.players[0];
+                tempSP = [selectedPlayer[0],selectedPlayer[1],selectedPlayer[2],selectedPlayer[3],selectedPlayer[4],selectedPlayer[5],selectedPlayer[6],selectedPlayer[7],defaultStats]
+            }
+            else
+            {
+                //add selected player to hightlighted players array
+                temp = props.players[0];
+                tempSP = [selectedPlayer[0],selectedPlayer[1],selectedPlayer[2],selectedPlayer[3],selectedPlayer[4],selectedPlayer[5],selectedPlayer[6],selectedPlayer[7],customStats]
+            }
             console.log("selected player: " + selectedPlayer)
 
-            //add selected player to hightlighted players array
-            let temp = props.players[0];
-            let tempSP = [selectedPlayer[0],selectedPlayer[1],selectedPlayer[2],selectedPlayer[3],selectedPlayer[4],selectedPlayer[5],selectedPlayer[6],selectedPlayer[7],customStats]
             //temp.push(selectedPlayer);
             temp.push(tempSP);
             console.log(tempSP);
@@ -94,7 +111,7 @@ function PlayerHighlight(props)
     {
         //add to list
         let temp = customStats;
-        temp.push([stat,0]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
+        temp.push([stat,0,"Over"]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
         setCustomStats(temp);
 
         setShowStatOptions(false);
@@ -265,8 +282,9 @@ customSelects2.forEach(function (select) {
       
     return(
         <div>
-            {display}
             {playerForm}
+            {display}
+            
         </div>
     );
 }

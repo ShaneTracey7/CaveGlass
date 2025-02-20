@@ -116,15 +116,18 @@
     margin-top: -100px;
     margin-left: auto;
     margin-right: auto;
-    z-index: 2;
-    position: relative;
+    z-index: 4;
+    position: absolute;
+    top: 30%;
+    left: 20%;
     border-radius: 15px;
 }
 
 .player-select-container{
     position: relative;
     display: inline-block;
-    width: 60%;
+    width: 80%;
+    max-width: 850px;
     min-width: 300px;
     height: fit-content;
     margin-left: auto;
@@ -213,7 +216,8 @@
 .stat-select-container{
     position: relative;
     display: inline-block;
-    width: 60%;
+    width: 80%;
+    max-width: 850px;
     min-width: 300px;
     height: fit-content;
     margin-left: auto;
@@ -265,7 +269,8 @@
     flex-direction: column;
     margin-top: 15px;
     margin-bottom: 15px;
-    width: 60%;
+    width: 80%;
+    max-width: 850px;
     min-width: 300px;
     height: fit-content;
     gap: 5px;
@@ -278,14 +283,15 @@
     width: 25px;
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: auto;
+    /*margin-left: auto;*/
     margin-right: 10px;
 }
 #form-element{
     margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
-    width: 60%;
+    width: 80%;
+    max-width: 850px;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * PlayerCard.js Component * * * * * * * * * * * * * * * * * * * * * * * */
@@ -308,7 +314,7 @@
     border-radius: 15px;
     border: 3px solid green;
     display:flex;
-    flex-direction: column;
+    flex-direction: row;
     margin:auto;
     overflow: hidden;
     position: relative;
@@ -318,6 +324,59 @@
     background-position: -20% 40%;
     opacity: 0.9;
 }
+.player-card-stat-container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: fit-content;
+    height: fit-content;
+    margin-left: 5%;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: white;
+}
+
+.player-card-stat{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    padding:5px;
+    margin: auto;
+    /*margin-top: auto;
+    margin-bottom: auto;*/
+    background-color: rgba(0, 0, 0, 1);
+    border: 2px solid white;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+}
+
+#player-card-stat-left{
+    margin-left: 50px;
+    margin-right: auto;
+}
+#player-card-stat-right{
+    margin-left: auto;
+    margin-right: 50px;
+}
+.player-card-line-stat{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    padding:5px;
+    margin-top: auto;
+    margin-bottom: auto;
+    
+}
+
+.bg-player-card-text-container{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: 0;
+}
+
 #bg-player-card-text{
     font-size: 4rem;
     font-weight: 800;
@@ -330,8 +389,26 @@
     margin-left: auto;
     margin-right: 75px;
     -webkit-text-stroke: 2px white;
-
 }
+#player-card-name{
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    font-style: italic;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto ;
+    margin-right: 75px;
+    -webkit-text-stroke: 2px gray;
+}
+.player-card-name-container{
+    display: flex;
+    width:100%;
+    background-color: black;
+}
+
 #player-card-layer3{
     height:fit-content;
     width: 100%;
@@ -373,7 +450,26 @@
     width:200px;
     margin:auto;
 }
+.player-card-line-container{
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 1);
+    border: 2px solid white;
 
+}
+.player-card-container{
+    display: flex;
+    flex-direction: row;
+    min-width:fit-content;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    gap:10px;
+    
+    
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * Game.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -990,6 +1086,53 @@ p{
     padding-top: 20px;
 }
 
+/*********************** Progress Bar *************************/
+.progress-bar{
+    width: 250px;
+    height:5px;
+    border-radius: 20px 0 0 20px;
+    background-color: gray;
+    border: 1px solid black;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.progress-bar-value{
+    height: 100%;
+    border-radius: 20px 0 0 20px;
+}
+.progress-bar-ext{
+    background-color: gray;
+    height: 5px;
+    width: 50px;
+    border: 1px solid black;
+    border-radius: 0 20px 20px 0;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.progress-bar-container{
+    display: flex;
+    flex-direction: row;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 30px;
+
+}
+.progress-bar-slider{
+    width:fit-content;
+    height:20px;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 10px;
+    position: relative;
+    font-size: 0.7rem;
+    line-height: 20px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.progress-bar-container-with-label{
+    display: flex;
+    flex-direction: column;
+}
 /*********************** Toggle Switch *************************/
 
 .toggle-right-label{
@@ -1000,8 +1143,8 @@ p{
     display: flex;
     flex-direction: row;
     width: fit-content;
-    margin-left: 10px;
-    margin-right: auto;
+    margin-left: auto;
+    margin-right: 15px;
     margin-top: auto;
     margin-bottom: auto;
 }
@@ -1099,6 +1242,27 @@ p{
     border: 0;
 }
 
+.line-container{
+    display: flex;
+    flex-direction: row;
+}
+.over-under-container{
+    width:fit-content;
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    background-color: white;
+    padding:3px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+.over-under-tab{
+    display: block;
+    background-color: gray;
+    height: 8px;
+    width: 100%;
+    border-radius: 5px;
+}
 
 /* need to add the rest */
 #color-ANA{
