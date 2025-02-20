@@ -51,8 +51,8 @@ function PlayerCard(props) {
             for(let i = 0; i < totalStats.length; i+=2)
                 {
                     let temp = <div className='player-card-container'>
-                                <p className='player-card-stat'> {stats[i][0] + ":"}</p>
-                                <p className='player-card-stat'> {stats[i+1][0] + ":"}</p>
+                                <p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>
+                                <p className='player-card-stat'> {totalStats[i+1][0] + ": "+ totalStats[i+1][3]}</p>
                             </div>;
                     statArr.push(temp);
                 }
@@ -66,7 +66,7 @@ function PlayerCard(props) {
                     if(i == 0)
                     {
                         temp = <div className='player-card-container'>
-                                    <p className='player-card-stat'> {stats[i][0] + ":"}</p>
+                                    <p className='player-card-stat'> {totalStats[i][0] + ": " + totalStats[i][3]}</p>
                                 </div>;
                         statArr.push(temp);
                         i++;
@@ -74,8 +74,8 @@ function PlayerCard(props) {
                     else
                     {
                         temp = <div className='player-card-container'>
-                                <p id='player-card-stat-left' className='player-card-stat'> {stats[i][0] + ":"}</p>
-                                <p id='player-card-stat-right' className='player-card-stat'> {stats[i+1][0] + ":"}</p>
+                                <p id='player-card-stat-left' className='player-card-stat'> {totalStats[i][0] + ": " + totalStats[i][3]}</p>
+                                <p id='player-card-stat-right' className='player-card-stat'> {totalStats[i+1][0] + ": " + totalStats[i+1][3]}</p>
                             </div>;
                         statArr.push(temp);
                         i+=2;
@@ -86,7 +86,7 @@ function PlayerCard(props) {
         //adding custom stats
         for(let i = 0; i < customStats.length; i++)
             {
-                statArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(0.75 * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
+                statArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
             }
 
     return (

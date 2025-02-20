@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../styles.css';
 import redx from "../pics/red-x.png"
 import whitex from "../pics/white-x.png"
@@ -17,8 +17,170 @@ function PlayerHighlight(props)
     const [checked, setChecked] = useState(false); //for toggle switch in form
     const [skaterStatList, setSkaterStatList] = useState(ssl);
     const [goalieStatList, setGoalieStatList] = useState(gsl);
-    const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under"]
+    const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under",<value>]
     const [showStatOptions, setShowStatOptions] = useState(false); //shows dropdown stat options
+
+
+    // called on when api call for box score data which is on interval (decided in Game.js)    not fully tested (but pretty sure works)
+    useEffect(() => {
+    
+        //playerByGameStats => (homeTeam,AwayTeam) => (defense[],forwards[],goalies[]) => get player by playerID => (all the stats)
+        let position;
+        let arr;
+        let player; // one of players from play cards
+        let apiPlayer; //endpoint at which the player's stats are located in API
+        let statArr;
+        let apiStatValue; //stats value in api
+        let isHomeTeam; //boolean player is on hometeam or not
+        let tempPlayers = props.players[0]; //player arr instance that holds all changes 
+        for(let i=0; i < props.players[0].length; i++) //each player
+        {
+            player = props.players[0][i];
+            position = player[7];
+            isHomeTeam = player[6] == props.teamsInfo[0].id ? true : false;
+            statArr = player[8];
+            
+            if(isHomeTeam)
+            {
+                if(position == 'D')
+                {
+                    arr = props.playerByGameStats.homeTeam.defense
+                    apiPlayer = arr.find(p => {return p.playerId == player[0]});
+                }
+                else if(position == 'G')
+                {
+                    arr = props.playerByGameStats.homeTeam.goalies
+                    apiPlayer = arr.find(p => {return p.playerId == player[0]});
+                }
+                else //forward
+                {
+                    arr = props.playerByGameStats.homeTeam.forwards
+                    apiPlayer = arr.find(p => {return p.playerId == player[0]});
+                }
+            }
+            else
+            {
+                if(position == 'D')
+                {
+                    arr = props.playerByGameStats.awayTeam.defense
+                    apiPlayer = arr.find(p => {return p.playerId == player[0]});
+                }
+                else if(position == 'G')
+                {
+                    arr = props.playerByGameStats.awayTeam.goalies
+                    apiPlayer = arr.find(p => {return p.playerId == player[0]});
+                }
+                else //forward
+                {
+                    arr = props.playerByGameStats.awayTeam.forwards
+                    apiPlayer = arr.find(p => {return p.playerId == player[0]});
+                }
+            }
+            
+            for(let i2=0; i2 < statArr.length; i2++) //each stat
+            {
+                apiStatValue = setStatForCheck(apiPlayer,position,statArr[i2][0]);
+                if(statArr[i2][3] != apiStatValue)
+                {
+                    tempPlayers[i][8][i2][3] = apiStatValue;
+                }
+            }
+        }
+        //set new value for players (if any there were any updates)
+        if(props.players[0] != tempPlayers)
+        {
+            props.players[1](tempPlayers);
+            console.log('box score updated');
+        }
+        else
+        {
+            console.log('no box score updates');
+        }
+    
+      }, [props.playerByGameStats]);
+
+
+    //gets a specific stat value (used when adding player card) 
+    function getStatValue(player,statName)
+    {
+        let arr;
+        let apiPlayer; //endpoint at which the player's stats are located in API
+        let position = player[7];
+        let isHomeTeam = player[6] == props.teamsInfo[0].id ? true : false;
+            
+        if(isHomeTeam)
+        {
+            if(position == 'D')
+            {
+                arr = props.playerByGameStats.homeTeam.defense
+                apiPlayer = arr.find(p => {return p.playerId == player[0]});
+            }
+            else if(position == 'G')
+            {
+                arr = props.playerByGameStats.homeTeam.goalies
+                apiPlayer = arr.find(p => {return p.playerId == player[0]});
+            }
+            else //forward
+            {
+                arr = props.playerByGameStats.homeTeam.forwards
+                apiPlayer = arr.find(p => {return p.playerId == player[0]});
+            }
+        }
+        else
+        {
+            if(position == 'D')
+            {
+                arr = props.playerByGameStats.awayTeam.defense
+                apiPlayer = arr.find(p => {return p.playerId == player[0]});
+            }
+            else if(position == 'G')
+            {
+                arr = props.playerByGameStats.awayTeam.goalies
+                apiPlayer = arr.find(p => {return p.playerId == player[0]});
+            }
+            else //forward
+            {
+                arr = props.playerByGameStats.awayTeam.forwards
+                apiPlayer = arr.find(p => {return p.playerId == player[0]});
+            }
+        }
+        let value = setStatForCheck(apiPlayer,position,statName);
+        console.log("value: " + value);
+        return value;
+    }
+
+    function setStatForCheck(apiPlayer,position,statName)
+    {
+        if(position == 'G')
+        {
+            switch(statName)
+            {
+                case 'TOI': return apiPlayer.toi;
+                case 'Saves': return apiPlayer.saves;
+                case 'Shots Against': return apiPlayer.shotsAgainst;
+                case 'Goals Against': return apiPlayer.goalsAgainst;
+                case 'Save %': return Math.round(apiPlayer.savePctg * 1000)/1000; //not always there in api (backup doesn't have it) (shows up a NaN)
+                //default: return statName.toLowerCase();
+            }
+        }
+        else
+        {
+            switch(statName)
+            {
+                case 'Goals': return apiPlayer.goals;
+                case 'Assists': return apiPlayer.assists;
+                case 'Points': return apiPlayer.points;
+                case 'Hits': return apiPlayer.hits;
+                case 'TOI': return apiPlayer.toi;
+                case '+/-': return apiPlayer.plusMinus;
+                case 'Shots': return apiPlayer.sog;
+                case 'Blocks': return apiPlayer.blockedShots;
+                case 'Face-off %': return apiPlayer.faceoffWinningPctg * 100;
+                //default: return statName.toLowerCase();
+            }
+            
+        }
+    }  
     //called when the add button from player form is clicked
     function addPlayer()
     {
@@ -27,12 +189,16 @@ function PlayerHighlight(props)
         {
             let temp;
             let tempSP;
+            let statValue;
             if(checked == false)
             {
+                //setting values for each default
                 let list = (selectedPlayer[7] == 'G' ? gsl : ssl);
                 let defaultStats = [];
                 for (let i = 0; i < list.length; i++){
-                    defaultStats.push([list[i],0]);
+                
+                    statValue = getStatValue(selectedPlayer,list[i]);
+                    defaultStats.push([list[i],0,'',statValue]);
                     console.log("stat: " + list[i])
                 }
 
@@ -42,6 +208,14 @@ function PlayerHighlight(props)
             }
             else
             {
+                //setting value for each customstat
+                for (let i = 0; i < customStats.length; i++){
+            
+                    statValue = getStatValue(selectedPlayer,customStats[i][0]);
+                    customStats[i][3] = statValue;
+                    
+                }
+
                 //add selected player to hightlighted players array
                 temp = props.players[0];
                 tempSP = [selectedPlayer[0],selectedPlayer[1],selectedPlayer[2],selectedPlayer[3],selectedPlayer[4],selectedPlayer[5],selectedPlayer[6],selectedPlayer[7],customStats]
@@ -111,7 +285,7 @@ function PlayerHighlight(props)
     {
         //add to list
         let temp = customStats;
-        temp.push([stat,0,"Over"]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
+        temp.push([stat,0,"Over",0]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
         setCustomStats(temp);
 
         setShowStatOptions(false);

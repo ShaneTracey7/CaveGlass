@@ -29,12 +29,12 @@ app.post("/", (req, res) => {
             res.send('Error!')
         });
     }
-    else if(req.body.type == "nfl")
+    else if(req.body.type == "box")
         {  
             let gameID = req.body.game;
             console.log("gameid: " +gameID)
-            console.log("in nfl") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
-            const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/feed/live"); 
+            console.log("in box") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
+            const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/boxscore"); 
             fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
