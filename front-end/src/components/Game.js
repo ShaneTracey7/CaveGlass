@@ -9,6 +9,7 @@ import downArrowWhite from '../pics/down-arrow-white.png';
 import upArrowWhite from '../pics/up-arrow-white.png';
 import playByPlayLogo from '../pics/play-by-play.png';
 import playerFocusLogo from '../pics/player-focus.png';
+import summaryLogo from '../pics/summary.png';
 import darkModeLogo from '../pics/dark-mode.png';
 import lightModeLogo from '../pics/light-mode.png';
 
@@ -75,6 +76,22 @@ function Game(props) {
 
   }, [isRunningBOX]); 
 
+
+  const setRosterAPI = () => {
+    axios.post('http://localhost:8080', {
+        type: 'pbp',
+        game: props.game.id,
+      }, {
+        headers: {
+        'content-type': 'application/json'
+        }}).then((data) => {
+      //this console.log will be in our frontend console
+      console.log(data)
+      //might crash if no games that day
+      setRoster(data.data.rosterSpots);
+    
+    })};
+
     //data will be the string we send from our server
     const getPlaybyPlay = () => {
         axios.post('http://localhost:8080', {
@@ -97,10 +114,7 @@ function Game(props) {
         
           });
           setIsRunningPBP(!isRunningPBP);
-          //setHomeSOG(data.data.homeTeam.sog);
-          //setAwaySOG(data.data.awayTeam.sog);
           setGameClock(data.data.clock.timeRemaining);
-          //setPeriod(data.data.periodDescriptor.number);
           console.log("empty")
           }
           else //to be called every 10secs
@@ -187,25 +201,23 @@ function Game(props) {
           if(roster.length == []) //first call
           {
             //set roster (necessary to add player to player focus)
-            //need to get from backend (can do it using playbyplay endpoint)
-
+            setRosterAPI();
+            
             if(playerByGameStats != data.data.playerByGameStats)
             {
                 setPlayerByGameStats(data.data.playerByGameStats);
             }
             setIsRunningBOX(!isRunningBOX);
-        
             setGameClock(data.data.clock.timeRemaining);
-            //setPeriod(data.data.periodDescriptor.number);
-            console.log("empty")
+            console.log("no roster")
           }
           else //to be called every 10secs
           {
             
             if(playerByGameStats != data.data.playerByGameStats)
-                {
-                    setPlayerByGameStats(data.data.playerByGameStats);
-                }
+            {
+                setPlayerByGameStats(data.data.playerByGameStats);
+            }
 
             setIsRunningBOX(!isRunningBOX);
             //Update scoreboard
@@ -269,13 +281,8 @@ function Game(props) {
             if(infoType != 'BOX')
             {
                 setInfoType('BOX');
-                if(roster.length > 0) //need to figure out a good condition
-                {
-                    //getPlaybyPlay();
-                    getPlayerFocus();
-                    console.log('called box')
-                }
-                
+                getPlayerFocus();
+                console.log('called box')
             }
             console.log('BOX')
         }
@@ -385,7 +392,7 @@ function Game(props) {
                 <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
                 <img className="cg-logo-small" src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
-                    <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }>Summary</div>
+                    <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={summaryLogo} alt="summary"/></div>
                     <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={playerFocusLogo} alt="player focus"/></div>
                     <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='toolbar-logo' src={playByPlayLogo} alt="play-by-play"/></div>
                 </div>
@@ -413,7 +420,7 @@ function Game(props) {
                 <p className='score-board-score-retro'>{homeScore}</p>
             </div>
         
-        <div className='score-board-info'>
+        <div className='score-board-info-middle'>
         <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
         <div className='score-board-period-container-retro'>
             <p className='score-board-period-label-retro'> Period </p>

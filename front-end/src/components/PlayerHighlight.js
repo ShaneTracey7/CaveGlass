@@ -322,7 +322,7 @@ function PlayerHighlight(props)
     {
         display = 
         <div>
-            <p> No highlighted players</p>
+            <p id="player-highlight-message"> No players</p>
             <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
         </div>
     }
