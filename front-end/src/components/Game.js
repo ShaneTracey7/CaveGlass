@@ -30,12 +30,14 @@ function Game(props) {
   const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
   const [gameClock, setGameClock] = useState("") //gameClock
   const [players, setPlayers] = useState([]); //players active inside player focus (each player has format: [playerId, fullname + number, firstname, lastname, number, headshot,teamId, positionCode, stat array])
+  const [teamStats, setTeamStats] = useState([]); // team stats active inside player focus (each team stat has format: [teamId, fullname, isHome, stat array])
 
   const [showToolbar, setShowToolbar] = useState(true) //determines if toolbar should be hidden or not
   const [showScoreBoard, setShowScoreBoard] = useState(true) //determines if scoreboard should be hidden or not
 
-  const [playerByGameStats, setPlayerByGameStats] = useState([]) //determines if scoreboard should be hidden or not
+  const [playerByGameStats, setPlayerByGameStats] = useState([]) //
 
+  const [statInfo,setStatInfo] = useState([]) // an array that gets data from api for playerhighlight format: [playerByGameStats,  teamGameStats]
 
   useEffect(() => {
 
@@ -173,7 +175,7 @@ function Game(props) {
 
     const getNFL = () => {
         axios.post('http://localhost:8080', {
-            type: 'nfl',
+            type: 'test',
             game: props.game.id,
           }, {
             headers: {
@@ -203,35 +205,35 @@ function Game(props) {
             //set roster (necessary to add player to player focus)
             setRosterAPI();
             
-            if(playerByGameStats != data.data.playerByGameStats)
+            if(statInfo != [data.data[0].playerByGameStats,data.data[1].summary.teamGameStats])
             {
-                setPlayerByGameStats(data.data.playerByGameStats);
+                setStatInfo([data.data[0].playerByGameStats,data.data[1].summary.teamGameStats]);
             }
             setIsRunningBOX(!isRunningBOX);
-            setGameClock(data.data.clock.timeRemaining);
+            setGameClock(data.data[0].clock.timeRemaining);
             console.log("no roster")
           }
           else //to be called every 10secs
           {
             
-            if(playerByGameStats != data.data.playerByGameStats)
-            {
-                setPlayerByGameStats(data.data.playerByGameStats);
-            }
+            if(statInfo != [data.data[0].playerByGameStats,data.data[1].summary.teamGameStats])
+                {
+                    setStatInfo([data.data[0].playerByGameStats,data.data[1].summary.teamGameStats]);
+                }
 
             setIsRunningBOX(!isRunningBOX);
             //Update scoreboard
-            setPeriod(data.data.periodDescriptor.number);
-            setGameClock(data.data.clock.timeRemaining);
+            setPeriod(data.data[0].periodDescriptor.number);
+            setGameClock(data.data[0].clock.timeRemaining);
             
             //not tested
-            if(homeScore != data.data.homeTeam.score)
+            if(homeScore != data.data[0].homeTeam.score)
             {
-                setHomeScore(data.data.homeTeam.score);
+                setHomeScore(data.data[0].homeTeam.score);
             }
-            if(awayScore != data.data.awayTeam.score)
+            if(awayScore != data.data[0].awayTeam.score)
             {
-                setAwayScore(data.data.awayTeam.score);
+                setAwayScore(data.data[0].awayTeam.score);
             }
           }
 
@@ -461,7 +463,7 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight playerByGameStats={playerByGameStats} roster={roster} players={[players,setPlayers]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>
+        info = <PlayerHighlight statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>
 
     }
     else if(infoType == 'PBP')

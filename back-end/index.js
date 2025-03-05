@@ -30,11 +30,40 @@ app.post("/", (req, res) => {
         });
     }
     else if(req.body.type == "box")
-        {  
+        {   let boxData;
+            let gsData;
             let gameID = req.body.game;
             console.log("gameid: " +gameID)
             console.log("in box") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
-            const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/boxscore"); 
+
+            const apiUrl1 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/boxscore"); 
+            let apiUrl2 = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);
+            Promise.all([fetch(apiUrl1), fetch(apiUrl2)])
+                .then(([response1, response2]) => {
+                    // Check if both responses are ok (status 200-299)
+                    if (response1.ok && response2.ok) {
+                        return Promise.all([response1.json(), response2.json()]);
+                    }
+                    throw new Error("One or both fetch requests failed");
+                })
+                .then(([data1, data2]) => {
+                    console.log("Data1:", data1);
+                    console.log("Data2:", data2);
+                    res.send([data1,data2]) // Run func3 after both fetch requests are completed
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    res.send('Error!')
+                });
+        }
+    else if(req.body.type == "test")   // summary.teamGameStats[0].category -> 'sog' .awayValue -> num
+                                        // [5] -> hits, [6] -> blocked shots, [4] -> pim,
+        {  
+            let gameID = req.body.game;
+            console.log("gameid: " +gameID)
+            console.log("in test") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
+            const apiUrl = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID); 
+            //const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/landing"); 
             fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
@@ -51,6 +80,7 @@ app.post("/", (req, res) => {
                 console.error('Error:', error);
                 res.send('Error!')
             });
+            
         }
     else
     {   

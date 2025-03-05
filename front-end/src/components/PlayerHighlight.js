@@ -10,16 +10,23 @@ function PlayerHighlight(props)
 
    let ssl = ['Goals','Assists','Points','+/-','TOI','Shots','Blocks','Hits','Face-off %'];
    let gsl = ['Shots Against','Saves','Goals Against','Save %','TOI'];
+   let tsl = ['Goals','Shots','Blocks']; //maybe add penalty mins
     
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(false); //playerForm
+    const [showTeamForm, setShowTeamForm] = useState(false); //teamForm
     const [showOptions, setShowOptions] = useState(false); //shows dropdown player options
+    const [showTeamOptions, setShowTeamOptions] = useState(false); //shows dropdown team options
     const [selectedPlayer, setSelectedPlayer] = useState([0,"Select a Player","","",0,"",0,"",[]]); //format: [playerId, fullname + number, firstname, lastname, number, headshot,teamId, positionCode, stat array]
-    const [checked, setChecked] = useState(false); //for toggle switch in form
+    const [selectedTeam, setSelectedTeam] = useState([0,"Select a Team", false, []]); //format: [teamId, team name, isHomeTeam, stat array]
+    const [checked, setChecked] = useState(false); //for toggle switch in playerform
+    const [checkedTeam, setCheckedTeam] = useState(false); //for toggle switch in teamform
     const [skaterStatList, setSkaterStatList] = useState(ssl);
     const [goalieStatList, setGoalieStatList] = useState(gsl);
+    const [teamStatList, setTeamStatList] = useState(tsl);
     const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under",<value>]
     const [showStatOptions, setShowStatOptions] = useState(false); //shows dropdown stat options
-
+    const [showTeamStatOptions, setShowTeamStatOptions] = useState(false); //shows dropdown team stat options
+    const [statOptionsState, setStatOptionsState] = useState([props.teamsInfo[0],props.teamsInfo[1]]); //shows dropdown team stat options
 
     // called on when api call for box score data which is on interval (decided in Game.js)    not fully tested (but pretty sure works)
     useEffect(() => {
@@ -39,22 +46,22 @@ function PlayerHighlight(props)
             position = player[7];
             isHomeTeam = player[6] == props.teamsInfo[0].id ? true : false;
             statArr = player[8];
-            
+
             if(isHomeTeam)
             {
                 if(position == 'D')
                 {
-                    arr = props.playerByGameStats.homeTeam.defense
+                    arr = props.statInfo[0].homeTeam.defense
                     apiPlayer = arr.find(p => {return p.playerId == player[0]});
                 }
                 else if(position == 'G')
                 {
-                    arr = props.playerByGameStats.homeTeam.goalies
+                    arr = props.statInfo[0].homeTeam.goalies
                     apiPlayer = arr.find(p => {return p.playerId == player[0]});
                 }
                 else //forward
                 {
-                    arr = props.playerByGameStats.homeTeam.forwards
+                    arr = props.statInfo[0].homeTeam.forwards
                     apiPlayer = arr.find(p => {return p.playerId == player[0]});
                 }
             }
@@ -62,17 +69,17 @@ function PlayerHighlight(props)
             {
                 if(position == 'D')
                 {
-                    arr = props.playerByGameStats.awayTeam.defense
+                    arr = props.statInfo[0].awayTeam.defense
                     apiPlayer = arr.find(p => {return p.playerId == player[0]});
                 }
                 else if(position == 'G')
                 {
-                    arr = props.playerByGameStats.awayTeam.goalies
+                    arr = props.statInfo[0].awayTeam.goalies
                     apiPlayer = arr.find(p => {return p.playerId == player[0]});
                 }
                 else //forward
                 {
-                    arr = props.playerByGameStats.awayTeam.forwards
+                    arr = props.statInfo[0].awayTeam.forwards
                     apiPlayer = arr.find(p => {return p.playerId == player[0]});
                 }
             }
@@ -94,11 +101,49 @@ function PlayerHighlight(props)
         }
         else
         {
-            console.log('no box score updates');
+            console.log('no box score player updates');
         }
-    
-      }, [props.playerByGameStats]);
 
+
+        //CHECKING TEAM CASES
+        let tempTeams = props.teamStats[0]; //team arr instance that holds all changes 
+        for(let i=0; i < props.teamStats[0].length; i++) //each teamStat (max 2)
+        {
+        
+            statArr = props.teamStats[0][i][3];
+            let endpoint = props.statInfo[1]
+            for(let i2=0; i2 < statArr.length; i2++) //each stat
+            {
+                apiStatValue = setTeamStatForCheck(endpoint,statArr[i2][0],props.teamStats[0][i][2]);
+                if(statArr[i2][3] != apiStatValue)
+                {
+                    tempTeams[i][3][i2][3] = apiStatValue;
+                }
+            }
+        }
+        
+        //set new value for teamstats (if any there were any updates)
+        if(props.teamStats[0] != tempTeams)
+        {
+            props.teamStats[1](tempTeams);
+            console.log('box score updated');
+        }
+        else
+        {
+            console.log('no box score player updates');
+        }
+      }, [props.statInfo]);
+
+
+      //gets a specific stat value (used when adding player card) 
+    function getTeamStatValue(isHome,statName)
+    {
+        let endpoint = props.statInfo[1]; //endpoint at which the team's stats are located in API
+        
+        let value = setTeamStatForCheck(endpoint,statName,isHome);
+        console.log("value: " + value);
+        return value;
+    }
 
     //gets a specific stat value (used when adding player card) 
     function getStatValue(player,statName)
@@ -112,17 +157,17 @@ function PlayerHighlight(props)
         {
             if(position == 'D')
             {
-                arr = props.playerByGameStats.homeTeam.defense
+                arr = props.statInfo[0].homeTeam.defense
                 apiPlayer = arr.find(p => {return p.playerId == player[0]});
             }
             else if(position == 'G')
             {
-                arr = props.playerByGameStats.homeTeam.goalies
+                arr = props.statInfo[0].homeTeam.goalies
                 apiPlayer = arr.find(p => {return p.playerId == player[0]});
             }
             else //forward
             {
-                arr = props.playerByGameStats.homeTeam.forwards
+                arr = props.statInfo[0].homeTeam.forwards
                 apiPlayer = arr.find(p => {return p.playerId == player[0]});
             }
         }
@@ -130,17 +175,17 @@ function PlayerHighlight(props)
         {
             if(position == 'D')
             {
-                arr = props.playerByGameStats.awayTeam.defense
+                arr = props.statInfo[0].awayTeam.defense
                 apiPlayer = arr.find(p => {return p.playerId == player[0]});
             }
             else if(position == 'G')
             {
-                arr = props.playerByGameStats.awayTeam.goalies
+                arr = props.statInfo[0].awayTeam.goalies
                 apiPlayer = arr.find(p => {return p.playerId == player[0]});
             }
             else //forward
             {
-                arr = props.playerByGameStats.awayTeam.forwards
+                arr = props.statInfo[0].awayTeam.forwards
                 apiPlayer = arr.find(p => {return p.playerId == player[0]});
             }
         }
@@ -177,6 +222,32 @@ function PlayerHighlight(props)
                 case 'Blocks': return apiPlayer.blockedShots;
                 case 'Face-off %': return apiPlayer.faceoffWinningPctg * 100;
                 //default: return statName.toLowerCase();
+            }
+            
+        }
+    }  
+    function setTeamStatForCheck(endpoint,statName,isHome)
+    {
+        if(isHome)
+        {
+            switch(statName)
+            {
+                case 'Shots': return endpoint[0].homeValue;
+                case 'Hits': return endpoint[5].homeValue;
+                case 'Penalty minutes': return endpoint[4].homeValue;
+                case 'Blocks': return endpoint[6].homeValue;
+                //goals will have a different endpoint
+            }
+        }
+        else //away team
+        {
+            switch(statName)
+            {
+                case 'Shots': return endpoint[0].awayValue;
+                case 'Hits': return endpoint[5].awayValue;
+                case 'Penalty minutes': return endpoint[4].awayValue;
+                case 'Blocks': return endpoint[6].awayValue;
+                //goals will have a different endpoint
             }
             
         }
@@ -236,24 +307,90 @@ function PlayerHighlight(props)
         }
     }
 
+    //called when the add button from player form is clicked
+    function addTeam(team)
+    {
+        console.log("Add Team")
+        if(selectedTeam[0] != 0)
+        {
+            let temp;
+            let tempSP;
+            let statValue;
+            if(checkedTeam == false)
+            {
+                //setting values for each default
+                let list = tsl;
+                let defaultStats = [];
+                for (let i = 0; i < list.length; i++){
+                
+                    statValue = getTeamStatValue(selectedTeam[2],list[i]);
+                    defaultStats.push([list[i],0,'',statValue]);
+                    console.log("stat: " + list[i])
+                }
+
+                //add selected player to hightlighted players array
+                temp = props.teamStats[0]; //array of players
+                tempSP = [selectedTeam[0],selectedTeam[1],selectedTeam[2],selectedTeam[3],defaultStats];
+            }
+            else
+            {
+                //setting value for each customstat
+                for (let i = 0; i < customStats.length; i++){
+            
+                    statValue = getTeamStatValue(selectedTeam[2],customStats[i][0]);
+                    customStats[i][3] = statValue;
+                }
+
+                //add selected player to hightlighted players array
+                temp = props.teamStats[0];
+                tempSP = [selectedTeam[0],selectedTeam[1],selectedTeam[2],selectedTeam[3],customStats];
+            }
+            console.log("selected team: " + selectedTeam)
+
+            //temp.push(selectedPlayer);
+            temp.push(tempSP);
+            console.log(tempSP);
+            props.teamStats[1](temp);
+
+            //CLEAR selectedPlayer
+            setSelectedTeam([0,"Select a Team",false,[]]);
+
+            //take away this team as an option in the teamform (i dont want user to make multiple instances)
+            setStatOptionsState(statOptionsState.filter((e)=>{return e != team}));
+        }
+        else
+        {
+            console.log("no team selected")
+        }
+    }
+
     function removeStat(stat)
     {
         //remove from list
         setCustomStats(customStats.filter((e)=>{return e != stat}));
 
         //add back to options
-        if(selectedPlayer[7] == 'G')
+        if(selectedTeam[0] != 0) // team stats
         {
-            let temp = goalieStatList;
+            let temp = teamStatList;
             temp.push(stat[0]);
-            setGoalieStatList(temp);
+            setTeamStatList(temp);
         }
-        else
+        else // player stats
         {
-            let temp = skaterStatList;
-            temp.push(stat[0]);
-            setSkaterStatList(temp);
-        }
+            if(selectedPlayer[7] == 'G')
+            {
+                let temp = goalieStatList;
+                temp.push(stat[0]);
+                setGoalieStatList(temp);
+            }
+            else
+            {
+                let temp = skaterStatList;
+                temp.push(stat[0]);
+                setSkaterStatList(temp);
+            }
+    }
 
     }
 
@@ -270,6 +407,18 @@ function PlayerHighlight(props)
         setShowForm(false);
     }
 
+    function cancelTeamAdd()
+    {
+        //CLEAR selectedPlayer
+        setSelectedTeam([0,"Select a Team",false]);
+        //clear stat list
+        setCustomStats([]);
+        //repopulate goalie and skater stat options
+        setTeamStatList(tsl);
+        //hide modal
+        setShowTeamForm(false);
+    }
+
     function playerOptionClick(id,text,fn,ln,n,hs,tid,pc,s)
     {
         setSelectedPlayer([id,text,fn,ln,n,hs,tid,pc,s]);
@@ -281,6 +430,16 @@ function PlayerHighlight(props)
         setSkaterStatList(ssl);
     }
 
+    function teamOptionClick(id,text,isHome)
+    {
+        setSelectedTeam([id,text,isHome]);
+        setShowTeamOptions(false);
+        //clear stat list
+        setCustomStats([]);
+        //repopulate team stat options
+        setTeamStatList(tsl);
+    }
+
     function statOptionClick(stat)
     {
         //add to list
@@ -290,40 +449,93 @@ function PlayerHighlight(props)
 
         setShowStatOptions(false);
 
-        if(selectedPlayer[7] == 'G')
+        if(selectedTeam[0] != 0) //team form
         {
-            setGoalieStatList(goalieStatList.filter((e)=>{return e != stat}));
+            setTeamStatList(teamStatList.filter((e)=>{return e != stat}));
         }
-        else
+        else //player form
         {
-            setSkaterStatList(skaterStatList.filter((e)=>{return e != stat}));
+            if(selectedPlayer[7] == 'G')
+            {
+                setGoalieStatList(goalieStatList.filter((e)=>{return e != stat}));
+            }
+            else
+            {
+                setSkaterStatList(skaterStatList.filter((e)=>{return e != stat}));
+            }
         }
     }
 
     let display;
-    if (props.players[0].length != 0)
+    if (props.players[0].length != 0 && props.teamStats[0].length != 0)
     {
         const playerCards = [];
         for (let i = 0; i < props.players[0].length; i++) 
         {   
-            
             playerCards.push( <PlayerCard playerData={props.players[0][i]} teamInfo={props.players[0][i][6] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} players={[props.players[0],props.players[1]]}></PlayerCard>);
         }
-
+        const teamCards = [];
+        for (let i = 0; i < props.teamStats[0].length; i++) 
+        {   
+            teamCards.push( <p>{props.teamStats[0][i][1]}</p>); //need to makes teams card
+        }
 
         display = 
         <div id="player-focus-container" >
             {playerCards}
-            <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+            {teamCards}
+            <div className='player-focus-button-container'>
+                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
+            </div>
             
+        </div>
+    }
+    else if (props.players[0].length != 0)
+    {
+        const playerCards = [];
+        for (let i = 0; i < props.players[0].length; i++) 
+        {   
+            playerCards.push( <PlayerCard playerData={props.players[0][i]} teamInfo={props.players[0][i][6] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} players={[props.players[0],props.players[1]]}></PlayerCard>);
+        }
+
+        display = 
+        <div id="player-focus-container" >
+            {playerCards}
+            <div className='player-focus-button-container'>
+                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
+            </div>
+                
+        </div>
+    }
+    else if (props.teamStats[0].length != 0)
+    {
+        const teamCards = [];
+        for (let i = 0; i < props.teamStats[0].length; i++) 
+        {   
+            teamCards.push( <p>{props.teamStats[0][i][1]}</p>); //need to makes teams card
+        }
+    
+        display = 
+        <div id="player-focus-container" >
+            {teamCards}
+            <div className='player-focus-button-container'>
+                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
+            </div>
+                
         </div>
     }
     else
     {
         display = 
-        <div>
+        <div id="player-focus-container" >
             <p id="player-highlight-message"> No players</p>
-            <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+            <div className='player-focus-button-container'>
+                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
+            </div>
         </div>
     }
     /*let playerForm = '';
@@ -352,6 +564,11 @@ function PlayerHighlight(props)
             playerDesc = props.roster[i].firstName.default + " " + props.roster[i].lastName.default + " #" + props.roster[i].sweaterNumber;
             playerOptions.push( <li class="player-option" onClick={() => {playerOptionClick(props.roster[i].playerId,props.roster[i].firstName.default + " " + props.roster[i].lastName.default + " #" + props.roster[i].sweaterNumber,props.roster[i].firstName.default,props.roster[i].lastName.default,props.roster[i].sweaterNumber,props.roster[i].headshot,props.roster[i].teamId,props.roster[i].positionCode,[])}} key={i} ><p class='player-option-text'>{playerDesc}</p><img className='player-option-img' src={props.roster[i].headshot} alt=""/></li>);
         }
+        const teamOptions = [];
+        for (let i = 0; i < statOptionsState.length; i++) 
+        {
+            teamOptions.push( <li class="player-option" onClick={() => {teamOptionClick(statOptionsState[i].id,statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default,true)}} key={i} ><p class='player-option-text'>{statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default}</p><img className='player-option-img' src={statOptionsState[i].darkLogo} alt=""/></li>);
+        } 
         
         const statOptions = [];
         const selectedStats = [];
@@ -367,7 +584,9 @@ function PlayerHighlight(props)
                 statList = skaterStatList;
             }
         }
-
+        else if(selectedTeam[0] != 0){
+            statList = teamStatList;
+        }
         
         for (let i = 0; i < statList.length; i++) 
         {   
@@ -405,7 +624,35 @@ function PlayerHighlight(props)
 
             <div id="player-form-add" onClick={addPlayer}>Add</div>
         </form>;
-   // }
+
+         let teamForm = <form className='player-form' style={{display: showTeamForm ? "flex": "none"}}>
+            <img id="player-form-cancel" onClick={cancelTeamAdd} src={redx} alt="exit"/>
+            
+            <div class="team-select-container">
+                <div class="player-select-selected" onClick={() => {setShowTeamOptions(true)}} > {selectedTeam[1]}</div>
+                <div class="player-select" style={{display: showTeamOptions ? "block": "none"}}>
+                    {teamOptions}
+                </div>
+            </div>
+            <div id="form-element">
+                <Toggle state={[checkedTeam,setCheckedTeam]} type="default" size='big'></Toggle>
+            </div>
+            <div id='custom-options-container' style={{display: checkedTeam ? "flex": "none"}}>
+                <div class="team-stat-select-container">
+                    <div class="player-select-selected" onClick={() => {setShowTeamStatOptions(true)}} > Select Stats </div>
+                    <div class="player-select" style={{display: showTeamStatOptions ? "block": "none"}}>
+                        {statOptions}
+                    </div>
+                </div>
+
+                <div id="custom-stats-container">
+                    {selectedStats}
+                </div>
+            </div>
+            
+            <div id="player-form-add" onClick={() => {addTeam(selectedTeam[0] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1])}}>Add</div>
+
+        </form>;
 
    /*<div class="stat-select-container">
                 <div class="player-select-selected" onClick={() => {setShowStatOptions(true)}} > Select Stats </div>
@@ -453,10 +700,37 @@ customSelects2.forEach(function (select) {
         }
     });
 });
+
+
+
+let customSelects3 = document.querySelectorAll('.team-select-container');
+
+// Attach click event listeners to each custom select
+customSelects3.forEach(function (select) {
+    // Close the dropdown if the user clicks outside of it
+    window.addEventListener('click', function (e) {
+        if (!select.contains(e.target)) {
+            setShowTeamOptions(false);
+        }
+    });
+});
+
+let customSelects4 = document.querySelectorAll('.team-stat-select-container');
+
+// Attach click event listeners to each custom select
+customSelects4.forEach(function (select) {
+    // Close the dropdown if the user clicks outside of it
+    window.addEventListener('click', function (e) {
+        if (!select.contains(e.target)) {
+            setShowTeamStatOptions(false);
+        }
+    });
+});
       
     return(
         <div>
             {playerForm}
+            {teamForm}
             {display}
             
         </div>
