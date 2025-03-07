@@ -3,18 +3,25 @@ import React, {useState,useEffect} from 'react';
 import redTrash from '../pics/red-trash.png';
 import ProgressBar from './ProgressBar';
 
-function PlayerCard(props) {
+function TeamCard(props) {
 
-    function deletePlayerCard()
+    function deleteTeamCard()
     {   
-        let temp = props.players[0];
-        let newTemp = temp.filter((e)=>{ return e[0] != props.playerData[0];});
-        props.players[1](newTemp);
+        let temp = props.teams[0];
+        let newTemp = temp.filter((e)=>{ return e[0] != props.teamData[0];});
+        props.teams[1](newTemp);
+
+        //add back to options list
+        let temp2 = props.statOptionsState[0];
+
+        temp2.push(props.teamInfo);
+        props.statOptionsState[1](temp2);
+
         console.log('card deleted');
     }
 
 
-    let stats = props.playerData[8];
+    let stats = props.teamData[3];
     const statArr = [];
 
     /*
@@ -33,8 +40,8 @@ function PlayerCard(props) {
         }
     }
         */
-       const totalStats = [];;
-       const customStats = [];;
+       const totalStats = [];
+       const customStats = [];
     for(let i = 0; i < stats.length; i++)
         {
             if(stats[i][1] == 0) // display style isn'total'
@@ -47,6 +54,12 @@ function PlayerCard(props) {
             }
         }
             //adding total stats
+            for(let i = 0; i < totalStats.length; i++)
+                {
+                    let temp = <p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>
+                    statArr.push(temp);
+                }
+        /*
         if(totalStats.length % 2 == 0) //even number
         {
             for(let i = 0; i < totalStats.length; i+=2)
@@ -83,6 +96,7 @@ function PlayerCard(props) {
                     }
                 }
         }
+        */
 
         //adding custom stats
         for(let i = 0; i < customStats.length; i++)
@@ -90,10 +104,12 @@ function PlayerCard(props) {
                 statArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
             }
 
+                        //style={{backgroundImage: "url(" + props.teamInfo.logo + ")"}}
     return (
-        <div className={props.darkMode ? 'PlayerCard1-dark': 'PlayerCard1'} id={"color-" + props.teamInfo.abbrev}>
+        <div className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} id={"color-" + props.teamInfo.abbrev}>
             
-            <div id="player-card-layer2"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} style={{backgroundImage: "url(" + props.teamInfo.darkLogo + ")"}}>
+
+            <div id="player-card-layer2"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'}> 
                 <div className='player-card-stat-container'>
                     {statArr}
                 </div>
@@ -103,18 +119,18 @@ function PlayerCard(props) {
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                 </div>
                 <div id="player-card-layer3"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'}>
-                    <img className='player-card-delete' onClick={() => {deletePlayerCard()}} src={redTrash} alt='delete'/>
-                    <img className='player-card-img' src={props.playerData[5]} alt={props.playerData[1]}/>
+                    <img className='player-card-delete' onClick={() => {deleteTeamCard()}} src={redTrash} alt='delete'/>
+                    <img className='player-card-img' src={props.teamInfo.darkLogo} alt={props.teamData[1]}/>
                     
                 </div>
                 
             </div>
             <div className='player-card-name-container'>
-                <p id="player-card-name">{props.playerData[1]}</p>
+                <p id="player-card-name">{props.teamData[1]}</p>
             </div>
             
         </div>
       );
   }
   
-  export default PlayerCard;
+  export default TeamCard;

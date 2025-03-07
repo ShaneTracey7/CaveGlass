@@ -4,6 +4,7 @@ import redx from "../pics/red-x.png"
 import whitex from "../pics/white-x.png"
 import PlayerCard from './PlayerCard';
 import Toggle from './Toggle';
+import TeamCard from './TeamCard';
 
 function PlayerHighlight(props)
 {
@@ -26,7 +27,7 @@ function PlayerHighlight(props)
     const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under",<value>]
     const [showStatOptions, setShowStatOptions] = useState(false); //shows dropdown stat options
     const [showTeamStatOptions, setShowTeamStatOptions] = useState(false); //shows dropdown team stat options
-    const [statOptionsState, setStatOptionsState] = useState([props.teamsInfo[0],props.teamsInfo[1]]); //shows dropdown team stat options
+    const [statOptionsState, setStatOptionsState] = useState([props.teamsInfo[0],props.teamsInfo[1]]); //keeps track of what teams to show as options (preventing users select same teams multiple times)
 
     // called on when api call for box score data which is on interval (decided in Game.js)    not fully tested (but pretty sure works)
     useEffect(() => {
@@ -236,6 +237,7 @@ function PlayerHighlight(props)
                 case 'Hits': return endpoint[5].homeValue;
                 case 'Penalty minutes': return endpoint[4].homeValue;
                 case 'Blocks': return endpoint[6].homeValue;
+                case 'Goals': return props.scores[0];
                 //goals will have a different endpoint
             }
         }
@@ -247,6 +249,7 @@ function PlayerHighlight(props)
                 case 'Hits': return endpoint[5].awayValue;
                 case 'Penalty minutes': return endpoint[4].awayValue;
                 case 'Blocks': return endpoint[6].awayValue;
+                case 'Goals': return props.scores[1];
                 //goals will have a different endpoint
             }
             
@@ -330,7 +333,7 @@ function PlayerHighlight(props)
 
                 //add selected player to hightlighted players array
                 temp = props.teamStats[0]; //array of players
-                tempSP = [selectedTeam[0],selectedTeam[1],selectedTeam[2],selectedTeam[3],defaultStats];
+                tempSP = [selectedTeam[0],selectedTeam[1],selectedTeam[2],defaultStats];
             }
             else
             {
@@ -343,7 +346,7 @@ function PlayerHighlight(props)
 
                 //add selected player to hightlighted players array
                 temp = props.teamStats[0];
-                tempSP = [selectedTeam[0],selectedTeam[1],selectedTeam[2],selectedTeam[3],customStats];
+                tempSP = [selectedTeam[0],selectedTeam[1],selectedTeam[2],customStats];
             }
             console.log("selected team: " + selectedTeam)
 
@@ -430,8 +433,9 @@ function PlayerHighlight(props)
         setSkaterStatList(ssl);
     }
 
-    function teamOptionClick(id,text,isHome)
-    {
+    function teamOptionClick(id,text)
+    {   
+        let isHome = (id == props.teamsInfo[0].id ? true : false);
         setSelectedTeam([id,text,isHome]);
         setShowTeamOptions(false);
         //clear stat list
@@ -477,7 +481,8 @@ function PlayerHighlight(props)
         const teamCards = [];
         for (let i = 0; i < props.teamStats[0].length; i++) 
         {   
-            teamCards.push( <p>{props.teamStats[0][i][1]}</p>); //need to makes teams card
+            teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
+        
         }
 
         display = 
@@ -514,7 +519,8 @@ function PlayerHighlight(props)
         const teamCards = [];
         for (let i = 0; i < props.teamStats[0].length; i++) 
         {   
-            teamCards.push( <p>{props.teamStats[0][i][1]}</p>); //need to makes teams card
+            teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
+        
         }
     
         display = 
@@ -567,7 +573,7 @@ function PlayerHighlight(props)
         const teamOptions = [];
         for (let i = 0; i < statOptionsState.length; i++) 
         {
-            teamOptions.push( <li class="player-option" onClick={() => {teamOptionClick(statOptionsState[i].id,statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default,true)}} key={i} ><p class='player-option-text'>{statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default}</p><img className='player-option-img' src={statOptionsState[i].darkLogo} alt=""/></li>);
+            teamOptions.push( <li class="player-option" onClick={() => {teamOptionClick(statOptionsState[i].id,statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default)}} key={i} ><p class='player-option-text'>{statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default}</p><img className='player-option-img' src={statOptionsState[i].logo} alt=""/></li>);
         } 
         
         const statOptions = [];

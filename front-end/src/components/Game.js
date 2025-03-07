@@ -463,7 +463,7 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>
+        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>
 
     }
     else if(infoType == 'PBP')
