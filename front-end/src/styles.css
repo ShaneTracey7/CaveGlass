@@ -346,11 +346,27 @@
     flex-direction: column;
     margin:auto;
     z-index: 1;
-    /*resize: none;*/
-    /*overflow: hidden;*/
+    min-width: 500px; 
+    min-height: 300px;
+    max-width: 80%;
+    max-height: 40vh;
+    resize: none;
+    overflow: hidden;
     container-name: playercard;
     container-type: size;
 }
+
+@media only screen and (min-width: 1400px){
+    .PlayerCard1
+    {
+        resize: vertical;
+    }
+    .PlayerCard1-dark
+    {
+        resize: vertical;
+    }
+}
+
 .PlayerCard{
     height:fit-content;
     width: 80%;
@@ -363,7 +379,7 @@
     z-index: 1;
 }
 #player-card-layer2{
-    height:fit-content;
+    height:100%;
     width: 100%;
     background-color: transparent;
     border-radius: 15px;
@@ -383,7 +399,7 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    width: fit-content;
+    width: 50%;
     height: fit-content;
     margin-left: 5%;
     margin-right: auto;
@@ -429,9 +445,17 @@
 .bg-player-card-text-container{
     width: fit-content;
     margin-left: auto;
-    margin-right: 0;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
 }
-
+.bg-player-card-text-container-team{
+    width: fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: 0; /*75px*/
+}
 #bg-player-card-text{
     font-size: 4rem;
     font-weight: 800;
@@ -442,11 +466,24 @@
     margin-top: 0;
     margin-bottom: 0;
     margin-left: auto;
-    margin-right: 75px;
-    -webkit-text-stroke: 2px white;
+    margin-right: 75px; /*75px*/
+    -webkit-text-stroke: 1px white;
+}
+#bg-player-card-number{
+    font-size: 15rem;
+    font-weight: 800;
+    color: transparent;
+    font-style: italic;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: 75px; /*75px*/
+    -webkit-text-stroke: 1px white;
 }
 #player-card-name{
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 800;
     color: white;
     font-style: italic;
@@ -455,7 +492,7 @@
     margin-top: 0;
     margin-bottom: 0;
     margin-left: auto ;
-    margin-right: 75px;
+    margin-right: 25px; /*75px; */
     -webkit-text-stroke: 2px gray;
 }
 .player-card-name-container{
@@ -463,15 +500,19 @@
     width:100%;
     background-color: black;
 }
+#profile-pic-and-button{
+    display:flex;
+    flex-direction: column;
+}
 
 #player-card-layer3{
-    height:fit-content;
+    height:100%;
     width: 100%;
     background-color: transparent;
     border-radius: 15px;
-    border: 2px solid blue;
+    border: 1px solid blue;
     display:flex;
-    flex-direction: column;
+    flex-direction: row;
     margin:auto;
     position: absolute;
     z-index: 3;
@@ -517,7 +558,10 @@
 .player-card-img{
     height: 200px;
     width:200px;
-    margin:auto;
+    margin-top: auto;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: 75px;
 }
 .player-card-line-container{
     display: flex;
@@ -532,27 +576,91 @@
     display: flex;
     flex-direction: row;
     min-width:fit-content;
-    width: 400px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     gap:10px;
-    
-    
 }
 
-/* This doesn't work as intended, need to fix */
-/* as user resizes plyaercard & teamcard */
-@container playercard (width > 800px) {
-    .PlayerCard1
-    {
-        resize: both;
+/* as user resizes playercard & teamcard */
+/*changes based upon width of card*/
+@container playercard (width < 600px) {
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
+        /*width: 300px;*/
     }
-    .PlayerCard1-dark
-    {
-        resize: both;
+    #player-card-layer2 > #player-card-layer3 >.player-card-stat-container {
+        margin-left: 0; 
     }
-
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
+        font-size: 1rem;
+    }
 }
+@container playercard (width > 600px) and (width < 1000px){
+    
+}
+@container playercard (width > 1000px){
+ 
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
+        /*width: 600px;*/
+    }
+    #player-card-layer2 > .bg-player-card-text-container{
+        margin-right: 100px;
+    }
+}
+
+/*changes based upon height of card*/
+@container playercard (height > 375px) and (height < 500px){
+    #player-card-layer2 > #player-card-layer3 > #profile-pic-and-button > .player-card-img{
+        width:250px;
+        height:250px;
+    }
+    #player-card-layer2 >#bg-player-card-number{
+        font-size: 18rem;
+    }
+    #player-card-layer2 >.bg-player-card-text-container-team > #bg-player-card-text{
+        font-size: 5rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
+        font-size: 1.75rem;
+    }
+    
+    #player-card-layer2 > .bg-player-card-text-container > #bg-player-card-text{
+        font-size: 6rem;
+    }
+    .player-card-name-container > #player-card-name{
+        font-size: 4rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container {
+        gap: 10px;
+    }
+}
+
+@container playercard (height > 500px){
+    #player-card-layer2 > #player-card-layer3 > #profile-pic-and-button > .player-card-img{
+        width:250px;
+        height:250px;
+    }
+    #player-card-layer2 >#bg-player-card-number{
+        font-size: 18rem;
+    }
+    #player-card-layer2 >.bg-player-card-text-container-team > #bg-player-card-text{
+        font-size: 5rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
+        font-size: 1.75rem;
+    }
+    
+    #player-card-layer2 > .bg-player-card-text-container > #bg-player-card-text{
+        font-size: 6rem;
+    }
+    .player-card-name-container > #player-card-name{
+        font-size: 4rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container {
+        gap: 10px;
+    }
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * Game.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 
 

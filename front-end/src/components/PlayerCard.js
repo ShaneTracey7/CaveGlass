@@ -94,23 +94,29 @@ function PlayerCard(props) {
         <div className={props.darkMode ? 'PlayerCard1-dark': 'PlayerCard1'} id={"color-" + props.teamInfo.abbrev}>
             
             <div id="player-card-layer2"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} style={{backgroundImage: "url(" + props.teamInfo.darkLogo + ")"}}>
-                <div className='player-card-stat-container'>
-                    {statArr}
-                </div>
-                <div className='bg-player-card-text-container'>
+                
+                {/*<div className='bg-player-card-text-container'>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
-                </div>
+                </div> */}
+                
+                <p id="bg-player-card-number">{ props.playerData[4]}</p>
+                
                 <div id="player-card-layer3"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'}>
-                    <img className='player-card-delete' onClick={() => {deletePlayerCard()}} src={redTrash} alt='delete'/>
-                    <img className='player-card-img' src={props.playerData[5]} alt={props.playerData[1]}/>
+                    <div className='player-card-stat-container'>
+                        {statArr}
+                    </div>
+                    <div id="profile-pic-and-button">
+                        <img className='player-card-delete' onClick={() => {deletePlayerCard()}} src={redTrash} alt='delete'/>
+                        <img className='player-card-img' src={props.playerData[5]} alt={props.playerData[1]}/>
+                    </div>
                     
                 </div>
                 
             </div>
             <div className='player-card-name-container'>
-                <p id="player-card-name">{props.playerData[1]}</p>
+                <p id="player-card-name">{props.playerData[2] + " " + props.playerData[3]}</p>
             </div>
             
         </div>

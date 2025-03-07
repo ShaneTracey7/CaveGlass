@@ -106,22 +106,24 @@ function TeamCard(props) {
 
                         //style={{backgroundImage: "url(" + props.teamInfo.logo + ")"}}
     return (
-        <div className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} id={"color-" + props.teamInfo.abbrev}>
+        <div className={props.darkMode ? 'PlayerCard1-dark': 'PlayerCard1'} id={"color-" + props.teamInfo.abbrev}>
             
 
             <div id="player-card-layer2"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'}> 
-                <div className='player-card-stat-container'>
-                    {statArr}
-                </div>
-                <div className='bg-player-card-text-container'>
+                
+                <div className='bg-player-card-text-container-team'>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                 </div>
                 <div id="player-card-layer3"className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'}>
-                    <img className='player-card-delete' onClick={() => {deleteTeamCard()}} src={redTrash} alt='delete'/>
-                    <img className='player-card-img' src={props.teamInfo.darkLogo} alt={props.teamData[1]}/>
-                    
+                    <div className='player-card-stat-container'>
+                        {statArr}
+                    </div>
+                    <div id="profile-pic-and-button">
+                        <img className='player-card-delete' onClick={() => {deleteTeamCard()}} src={redTrash} alt='delete'/>
+                        <img className='player-card-img' src={props.teamInfo.darkLogo} alt={props.teamData[1]}/>
+                    </div>
                 </div>
                 
             </div>
