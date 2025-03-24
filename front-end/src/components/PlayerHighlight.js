@@ -9,7 +9,7 @@ import TeamCard from './TeamCard';
 function PlayerHighlight(props)
 {
 
-   let ssl = ['Goals','Assists','Points','+/-','TOI','Shots','Blocks','Hits','Face-off %'];
+   let ssl = ['Goals','Assists','Points','+/-','TOI','Shots','Blocks','Hits','Face-off'];
    let gsl = ['Shots Against','Saves','Goals Against','Save %','TOI'];
    let tsl = ['Goals','Shots','Blocks']; //maybe add penalty mins
     
@@ -221,7 +221,7 @@ function PlayerHighlight(props)
                 case '+/-': return apiPlayer.plusMinus;
                 case 'Shots': return apiPlayer.sog;
                 case 'Blocks': return apiPlayer.blockedShots;
-                case 'Face-off %': return apiPlayer.faceoffWinningPctg * 100;
+                case 'Face-off': return (apiPlayer.faceoffWinningPctg * 100).toFixed(0) + '%';
                 //default: return statName.toLowerCase();
             }
             
@@ -471,6 +471,18 @@ function PlayerHighlight(props)
     }
 
     let display;
+    let buttons; //arr of buttons to be displayed
+    if(!showForm && !showTeamForm)
+    {
+        buttons = <div className='player-focus-button-container'>
+                        <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
+                        <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
+                </div>;
+    }
+    else
+    {
+        buttons = [];
+    }
     if (props.players[0].length != 0 && props.teamStats[0].length != 0)
     {
         const playerCards = [];
@@ -484,16 +496,12 @@ function PlayerHighlight(props)
             teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
         
         }
-
+        
         display = 
         <div id="player-focus-container" >
             {playerCards}
             {teamCards}
-            <div className='player-focus-button-container'>
-                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
-                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
-            </div>
-            
+            {buttons}
         </div>
     }
     else if (props.players[0].length != 0)
@@ -507,10 +515,7 @@ function PlayerHighlight(props)
         display = 
         <div id="player-focus-container" >
             {playerCards}
-            <div className='player-focus-button-container'>
-                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
-                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
-            </div>
+            {buttons}
                 
         </div>
     }
@@ -522,14 +527,12 @@ function PlayerHighlight(props)
             teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
         
         }
+        let buttons = [];
     
         display = 
         <div id="player-focus-container" >
             {teamCards}
-            <div className='player-focus-button-container'>
-                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
-                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
-            </div>
+            {buttons}
                 
         </div>
     }
@@ -538,10 +541,7 @@ function PlayerHighlight(props)
         display = 
         <div id="player-focus-container" >
             <p id="player-highlight-message"> No players</p>
-            <div className='player-focus-button-container'>
-                <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
-                <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
-            </div>
+            {buttons}
         </div>
     }
     /*let playerForm = '';

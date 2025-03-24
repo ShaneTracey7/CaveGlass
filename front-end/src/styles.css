@@ -346,10 +346,10 @@
     flex-direction: column;
     margin:auto;
     z-index: 1;
-    min-width: 500px; 
+    min-width: 600px; 
     min-height: 300px;
     max-width: 80%;
-    max-height: 40vh;
+    max-height: 501px; /*40vh */
     resize: none;
     overflow: hidden;
     container-name: playercard;
@@ -392,20 +392,23 @@
     z-index: 2;
     background-repeat: no-repeat;
     background-size: 700px 700px;
-    background-position: -20% 40%;
+    background-position: -10% 40%;
     opacity: 0.9;
 }
 .player-card-stat-container{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;/* column */
     gap: 5px;
     width: 50%;
     height: fit-content;
-    margin-left: 5%;
+    margin-left: auto;
     margin-right: auto;
     margin-top: auto;
     margin-bottom: auto;
     color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 15px;
 }
 
 .player-card-stat{
@@ -413,9 +416,10 @@
     font-weight: 800;
     font-size: 1.25rem;
     padding:5px;
-    margin: auto;
-    /*margin-top: auto;
-    margin-bottom: auto;*/
+    margin-left: 0;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
     background-color: rgba(0, 0, 0, 1);
     border: 2px solid white;
     border-radius: 5px;
@@ -574,17 +578,19 @@
 }
 .player-card-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;/*row */
     min-width:fit-content;
-    width: 100%;
+    width: fit-content;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0;
+    margin-bottom: auto;
     gap:10px;
 }
 
 /* as user resizes playercard & teamcard */
 /*changes based upon width of card*/
-@container playercard (width < 600px) {
+@container playercard (width < 700px) {
     #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
         /*width: 300px;*/
     }
@@ -595,8 +601,8 @@
         font-size: 1rem;
     }
 }
-@container playercard (width > 600px) and (width < 1000px){
-    
+@container playercard (width > 700px) and (width < 1000px){
+    /* default */
 }
 @container playercard (width > 1000px){
  
@@ -606,10 +612,14 @@
     #player-card-layer2 > .bg-player-card-text-container{
         margin-right: 100px;
     }
+    #player-card-layer3 > .player-card-stat-container > .player-card-container> .player-card-stat{
+        font-size: 1.75rem;
+    }
+
 }
 
 /*changes based upon height of card*/
-@container playercard (height > 375px) and (height < 500px){
+@container playercard (height > 375px) and (height < 500px) and (width > 1200px){
     #player-card-layer2 > #player-card-layer3 > #profile-pic-and-button > .player-card-img{
         width:250px;
         height:250px;
@@ -621,7 +631,7 @@
         font-size: 5rem;
     }
     #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
-        font-size: 1.75rem;
+        font-size: 2.25rem;
     }
     
     #player-card-layer2 > .bg-player-card-text-container > #bg-player-card-text{
@@ -630,34 +640,34 @@
     .player-card-name-container > #player-card-name{
         font-size: 4rem;
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container {
-        gap: 10px;
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
+        gap: 20px;
     }
 }
 
-@container playercard (height > 500px){
+@container playercard (height > 500px) and (width > 1200px){
     #player-card-layer2 > #player-card-layer3 > #profile-pic-and-button > .player-card-img{
-        width:250px;
-        height:250px;
+        width:300px;
+        height:300px;
     }
     #player-card-layer2 >#bg-player-card-number{
-        font-size: 18rem;
+        font-size: 22rem;
     }
     #player-card-layer2 >.bg-player-card-text-container-team > #bg-player-card-text{
         font-size: 5rem;
     }
     #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
-        font-size: 1.75rem;
+        font-size: 2.75rem;
     }
     
     #player-card-layer2 > .bg-player-card-text-container > #bg-player-card-text{
         font-size: 6rem;
     }
     .player-card-name-container > #player-card-name{
-        font-size: 4rem;
+        font-size: 5rem;
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container {
-        gap: 10px;
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container .player-card-container{
+        gap: 30px;
     }
 }
 
@@ -1111,6 +1121,7 @@ p{
     border: 4px solid gray;
     width: 80%;
     min-width: fit-content;
+    min-width: 650px;
     background-color: rgb(30, 30, 30);
     display: flex;
     flex-direction: row;
@@ -1310,9 +1321,9 @@ p{
 }
 
 /* as user resizes scoreboard */
-@container scoreboard (height > 300px) {
+@container scoreboard (height > 300px) and (width > 1300px) {
     .score-board-score-retro {
-      font-size: 5rem;
+      font-size: 6rem;
     }
     .score-board-info{
         font-size: 2rem;
@@ -1325,17 +1336,44 @@ p{
         margin-bottom: auto;
     }
     #score-board-period-retro{
-        font-size: 5rem;
+        font-size: 6rem;
     }
     .score-board-period-label-retro{
         font-size: 3rem;
     }
 
     #game-clock{
-        font-size: 5rem;
+        font-size: 6rem;
         border-top: 4px solid gray;
         margin-top: auto;
     }
+}
+@container scoreboard (height > 300px) and (width > 950px) and (width < 1300px) {
+    .score-board-score-retro {
+        font-size: 4rem;
+      }
+      .score-board-info{
+          font-size: 1.5rem;
+      }
+      .score-board-name{
+          font-size: 2.5rem;
+      }
+      .score-board-period-container-retro{
+          margin-top: 30px;
+          margin-bottom: auto;
+      }
+      #score-board-period-retro{
+          font-size: 4rem;
+      }
+      .score-board-period-label-retro{
+          font-size: 2.5rem;
+      }
+  
+      #game-clock{
+          font-size: 4rem;
+          border-top: 4px solid gray;
+          margin-top: auto;
+      }
 }
 @media only screen and (min-width: 1400px){
     #score-board-retro{
@@ -1343,34 +1381,7 @@ p{
     }
 }
 
-@container scoreboard (height > 300px) {
-    .score-board-score-retro {
-      font-size: 5rem;
-    }
-    .score-board-info{
-        font-size: 2rem;
-    }
-    .score-board-name{
-        font-size: 3rem;
-    }
-    .score-board-period-container-retro{
-        margin-top: 30px;
-        margin-bottom: auto;
-    }
-    #score-board-period-retro{
-        font-size: 5rem;
-    }
-    .score-board-period-label-retro{
-        font-size: 3rem;
-    }
-
-    #game-clock{
-        font-size: 5rem;
-        border-top: 4px solid gray;
-        margin-top: auto;
-    }
-}
-@container scoreboard (height > 200px) and (height < 300px){
+@container scoreboard (height > 200px) and (height < 300px) and (width > 950px){
     .score-board-score-retro {
       font-size: 4rem;
     }
