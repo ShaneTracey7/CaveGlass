@@ -28,7 +28,10 @@ function PlayerHighlight(props)
     const [showStatOptions, setShowStatOptions] = useState(false); //shows dropdown stat options
     const [showTeamStatOptions, setShowTeamStatOptions] = useState(false); //shows dropdown team stat options
     const [statOptionsState, setStatOptionsState] = useState([props.teamsInfo[0],props.teamsInfo[1]]); //keeps track of what teams to show as options (preventing users select same teams multiple times)
-
+    const [statListCap, setStatListCap] = useState(0); //value to keep track of how much space stats will take up on playercard
+    
+    const [selectedStats, setSelectedStats] = useState([]); //testing
+    
     // called on when api call for box score data which is on interval (decided in Game.js)    not fully tested (but pretty sure works)
     useEffect(() => {
     
@@ -134,6 +137,20 @@ function PlayerHighlight(props)
             console.log('no box score player updates');
         }
       }, [props.statInfo]);
+
+
+      useEffect(() => {
+
+        /*let tempSS = [];
+        for (let i = 0; i < customStats.length; i++) 
+        {                                                                                                                                                           
+            tempSS.push( <li class="selected-stat-element" key={i} ><p class='player-option-text'>{customStats[i][0]}</p> <Toggle cap={[statListCap,setStatListCap]} type="statList" state={[false]} size='small' statState={[customStats,setCustomStats]} index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(customStats[i])}} src={whitex} alt="delete"/> </li>);
+            console.log("i: " + i)
+        }
+        console.log("tempSS: " + tempSS)
+        setSelectedStats(tempSS);*/
+
+      }, [customStats]);
 
 
       //gets a specific stat value (used when adding player card) 
@@ -282,6 +299,11 @@ function PlayerHighlight(props)
             }
             else
             {
+                if(customStats.length < 1)
+                {
+                    console.log("no stats selected")
+                    return; //do nothing
+                }
                 //setting value for each customstat
                 for (let i = 0; i < customStats.length; i++){
             
@@ -303,6 +325,8 @@ function PlayerHighlight(props)
 
             //CLEAR selectedPlayer
             setSelectedPlayer([0,"Select a Player","","",0,"",0,"",[]]);
+
+            setStatListCap(0);
         }
         else
         {
@@ -355,7 +379,7 @@ function PlayerHighlight(props)
             console.log(tempSP);
             props.teamStats[1](temp);
 
-            //CLEAR selectedPlayer
+            //CLEAR selected Team
             setSelectedTeam([0,"Select a Team",false,[]]);
 
             //take away this team as an option in the teamform (i dont want user to make multiple instances)
@@ -369,9 +393,17 @@ function PlayerHighlight(props)
 
     function removeStat(stat)
     {
-        //remove from list
+        console.log("stat: " + stat);
+        
+        let removeIndex = customStats.findIndex(e => e === stat);
+        //remove from card list
+        let tempSS = selectedStats;
+        let test = tempSS.splice(removeIndex, 1);
+        setSelectedStats(tempSS);
+        console.log("removed element: " +  test + " index: " + removeIndex);
+        //remove from data list
         setCustomStats(customStats.filter((e)=>{return e != stat}));
-
+        
         //add back to options
         if(selectedTeam[0] != 0) // team stats
         {
@@ -393,6 +425,20 @@ function PlayerHighlight(props)
                 temp.push(stat[0]);
                 setSkaterStatList(temp);
             }
+        
+            //decrement statlistcap
+            if(stat[1] > 0)
+            {
+                setStatListCap((statListCap - 3));
+                //clear line value
+
+
+            }
+            else
+            {
+                setStatListCap((statListCap - 1));
+            }
+            
     }
 
     }
@@ -408,6 +454,9 @@ function PlayerHighlight(props)
         setSkaterStatList(ssl);
         //hide modal
         setShowForm(false);
+        setStatListCap(0);
+        
+        
     }
 
     function cancelTeamAdd()
@@ -420,6 +469,7 @@ function PlayerHighlight(props)
         setTeamStatList(tsl);
         //hide modal
         setShowTeamForm(false);
+
     }
 
     function playerOptionClick(id,text,fn,ln,n,hs,tid,pc,s)
@@ -446,6 +496,13 @@ function PlayerHighlight(props)
 
     function statOptionClick(stat)
     {
+
+        //check to see if list is full
+        if(statListCap < 12)
+        {
+            //increment capacity
+            setStatListCap((statListCap+1));
+        }
         //add to list
         let temp = customStats;
         temp.push([stat,0,"Over",0]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
@@ -472,17 +529,11 @@ function PlayerHighlight(props)
 
     let display;
     let buttons; //arr of buttons to be displayed
-    if(!showForm && !showTeamForm)
-    {
-        buttons = <div className='player-focus-button-container'>
-                        <div className='mode-button-dark' onClick={() => {setShowForm(true)}}> Add Player </div>
-                        <div className='mode-button-dark' onClick={() => {setShowTeamForm(true)}}> Add Team </div>
+    buttons = <div className='player-focus-button-container'>
+                        <button className='mode-button-dark' onClick={() => {setShowForm(true)}} disabled={(showTeamForm) ?  true : false} > Add Player </button>
+                        <button className='mode-button-dark' onClick={() => {setShowTeamForm(true)}} disabled={(showForm) ?  true : false}> Add Team </button>{/*disabled={showForm && showTeamForm ? true : false} */}
                 </div>;
-    }
-    else
-    {
-        buttons = [];
-    }
+   
     if (props.players[0].length != 0 && props.teamStats[0].length != 0)
     {
         const playerCards = [];
@@ -527,7 +578,6 @@ function PlayerHighlight(props)
             teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
         
         }
-        let buttons = [];
     
         display = 
         <div id="player-focus-container" >
@@ -577,7 +627,7 @@ function PlayerHighlight(props)
         } 
         
         const statOptions = [];
-        const selectedStats = [];
+       // const selectedStats = [];
         let statList = [];
         if (selectedPlayer[7] != "") //there is a selected player 
         {
@@ -599,15 +649,18 @@ function PlayerHighlight(props)
             statOptions.push( <li class="stat-option" onClick={() => {statOptionClick(statList[i])}} key={i} ><p class='stat-option-text'>{statList[i]}</p></li>);
         }
 
+        
+        let tempSS = [];
         for (let i = 0; i < customStats.length; i++) 
-        {   
-            selectedStats.push( <li class="selected-stat-element" key={i} ><p class='player-option-text'>{customStats[i][0]}</p> <Toggle type="statList" state={[false]} size='small' statState={[customStats,setCustomStats]} index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(customStats[i])}} src={whitex} alt="delete"/> </li>);
-        }
+        {                                                                                                                                                           
+            tempSS.push( <li class="selected-stat-element" key={i} ><p class='player-option-text'>{customStats[i][0]}</p> <Toggle cap={[statListCap,setStatListCap]} type="statList" state={customStats[i][2] > 0 ? true : false} statState={[customStats,setCustomStats]} size='small' index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(customStats[i])}} src={whitex} alt="delete"/> </li>);
+            //setSelectedStats(tempSS); 
+        }                                                                                                                                                                                           
 
         let playerForm = <form className='player-form' style={{display: showForm ? "flex": "none"}}>
             <img id="player-form-cancel" onClick={cancelAdd} src={redx} alt="exit"/>
             <div class="player-select-container">
-                <div class="player-select-selected" onClick={() => {setShowOptions(true)}} > {selectedPlayer[1]}</div>
+                <div class="player-select-selected" onClick={() => {if (statListCap < 12){ setShowOptions(true)}}} > {selectedPlayer[1]}</div>
                 <div class="player-select" style={{display: showOptions ? "block": "none"}}>
                     {playerOptions}
                 </div>
@@ -617,18 +670,19 @@ function PlayerHighlight(props)
             </div>
             <div id='custom-options-container' style={{display: checked ? "flex": "none"}}>
                 <div class="stat-select-container">
-                    <div class="player-select-selected" onClick={() => {setShowStatOptions(true)}} > Select Stats </div>
+                    <div class="player-select-selected" onClick={() => {if(statListCap < 12 ){setShowStatOptions(true)}}} > Select Stats </div>
                     <div class="player-select" style={{display: showStatOptions ? "block": "none"}}>
                         {statOptions}
                     </div>
                 </div>
 
                 <div id="custom-stats-container">
-                    {selectedStats}
+                    {tempSS}{/*{selectedStats}*/}
                 </div>
             </div>
 
             <div id="player-form-add" onClick={addPlayer}>Add</div>
+            <p>{"statlistcap: " + statListCap}</p>
         </form>;
 
          let teamForm = <form className='player-form' style={{display: showTeamForm ? "flex": "none"}}>

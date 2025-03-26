@@ -361,10 +361,21 @@
     {
         resize: vertical;
     }
-    .PlayerCard1-dark
+    
+}
+@media only screen and (max-width: 900px){
+    .PlayerCard1
     {
-        resize: vertical;
+        max-height: 350px;
     }
+    
+}
+@media only screen and (min-width: 900px) and (max-width: 1500px){
+    .PlayerCard1
+    {
+        max-height: 400px;
+    }
+    
 }
 
 .PlayerCard{
@@ -397,7 +408,7 @@
 }
 .player-card-stat-container{
     display: flex;
-    flex-direction: row;/* column */
+    flex-direction: column;/* column */
     gap: 5px;
     width: 50%;
     height: fit-content;
@@ -410,6 +421,20 @@
     padding: 10px;
     border-radius: 15px;
 }
+.player-card-normal-stat-container{
+    display: flex;
+    flex-direction: row;/* column */
+    gap: 5px;
+    width: 100%;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: white;
+    border-radius: 15px;
+}
+
 
 .player-card-stat{
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -507,6 +532,9 @@
 #profile-pic-and-button{
     display:flex;
     flex-direction: column;
+    margin-left: auto;
+    margin-right: 0;
+    min-width: fit-content;
 }
 
 #player-card-layer3{
@@ -521,6 +549,7 @@
     position: absolute;
     z-index: 3;
 }
+/* i don't think this is in use */
 .PlayerCard1-dark{
     height:fit-content;
     width: 80%;
@@ -574,7 +603,17 @@
     padding: 3px;
     background-color: rgba(0, 0, 0, 1);
     border: 2px solid white;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
 
+}
+.shrunk-stat-line-text{
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-bottom: 0;
+    padding-right: 5px;
 }
 .player-card-container{
     display: flex;
@@ -591,13 +630,13 @@
 /* as user resizes playercard & teamcard */
 /*changes based upon width of card*/
 @container playercard (width < 700px) {
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container > .player-card-container{
         /*width: 300px;*/
     }
-    #player-card-layer2 > #player-card-layer3 >.player-card-stat-container {
+    #player-card-layer2 > #player-card-layer3 >.player-card-stat-container > .player-card-normal-stat-container{
         margin-left: 0; 
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container > .player-card-container > .player-card-stat {
         font-size: 1rem;
     }
 }
@@ -606,13 +645,13 @@
 }
 @container playercard (width > 1000px){
  
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container > .player-card-container{
         /*width: 600px;*/
     }
     #player-card-layer2 > .bg-player-card-text-container{
-        margin-right: 100px;
+        /*margin-right: 100px;*/
     }
-    #player-card-layer3 > .player-card-stat-container > .player-card-container> .player-card-stat{
+    #player-card-layer3 > .player-card-stat-container .player-card-normal-stat-container > .player-card-container> .player-card-stat{
         font-size: 1.75rem;
     }
 
@@ -628,20 +667,35 @@
         font-size: 18rem;
     }
     #player-card-layer2 >.bg-player-card-text-container-team > #bg-player-card-text{
-        font-size: 5rem;
+        font-size: 6rem;
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container> .player-card-container > .player-card-stat {
         font-size: 2.25rem;
     }
     
-    #player-card-layer2 > .bg-player-card-text-container > #bg-player-card-text{
-        font-size: 6rem;
-    }
     .player-card-name-container > #player-card-name{
         font-size: 4rem;
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container{
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container> .player-card-container{
         gap: 20px;
+    }
+     /* line stats */
+     #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.player-card-line-stat{
+        font-size: 2rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > p{
+        font-size: 1.25rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar-slider {
+        font-size: 0.9rem;
+        height: 25px;
+        line-height: 25px;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar {
+        height: 8px;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar-ext {
+        height: 8px;
     }
 }
 
@@ -654,21 +708,37 @@
         font-size: 22rem;
     }
     #player-card-layer2 >.bg-player-card-text-container-team > #bg-player-card-text{
-        font-size: 5rem;
+        font-size: 7rem;
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-container > .player-card-stat {
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container> .player-card-container > .player-card-stat {
         font-size: 2.75rem;
     }
     
-    #player-card-layer2 > .bg-player-card-text-container > #bg-player-card-text{
-        font-size: 6rem;
-    }
     .player-card-name-container > #player-card-name{
         font-size: 5rem;
     }
-    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container .player-card-container{
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-normal-stat-container >.player-card-container{
         gap: 30px;
     }
+        /* line stats */
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.player-card-line-stat{
+        font-size: 2.5rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > p{
+        font-size: 1.75rem;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar-slider {
+        font-size: 1rem;
+        height: 30px;
+        line-height: 30px;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar {
+        height: 10px;
+    }
+    #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar-ext {
+        height: 10px;
+    }
+
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * Game.js Component * * * * * * * * * * * * * * * * * * * * * * * */
@@ -848,10 +918,11 @@
     
 }
 
+
 .mode-button-dark{
     color: white;
-    background-color: black;
-    border: 2px solid gray;
+    background-color: rgb(36, 136, 87);
+    border: 3px solid gray;
     margin-top: auto;
     margin-bottom: auto;
     width: 100px;
@@ -859,8 +930,12 @@
     border-radius: 15px;
     line-height: 40px;
     font-weight: bold;
+    font-size: 0.95rem;
     margin-left: auto;
     margin-right: auto;
+}
+.mode-button-dark:hover{
+    background-color: rgb(22, 89, 57);
 }
 
 

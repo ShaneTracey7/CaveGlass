@@ -16,6 +16,7 @@ function PlayerCard(props) {
 
     let stats = props.playerData[8];
     const statArr = [];
+    const customStatArr = [];
 
     /*
     for(let i = 0; i < stats.length; i++)
@@ -102,7 +103,7 @@ function PlayerCard(props) {
                     if(i == 0)
                     {
                         
-                        col1.push(<p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>);
+                        col2.push(<p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>);
                         i++;
                     }
                     else
@@ -209,7 +210,7 @@ function PlayerCard(props) {
         //adding custom stats
         for(let i = 0; i < customStats.length; i++)
             {
-                statArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
+                customStatArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
             }
 
     return (                
@@ -217,17 +218,14 @@ function PlayerCard(props) {
             
             <div id="player-card-layer2"className='PlayerCard' style={{backgroundImage: "url(" + props.teamInfo.darkLogo + ")"}}>{/*className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} */ }
                 
-                {/*<div className='bg-player-card-text-container'>
-                    <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
-                    <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
-                    <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
-                </div> */}
-                
                 <p id="bg-player-card-number">{ props.playerData[4]}</p>
                 
                 <div id="player-card-layer3"className='PlayerCard'> {/*className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} */ }
                     <div className='player-card-stat-container'>
-                        {statArr}
+                    <div className='player-card-normal-stat-container'>
+                            {statArr}
+                        </div>
+                        {customStatArr}
                     </div>
                     <div id="profile-pic-and-button">
                         <img className='player-card-delete' onClick={() => {deletePlayerCard()}} src={redTrash} alt='delete'/>

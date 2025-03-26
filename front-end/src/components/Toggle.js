@@ -5,6 +5,25 @@ import React, {useState,useEffect} from 'react';
 
 function Toggle(props) {
 
+    function lineInputChange(e)
+    {
+        setLineState(e.target.value);
+        setLiValue(e.target.value);
+        if(e.target.value == "")
+        {
+            props.cap[1](props.cap[0] -= 2);
+            setLicFlag(true);
+        }
+        else
+        {   
+            if(licFlag)
+            {
+                props.cap[1](props.cap[0] += 2);
+                setLicFlag(false);
+            }
+        }
+        console.log("licFlag: " + licFlag + " e.target.value: " + e.target.value);
+    }
 
     function setLineState(value)
     {
@@ -26,6 +45,8 @@ function Toggle(props) {
 
     const [checked, setChecked] = useState(props.state[0]); //for toggle switch in form
     const [oUState, setOUState] = useState(""); //for toggle switch in form
+    const [licFlag, setLicFlag] = useState(true); //flag for line input change (true if value is ""/null)
+    const [liValue, setLiValue] = useState(""); //used to be "" 
 
     let textBefore;
     let textAfterTrue;
@@ -43,7 +64,7 @@ function Toggle(props) {
     else
     {
         lineInput = <div className='line-container' style={{display: checked ? "flex": "none"}}>
-                <input class="line-input" type='number'  onChange={(e) => setLineState(e.target.value)} /> 
+                <input class="line-input" type='number' value={liValue} onChange={(e) => {lineInputChange(e)}} /> 
                 <div className='over-under-container'>
                 <div onClick={() => setLineState('Over')} >
                         Over
@@ -65,11 +86,27 @@ function Toggle(props) {
     {
         if(props.type == 'statList')
         {
-            let temp = props.statState[0];
-            temp[props.index][1] = 0; //changes value to line input back to default
-            props.statState[1](temp);
+            if(props.cap[0] <= 10 || checked)
+            {
+                let temp = props.statState[0];
+                temp[props.index][1] = 0; //changes value to line input back to default
+                props.statState[1](temp);
 
-            setChecked(!checked)
+                setChecked(!checked)
+
+                if(checked && !licFlag)
+                {
+                    //clear line value
+                    setLiValue("");
+                    props.cap[1](props.cap[0] -= 2);
+                    setLicFlag(true);
+                }
+        
+            }
+            else // no more room 
+            {
+                //do nothing
+            }
         }
         else if(props.type == 'default')
         {
@@ -88,7 +125,7 @@ function Toggle(props) {
         <div class={props.size == "small" ? "toggle-switch-container" : "toggle-switch-container-big"}>
             <p class="toggle-left-label">{textBefore}</p>
             <label id={props.size == "small" ? 'small-toggle-switch': 'big-toggle-switch'}class="toggle-switch">
-                <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick}/>
+                <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>
                 <span id={props.size == "small" ? 'small-slider': 'big-slider'} class="slider"></span>
             </label>
             <p class="toggle-right-label">{checked ? textAfterTrue: textAfterFalse }</p>
