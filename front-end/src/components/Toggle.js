@@ -27,17 +27,19 @@ function Toggle(props) {
 
     function setLineState(value)
     {
-        let temp;
         if(value == 'Over' || value == 'Under')
         {
-            temp = props.statState[0];
-            temp[props.index][2] = value; //changes value to line input
+            const temp = [...props.statState[0]]; // use effect should recognize now
+            //temp = props.statState[0];
+            temp[props.index][2] = value; //changes value to line input (was [2])
             props.statState[1](temp);
             setOUState(value);
+
         }
-        else
+        else //idk what scenario this would be invoked
         {
-            temp = props.statState[0];
+            const temp = [...props.statState[0]]; // use effect should recognize now
+            //temp = props.statState[0];
             temp[props.index][1] = value; //changes value to line input
             props.statState[1](temp);
         }
@@ -53,6 +55,7 @@ function Toggle(props) {
     let textAfterFalse;
     let display;
     let lineInput;
+    let mainToggle;
 
     if(props.type == 'default')
     {
@@ -60,6 +63,8 @@ function Toggle(props) {
         textBefore = "Player Info:";
         textAfterTrue = "Custom";
         textAfterFalse = "Default";
+
+        mainToggle = <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>;
     }
     else
     {
@@ -77,9 +82,12 @@ function Toggle(props) {
                 </div>
             </div>
 
-        textBefore = "Display Style:"
+        textBefore = "Display Style: " + props.index + " "; //new for testing
         textAfterTrue = "Line:";
         textAfterFalse = "Total";
+
+        mainToggle = <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>;
+            
     }
 
     function handleClick()
@@ -88,11 +96,16 @@ function Toggle(props) {
         {
             if(props.cap[0] <= 10 || checked)
             {
-                let temp = props.statState[0];
+                //let temp = props.statState[0];
+                const temp = [...props.statState[0]];
                 temp[props.index][1] = 0; //changes value to line input back to default
                 props.statState[1](temp);
 
-                setChecked(!checked)
+                /*const temp2 = [...props.statState[0]]; // use effect should recognize now
+                temp2[props.index][4] = !checked; //keeps toggle state consistent
+                props.statState[1](temp2);*/
+
+                setChecked(!checked);
 
                 if(checked && !licFlag)
                 {
@@ -101,10 +114,11 @@ function Toggle(props) {
                     props.cap[1](props.cap[0] -= 2);
                     setLicFlag(true);
                 }
-        
+                console.log("props.cap[0]: " + props.cap[0])
             }
             else // no more room 
             {
+                console.log(" else props.cap[0]: " + props.cap[0])
                 //do nothing
             }
         }
@@ -125,7 +139,7 @@ function Toggle(props) {
         <div class={props.size == "small" ? "toggle-switch-container" : "toggle-switch-container-big"}>
             <p class="toggle-left-label">{textBefore}</p>
             <label id={props.size == "small" ? 'small-toggle-switch': 'big-toggle-switch'}class="toggle-switch">
-                <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>
+                {mainToggle}
                 <span id={props.size == "small" ? 'small-slider': 'big-slider'} class="slider"></span>
             </label>
             <p class="toggle-right-label">{checked ? textAfterTrue: textAfterFalse }</p>

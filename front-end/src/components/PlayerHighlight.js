@@ -24,13 +24,11 @@ function PlayerHighlight(props)
     const [skaterStatList, setSkaterStatList] = useState(ssl);
     const [goalieStatList, setGoalieStatList] = useState(gsl);
     const [teamStatList, setTeamStatList] = useState(tsl);
-    const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under",<value>]
+    const [customStats, setCustomStats] = useState([]); // arr of user selected stats. Stat format [<stat name>,<line value>, "over" or "under",<value>, <checked(bool)>]
     const [showStatOptions, setShowStatOptions] = useState(false); //shows dropdown stat options
     const [showTeamStatOptions, setShowTeamStatOptions] = useState(false); //shows dropdown team stat options
     const [statOptionsState, setStatOptionsState] = useState([props.teamsInfo[0],props.teamsInfo[1]]); //keeps track of what teams to show as options (preventing users select same teams multiple times)
     const [statListCap, setStatListCap] = useState(0); //value to keep track of how much space stats will take up on playercard
-    
-    const [selectedStats, setSelectedStats] = useState([]); //testing
     
     // called on when api call for box score data which is on interval (decided in Game.js)    not fully tested (but pretty sure works)
     useEffect(() => {
@@ -139,16 +137,10 @@ function PlayerHighlight(props)
       }, [props.statInfo]);
 
 
+      //was made just for testing
       useEffect(() => {
 
-        /*let tempSS = [];
-        for (let i = 0; i < customStats.length; i++) 
-        {                                                                                                                                                           
-            tempSS.push( <li class="selected-stat-element" key={i} ><p class='player-option-text'>{customStats[i][0]}</p> <Toggle cap={[statListCap,setStatListCap]} type="statList" state={[false]} size='small' statState={[customStats,setCustomStats]} index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(customStats[i])}} src={whitex} alt="delete"/> </li>);
-            console.log("i: " + i)
-        }
-        console.log("tempSS: " + tempSS)
-        setSelectedStats(tempSS);*/
+        console.log("change in custom stats")
 
       }, [customStats]);
 
@@ -157,7 +149,6 @@ function PlayerHighlight(props)
     function getTeamStatValue(isHome,statName)
     {
         let endpoint = props.statInfo[1]; //endpoint at which the team's stats are located in API
-        
         let value = setTeamStatForCheck(endpoint,statName,isHome);
         console.log("value: " + value);
         return value;
@@ -241,7 +232,6 @@ function PlayerHighlight(props)
                 case 'Face-off': return (apiPlayer.faceoffWinningPctg * 100).toFixed(0) + '%';
                 //default: return statName.toLowerCase();
             }
-            
         }
     }  
     function setTeamStatForCheck(endpoint,statName,isHome)
@@ -269,7 +259,6 @@ function PlayerHighlight(props)
                 case 'Goals': return props.scores[1];
                 //goals will have a different endpoint
             }
-            
         }
     }  
     //called when the add button from player form is clicked
@@ -395,12 +384,6 @@ function PlayerHighlight(props)
     {
         console.log("stat: " + stat);
         
-        let removeIndex = customStats.findIndex(e => e === stat);
-        //remove from card list
-        let tempSS = selectedStats;
-        let test = tempSS.splice(removeIndex, 1);
-        setSelectedStats(tempSS);
-        console.log("removed element: " +  test + " index: " + removeIndex);
         //remove from data list
         setCustomStats(customStats.filter((e)=>{return e != stat}));
         
@@ -431,16 +414,12 @@ function PlayerHighlight(props)
             {
                 setStatListCap((statListCap - 3));
                 //clear line value
-
-
             }
             else
             {
                 setStatListCap((statListCap - 1));
             }
-            
-    }
-
+        }
     }
 
     function cancelAdd()
@@ -454,9 +433,8 @@ function PlayerHighlight(props)
         setSkaterStatList(ssl);
         //hide modal
         setShowForm(false);
+        //resets the cap
         setStatListCap(0);
-        
-        
     }
 
     function cancelTeamAdd()
@@ -469,7 +447,8 @@ function PlayerHighlight(props)
         setTeamStatList(tsl);
         //hide modal
         setShowTeamForm(false);
-
+        //resets the cap
+        setStatListCap(0);
     }
 
     function playerOptionClick(id,text,fn,ln,n,hs,tid,pc,s)
@@ -494,9 +473,8 @@ function PlayerHighlight(props)
         setTeamStatList(tsl);
     }
 
-    function statOptionClick(stat)
+    function statOptionClick(stat) 
     {
-
         //check to see if list is full
         if(statListCap < 12)
         {
@@ -504,8 +482,9 @@ function PlayerHighlight(props)
             setStatListCap((statListCap+1));
         }
         //add to list
-        let temp = customStats;
-        temp.push([stat,0,"Over",0]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
+        //let temp = customStats;
+        const temp = [...customStats]; // use effect should recognize now
+        temp.push([stat,0,"Over",0,false]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
         setCustomStats(temp);
 
         setShowStatOptions(false);
@@ -545,7 +524,6 @@ function PlayerHighlight(props)
         for (let i = 0; i < props.teamStats[0].length; i++) 
         {   
             teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
-        
         }
         
         display = 
@@ -566,8 +544,7 @@ function PlayerHighlight(props)
         display = 
         <div id="player-focus-container" >
             {playerCards}
-            {buttons}
-                
+            {buttons}    
         </div>
     }
     else if (props.teamStats[0].length != 0)
@@ -576,14 +553,12 @@ function PlayerHighlight(props)
         for (let i = 0; i < props.teamStats[0].length; i++) 
         {   
             teamCards.push( <TeamCard statOptionsState={[statOptionsState,setStatOptionsState]} teamData={props.teamStats[0][i]} teamInfo={ props.teamStats[0][i][2] ? props.teamsInfo[0] : props.teamsInfo[1]} darkMode={props.darkMode} teams={[props.teamStats[0],props.teamStats[1]]}></TeamCard>);
-        
         }
     
         display = 
         <div id="player-focus-container" >
             {teamCards}
             {buttons}
-                
         </div>
     }
     else
@@ -649,14 +624,10 @@ function PlayerHighlight(props)
             statOptions.push( <li class="stat-option" onClick={() => {statOptionClick(statList[i])}} key={i} ><p class='stat-option-text'>{statList[i]}</p></li>);
         }
 
-        
-        let tempSS = [];
-        for (let i = 0; i < customStats.length; i++) 
-        {                                                                                                                                                           
-            tempSS.push( <li class="selected-stat-element" key={i} ><p class='player-option-text'>{customStats[i][0]}</p> <Toggle cap={[statListCap,setStatListCap]} type="statList" state={customStats[i][2] > 0 ? true : false} statState={[customStats,setCustomStats]} size='small' index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(customStats[i])}} src={whitex} alt="delete"/> </li>);
-            //setSelectedStats(tempSS); 
-        }                                                                                                                                                                                           
-
+        let tempSS = customStats.map((cs, i) => (                                                                                                       //may need to change to [cs[4]]      //figure this out       key={cs[4]}                               
+            <li class="selected-stat-element" key={cs[0]} ><p class='player-option-text'>{cs[0]}</p> <Toggle cap={[statListCap,setStatListCap]} type="statList" state={[false]}  statState={[customStats,setCustomStats]} size='small' index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(cs)}} src={whitex} alt="delete"/> </li>
+        ));
+    
         let playerForm = <form className='player-form' style={{display: showForm ? "flex": "none"}}>
             <img id="player-form-cancel" onClick={cancelAdd} src={redx} alt="exit"/>
             <div class="player-select-container">
@@ -677,12 +648,12 @@ function PlayerHighlight(props)
                 </div>
 
                 <div id="custom-stats-container">
-                    {tempSS}{/*{selectedStats}*/}
+                        {tempSS}
                 </div>
             </div>
 
             <div id="player-form-add" onClick={addPlayer}>Add</div>
-            <p>{"statlistcap: " + statListCap}</p>
+            <p>{"statlistcap: " + statListCap}</p> {/* only here for testing*/}
         </form>;
 
          let teamForm = <form className='player-form' style={{display: showTeamForm ? "flex": "none"}}>
@@ -706,12 +677,13 @@ function PlayerHighlight(props)
                 </div>
 
                 <div id="custom-stats-container">
-                    {selectedStats}
+                     {/* use to not be a state variable*/}
+                    {tempSS}
                 </div>
             </div>
             
             <div id="player-form-add" onClick={() => {addTeam(selectedTeam[0] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1])}}>Add</div>
-
+            <p>{"statlistcap: " + statListCap}</p> {/* only here for testing*/}
         </form>;
 
    /*<div class="stat-select-container">
@@ -760,8 +732,6 @@ customSelects2.forEach(function (select) {
         }
     });
 });
-
-
 
 let customSelects3 = document.querySelectorAll('.team-select-container');
 
