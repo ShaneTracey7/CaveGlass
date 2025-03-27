@@ -171,39 +171,6 @@ function TeamCard(props) {
         //adding custom stats
     if(customStats.length > 0)
             {   
-                /*
-              if(window.innerWidth >= 1100)
-                {
-                    for(let i = 0; i < customStats.length; i++)
-                        { 
-                            customStatArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
-                        }
-                }
-              else
-              {
-                for(let i = 0; i < customStats.length; i++)
-                    {   
-                        customStatArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <p>{"(" +customStats[i][2] + Math.round(customStats[i][1] * 10) / 10 + "): " + Math.round(customStats[i][3] * 10) / 10}</p></div> );
-                    }
-              }
-                window.addEventListener('resize', () => {
-
-                    if(window.innerWidth >= 1100){
-                        //customStatArr.length = 0;// [];
-                        for(let i = 0; i < customStats.length; i++)
-                            { 
-                            customStatArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
-                            }
-                    } else {
-                        
-                        //customStatArr.length = 0;
-                        for(let i = 0; i < customStats.length; i++)
-                            {   
-                            customStatArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <p>{"(" +customStats[i][2] + Math.round(customStats[i][1] * 10) / 10 + "): " + Math.round(customStats[i][3] * 10) / 10}</p></div> );
-                            }
-                    }
-                  })
-                */
                 if(window.innerWidth > 1100)
                 {
                     for(let i = 0; i < customStats.length; i++)

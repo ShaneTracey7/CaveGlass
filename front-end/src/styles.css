@@ -614,6 +614,15 @@
     margin-bottom: auto;
     padding-bottom: 0;
     padding-right: 5px;
+    font-size: 1.25rem;
+}
+.shrunk-player-card-line-stat{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    padding:5px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 .player-card-container{
     display: flex;
@@ -680,6 +689,7 @@
         gap: 20px;
     }
      /* line stats */
+     /*
      #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.player-card-line-stat{
         font-size: 2rem;
     }
@@ -696,7 +706,7 @@
     }
     #player-card-layer2 > #player-card-layer3 > .player-card-stat-container > .player-card-line-container >.progress-bar-container-with-label > .progress-bar-container > .progress-bar-ext {
         height: 8px;
-    }
+    }*/
 }
 
 @container playercard (height > 500px) and (width > 1200px){

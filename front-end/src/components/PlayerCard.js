@@ -1,9 +1,94 @@
 import '../styles.css';
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,useRef} from 'react';
 import redTrash from '../pics/red-trash.png';
 import ProgressBar from './ProgressBar';
 
 function PlayerCard(props) {
+
+   const [customStatArr, setCustomStatArr] = useState(setDefaultCustomStats());
+   const elementRef = useRef(null); //used on parent div
+   const prevHeightRef = useRef(0);// used to change jsx upon player card height
+   const prevWidthRef = useRef(0);// used to change jsx upon player card width
+
+      useEffect(() => {
+        const resizeObserver = new ResizeObserver((entries) => {
+          entries.forEach((entry) => {
+            // Get the new dimensions
+            const { width, height } = entry.contentRect;
+            console.log("height: " + height);
+
+            // Compare previous Dims with the current height
+            const prevHeight = prevHeightRef.current;
+            const prevWidth = prevWidthRef.current;
+
+            if(prevHeight >= 370 && height < 370 || (height >= 370 && prevWidth >= 900 && width < 900))//was over 330
+                {
+                    let temp1 = [];
+                    for(let i = 0; i < customStats.length; i++)
+                        {   
+                            temp1.push( <div className='player-card-line-container'><p className='shrunk-player-card-line-stat'> {customStats[i][0]}</p> <p className='shrunk-stat-line-text'>{"(" +customStats[i][2] + " " + Math.round(customStats[i][1] * 10) / 10 + "): " + Math.round(customStats[i][3] * 10) / 10}</p></div> );
+                        }
+                        let temp2 = temp1;
+                       setCustomStatArr(temp2);
+                } 
+            else if(prevHeight < 370 && height >= 370 || (height >= 370 && prevWidth < 900 && width >= 900))
+                {
+                    if(width >= 900)
+                    {    
+                        let temp1 = [];
+                        for(let i = 0; i < customStats.length; i++)
+                            { 
+                                temp1.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
+                            }
+                            let temp2 = temp1;
+                            setCustomStatArr(temp2);
+                    }
+                }
+            else
+            {
+                console.log("else")
+            }
+            // Update the ref with the current Dims for the next comparison
+            prevHeightRef.current = height;
+            prevWidthRef.current = width;
+
+          });
+        });
+
+        // Observe the element
+        if (elementRef.current) {
+            resizeObserver.observe(elementRef.current);
+        }
+  
+        // Cleanup the observer on component unmount
+        return () => {
+            if (elementRef.current) {
+            resizeObserver.unobserve(elementRef.current);
+            }
+        };
+        }, []);
+
+    //needed to initalize customStatArr
+   function setDefaultCustomStats()
+   {
+       let stats = props.playerData[8];
+
+      const customStats = [];
+      for(let i = 0; i < stats.length; i++)
+       {
+           if(stats[i][1] != 0) // display style isn'total'
+           {
+               customStats.push(stats[i]);
+           }
+       }
+       //adding custom stats
+       const csa = [];
+       for(let i = 0; i < customStats.length; i++)
+           {
+            csa.push( <div className='player-card-line-container'><p className='shrunk-player-card-line-stat'> {customStats[i][0]}</p> <p className='shrunk-stat-line-text'>{"(" +customStats[i][2] + " " + Math.round(customStats[i][1] * 10) / 10 + "): " + Math.round(customStats[i][3] * 10) / 10}</p></div> );
+            }
+       return csa;
+   }
 
     function deletePlayerCard()
     {   
@@ -13,29 +98,11 @@ function PlayerCard(props) {
         console.log('card deleted');
     }
 
-
     let stats = props.playerData[8];
     const statArr = [];
-    const customStatArr = [];
+    const totalStats = [];
+    const customStats = [];
 
-    /*
-    for(let i = 0; i < stats.length; i++)
-    {
-        if(stats[i][1] == 0) // display style is 'total'
-        {
-            statArr.push( <div className='player-card-container'><p className='player-card-stat'> {stats[i][0] + ":"}</p></div>);
-        }     
-    }
-    for(let i = 0; i < stats.length; i++)
-    {
-        if(stats[i][1] != 0) // display style is 'custom'
-        {
-            statArr.push( <div className='player-card-line-container'><p className='player-card-stat'> {stats[i][0]}</p> <ProgressBar value={Math.round(0.75 * 10) / 10} line={Math.round(stats[i][1] * 10) / 10} ou={stats[i][2]}></ProgressBar></div> );
-        }
-    }
-        */
-       const totalStats = [];;
-       const customStats = [];;
     for(let i = 0; i < stats.length; i++)
         {
             if(stats[i][1] == 0) // display style isn'total'
@@ -48,7 +115,7 @@ function PlayerCard(props) {
             }
         }
             //adding total stats
-        if(totalStats.length % 3 == 0) //divisible by 3
+    if(totalStats.length % 3 == 0) //divisible by 3
         {
             let col1 = [];
             let col2 = [];
@@ -75,19 +142,7 @@ function PlayerCard(props) {
                 statArr.push(temp1);
                 statArr.push(temp2);
                 statArr.push(temp3);
-        }/*
-        if(totalStats.length % 3 == 0) //divisible by 3
-        {
-            for(let i = 0; i < totalStats.length; i+=3)
-                {
-                    let temp = <div className='player-card-container'>
-                                <p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>
-                                <p className='player-card-stat'> {totalStats[i+1][0] + ": "+ totalStats[i+1][3]}</p>
-                                <p className='player-card-stat'> {totalStats[i+2][0] + ": "+ totalStats[i+2][3]}</p>
-                            </div>;
-                    statArr.push(temp);
-                }
-        }*/
+        }
         else if(totalStats.length % 3 == 1)
         {
             let i = 0;
@@ -99,10 +154,8 @@ function PlayerCard(props) {
             let temp3;
             while( i < totalStats.length)
                 {
-                    
                     if(i == 0)
                     {
-                        
                         col2.push(<p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>);
                         i++;
                     }
@@ -169,52 +222,9 @@ function PlayerCard(props) {
             statArr.push(temp2);
             statArr.push(temp3);
         }
-            /* old way (2 cols)
-        if(totalStats.length % 2 == 0) //even number
-        {
-            for(let i = 0; i < totalStats.length; i+=2)
-                {
-                    let temp = <div className='player-card-container'>
-                                <p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>
-                                <p className='player-card-stat'> {totalStats[i+1][0] + ": "+ totalStats[i+1][3]}</p>
-                            </div>;
-                    statArr.push(temp);
-                }
-        }
-        else //odd number
-        {
-            let i = 0;
-            let temp;
-            while( i < totalStats.length)
-                {
-                    if(i == 0)
-                    {
-                        temp = <div className='player-card-container'>
-                                    <p className='player-card-stat'> {totalStats[i][0] + ": " + totalStats[i][3]}</p>
-                                </div>;
-                        statArr.push(temp);
-                        i++;
-                    }
-                    else
-                    {
-                        temp = <div className='player-card-container'>
-                                <p id='player-card-stat-left' className='player-card-stat'> {totalStats[i][0] + ": " + totalStats[i][3]}</p>
-                                <p id='player-card-stat-right' className='player-card-stat'> {totalStats[i+1][0] + ": " + totalStats[i+1][3]}</p>
-                            </div>;
-                        statArr.push(temp);
-                        i+=2;
-                    }
-                }
-        }*/
-
-        //adding custom stats
-        for(let i = 0; i < customStats.length; i++)
-            {
-                customStatArr.push( <div className='player-card-line-container'><p className='player-card-line-stat'> {customStats[i][0]}</p> <ProgressBar value={Math.round(customStats[i][3] * 10) / 10} line={Math.round(customStats[i][1] * 10) / 10} ou={customStats[i][2]}></ProgressBar></div> );
-            }
 
     return (                
-        <div className='PlayerCard1' style={props.darkMode ? {border: '4px solid white'}: {border: '4px solid black'}} id={"color-" + props.teamInfo.abbrev}> {/*props.darkMode ? 'PlayerCard1-dark': 'PlayerCard1'*/ }
+        <div className='PlayerCard1' style={props.darkMode ? {border: '4px solid white'}: {border: '4px solid black'}} id={"color-" + props.teamInfo.abbrev} ref={elementRef}> {/*props.darkMode ? 'PlayerCard1-dark': 'PlayerCard1'*/ }
             
             <div id="player-card-layer2"className='PlayerCard' style={{backgroundImage: "url(" + props.teamInfo.darkLogo + ")"}}>{/*className={props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} */ }
                 
@@ -231,9 +241,7 @@ function PlayerCard(props) {
                         <img className='player-card-delete' onClick={() => {deletePlayerCard()}} src={redTrash} alt='delete'/>
                         <img className='player-card-img' src={props.playerData[5]} alt={props.playerData[1]}/>
                     </div>
-                    
                 </div>
-                
             </div>
             <div className='player-card-name-container'>
                 <p id="player-card-name">{props.playerData[2] + " " + props.playerData[3]}</p>
