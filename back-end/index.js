@@ -99,7 +99,7 @@ app.get('/', (req, res) => {
     console.log(today)
     //maybe add a timeout?
                                                                     //today
-    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-30"); //YYYY-MM-DD
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-28"); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
         if (!response.ok) {

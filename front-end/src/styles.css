@@ -19,6 +19,81 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
+#main-home-logo{
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+#home-page{
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll; /*may need this */
+    height: 100%;
+    /*height: auto;*/
+}
+#footer-blurb{
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.431);
+    border-radius: 15px;
+}
+
+#home-footer{
+    margin-top: auto;
+    margin-bottom: 0;
+    background-color: rgba(128, 128, 128, 0.413);
+    min-height: fit-content;
+}
+
+.footer-line{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+#footer-main-logo{
+    width: 80px;
+    height: 70px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-logos{
+    width: 60px;
+    height: 60px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.footer-logos:hover
+{
+  filter: brightness(0.8);
+  transition: filter 0.2s ease;
+}
+
+.loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
 .gameList{
     display: flex;
@@ -29,6 +104,7 @@
     padding-bottom: 20px;
     padding-top: 20px;
     overflow-y: scroll;
+    min-height: 60%;
 }
 .gameList::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
@@ -383,7 +459,7 @@
     width: 80%;
     background-color: white;
     border-radius: 15px;
-    border: 4px solid black;
+    /*border: 4px solid black;*/
     display:flex;
     flex-direction: column;
     margin:auto;
@@ -394,7 +470,7 @@
     width: 100%;
     background-color: transparent;
     border-radius: 15px;
-    border: 3px solid green;
+    /*border: 3px solid green;*/
     display:flex;
     flex-direction: row;
     margin:auto;
@@ -542,7 +618,7 @@
     width: 100%;
     background-color: transparent;
     border-radius: 15px;
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
     display:flex;
     flex-direction: row;
     margin:auto;

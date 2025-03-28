@@ -653,7 +653,7 @@ function PlayerHighlight(props)
             </div>
 
             <div id="player-form-add" onClick={addPlayer}>Add</div>
-            <p>{"statlistcap: " + statListCap}</p> {/* only here for testing*/}
+            {/*<p>{"statlistcap: " + statListCap}</p>*/} {/* only here for testing*/}
         </form>;
 
          let teamForm = <form className='player-form' style={{display: showTeamForm ? "flex": "none"}}>
@@ -683,7 +683,7 @@ function PlayerHighlight(props)
             </div>
             
             <div id="player-form-add" onClick={() => {addTeam(selectedTeam[0] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1])}}>Add</div>
-            <p>{"statlistcap: " + statListCap}</p> {/* only here for testing*/}
+            {/*<p>{"statlistcap: " + statListCap}</p>*/} {/* only here for testing*/}
         </form>;
 
    /*<div class="stat-select-container">
