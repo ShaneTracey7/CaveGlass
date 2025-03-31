@@ -3,6 +3,7 @@ import React, {useState,useEffect} from 'react';
 import ScoreReaction from './ScoreReaction';
 import axios from 'axios';
 import PlayerHighlight from './PlayerHighlight';
+import Toggle from './Toggle';
 import downArrow from '../pics/down-arrow.svg';
 import upArrow from '../pics/up-arrow.svg';
 import downArrowWhite from '../pics/down-arrow-white.png';
@@ -12,7 +13,8 @@ import playerFocusLogo from '../pics/player-focus.png';
 import summaryLogo from '../pics/summary.png';
 import darkModeLogo from '../pics/dark-mode.png';
 import lightModeLogo from '../pics/light-mode.png';
-
+import cog from '../pics/cog.svg';
+import redx from '../pics/red-x.png';
 
 function Game(props) {
   
@@ -26,15 +28,25 @@ function Game(props) {
   const [darkMode, setDarkMode] = useState(false); //light and dark mode toggle
   const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
   const [awayScore, setAwayScore] = useState(props.game.awayTeam.hasOwnProperty("score") ? props.game.awayTeam.score : 0) //score displayed in scoreboard
-  const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
-  const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
+  //const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
+  //const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
   const [gameClock, setGameClock] = useState("") //gameClock
   const [players, setPlayers] = useState([]); //players active inside player focus (each player has format: [playerId, fullname + number, firstname, lastname, number, headshot,teamId, positionCode, stat array])
   const [teamStats, setTeamStats] = useState([]); // team stats active inside player focus (each team stat has format: [teamId, fullname, isHome, stat array])
 
   const [showToolbar, setShowToolbar] = useState(true) //determines if toolbar should be hidden or not
   const [showScoreBoard, setShowScoreBoard] = useState(true) //determines if scoreboard should be hidden or not
-
+  const [showSettings, setShowSettings] = useState(false) //determines if settings modal should be hidden or not
+  const [settings, setSettings] = useState([0,true,props.game.homeTeam.placeName.default]) // format: [<delay>,<goallight (true or false)>, <what team> ]
+  
+  // for settings form
+  const [goalLightOn, setGoalLightOn] = useState(true);
+  const [delay, setDelay] = useState(settings[0]);
+  const [selectedOption, setSelectedOption] = useState(settings[2]);
+  const [showOptions, setShowOptions] = useState(false); //shows dropdown team options
+  const [statOptionsState, setStatOptionsState] = useState([props.game.homeTeam,props.game.awayTeam,"Both"]); //keeps track of what teams to show as options (preventing users select same teams multiple times)
+         
+    
   const [playerByGameStats, setPlayerByGameStats] = useState([]) //
 
   const [statInfo,setStatInfo] = useState([]) // an array that gets data from api for playerhighlight format: [playerByGameStats,  teamGameStats]
@@ -349,6 +361,25 @@ function Game(props) {
           return newStr;
     }
 
+    function exitSettings()
+    {
+        setDelay(settings[0]);
+        setSelectedOption(settings[2]);
+        setGoalLightOn(settings[1]);
+        setShowSettings(false);
+    }
+    function updateSettings()
+    {
+        setSettings([delay,goalLightOn,selectedOption]);
+        setShowSettings(false);
+    }
+    
+    function teamOptionClick(name)
+    {   
+        setSelectedOption(name);
+        setShowOptions(false);
+        
+    }
     
     
 
@@ -356,14 +387,51 @@ function Game(props) {
   let info;
   let toolbar;
   let scoreboard;
+  let settingsForm;
   if (score)
   {
+    settingsForm = <div></div>;
     display = <ScoreReaction scored={setScore}/>;
     info = <p> .</p>
+    
   }
   else
-  {
+  {    
+        const teamOptions = [];
+        for (let i = 0; i < statOptionsState.length; i++) 
+        {
+            if(statOptionsState[i] == "Both")
+            {
+                teamOptions.push( <li class="player-option" onClick={() => {teamOptionClick("Both")}} key={i} ><p class='player-option-text'>Both</p></li>);
+            }
+            else
+            {
+                teamOptions.push( <li class="player-option" onClick={() => {teamOptionClick(statOptionsState[i].placeName.default)}} key={i} ><p class='player-option-text'>{statOptionsState[i].placeName.default + " " + statOptionsState[i].commonName.default}</p><img className='player-option-img' src={statOptionsState[i].logo} alt=""/></li>);
+            }
+        } 
 
+    settingsForm = <form className='player-form' style={{display: showSettings ? "flex": "none"}}>
+            <img id="player-form-cancel" onClick={exitSettings} src={redx} alt="exit"/>
+            
+            <div id="form-element">
+                <label><b>Stream Delay</b> (in seconds):
+                    <input class="line-input" id="settings-input" type='number' value={delay} min={0} max={180} onChange={(e) => {setDelay(e.target.value)}} /> 
+                </label>
+            </div>
+            <div id="form-element"> {/* this toggle state is causing issues */}
+                <Toggle state={[goalLightOn,setGoalLightOn]} type="settings" size='big'></Toggle>
+            </div>
+                
+                <div class="setting-select-container" style={{display: goalLightOn ? "flex": "none"}}>
+                    <p id="pss-settings-label"> Triggering Team: </p>
+                    <div class="player-select-selected" id="pss-settings" onClick={() => {setShowOptions(true)}} > {selectedOption}</div>
+                    <div class="player-select" style={{display: showOptions ? "block": "none"}}>
+                        {teamOptions}
+                    </div>
+                </div>
+            
+            <div id="player-form-add" onClick={updateSettings}>Save Changes</div> 
+        </form>;
     /*
         <div id='score-board'> 
         <div id='score-board-container'> 
@@ -399,6 +467,8 @@ function Game(props) {
                     <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='toolbar-logo' src={playByPlayLogo} alt="play-by-play"/></div>
                 </div>
                 <img id="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
+                <img id="mode-button-img" onClick={() => {setShowSettings(true)}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
+                
                 <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
             </div>
     }
@@ -447,14 +517,8 @@ function Game(props) {
         </div>
     }
     display = <div id='display'>
-        
-        
         {scoreboard}
         {toolbar}
-
-
-        
-        
     </div> ;
 
     if(infoType == 'SUM')
@@ -783,8 +847,21 @@ function Game(props) {
     }
   }
 
+ let customSelects = document.querySelectorAll('.setting-select-container');
+
+// Attach click event listeners to each custom select
+customSelects.forEach(function (select) {
+    // Close the dropdown if the user clicks outside of it
+    window.addEventListener('click', function (e) {
+        if (!select.contains(e.target)) {
+            setShowOptions(false);
+        }
+    });
+});
+
     return (
       <div className={darkMode ? 'Game-dark': 'Game'}>
+      {settingsForm}
       {display}
       {info}
       </div>

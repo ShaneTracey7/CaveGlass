@@ -163,6 +163,7 @@ function Main(props)
                     <hr class="footer-line"/>
                     <img className="cg-logo-small" id="footer-main-logo" src={ require("../pics/cg-logo-small.png")} alt="CaveGlass"/>
                     <p id="footer-blurb"> Cave Glass is designed to complement the live viewing experience of an NHL game, making it perfect for sports bars, man caves, or any setting with a TV or display showing the game. It pulls real-time data from the NHL API to showcase live game statistics, such as score updates, player performance, and team stats, right next to the action on the screen. The app provides dynamic, up-to-the-minute insights, giving fans a deeper understanding of the game as it unfolds. Whether it's tracking goals, penalties, or shots on goal, this tool enhances the atmosphere of any sports viewing space, keeping everyone engaged and informed without taking attention away from the live game itself.</p>
+                    <p id="footer-tag"> created by Shane T.</p>
                 </div>
 
    /* <button className="main-button" onClick={apiGetGames}>Test Api call</button> */

@@ -66,6 +66,16 @@ function Toggle(props) {
 
         mainToggle = <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>;
     }
+    else if(props.type == 'settings')
+    {
+        lineInput = ""
+        textBefore = <b> Goal light </b> ; //+ "( screen lights up for 20 seconds when a goal is scored ):";
+        textAfterTrue = "";
+        textAfterFalse = "";
+
+        mainToggle = <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>;
+    
+    }
     else
     {
         lineInput = <div className='line-container' style={{display: checked ? "flex": "none"}}>
@@ -122,10 +132,10 @@ function Toggle(props) {
                 //do nothing
             }
         }
-        else if(props.type == 'default')
+        else if(props.type == 'default' || props.type == 'settings')
         {
             props.state[1](!props.state[0]);
-            setChecked(!checked)
+            setChecked(!checked);
         }
         else
         {
