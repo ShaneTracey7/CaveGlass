@@ -381,14 +381,17 @@ function Game(props) {
         
     }
     
-    
+    function testScore()
+    {
+        setScore(true);
+    }
 
   let display;
   let info;
   let toolbar;
   let scoreboard;
   let settingsForm;
-  if (score)
+  if (score) //score && settings[1] // if goalight is on or not
   {
     settingsForm = <div></div>;
     display = <ScoreReaction scored={setScore}/>;
@@ -460,14 +463,14 @@ function Game(props) {
     {
         toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
                 <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
-                <img className="cg-logo-small" src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
+                <img className="cg-logo-small" onClick={testScore} src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
                     <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={summaryLogo} alt="summary"/></div>
                     <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={playerFocusLogo} alt="player focus"/></div>
                     <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='toolbar-logo' src={playByPlayLogo} alt="play-by-play"/></div>
                 </div>
-                <img id="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
-                <img id="mode-button-img" onClick={() => {setShowSettings(true)}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
+                <img class="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
+                <img class="mode-button-img" id="settings-cog" onClick={() => {setShowSettings(true)}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
                 
                 <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
             </div>

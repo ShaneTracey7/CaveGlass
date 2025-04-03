@@ -17,6 +17,7 @@
     height: 100vh;
 }
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
     margin-left: auto;
@@ -925,7 +926,7 @@
 #hide-arrow{
     height:25px;
     width:25px;
-    margin-left: auto;
+    margin-left: 0;
     margin-right: 10px;
     margin-top: 5px;
     margin-bottom: auto;
@@ -949,15 +950,21 @@
     background-color: rgba(128, 128, 128, 0.3);
 }
 
-#mode-button-img{
+.mode-button-img{
     width: 100px;
     height:50%;
     margin: auto;
     padding: 5px;
     border-radius: 15px;
 }
-#mode-button-img:hover{
+.mode-button-img:hover{
     background-color: rgba(128, 128, 128, 0.2);
+}
+#settings-cog{
+    margin-left: auto;
+    margin-right: 0;
+    padding-left:0;
+    padding-right: 0;
 }
 
 #back-arrow{
@@ -1790,6 +1797,187 @@ p{
     width: 100%;
     border-radius: 5px;
 }
+
+/* * * * * * * * * * * * * * *  * *  * * * * * *  * * * Score Reaction  * * * * *  * * * * * * * * * * * * */
+
+
+
+
+
+
+.scoreReaction{
+    background-color: black;
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.goal-container {
+    height:75%;
+    width: 30%;
+    min-height: 600px;
+    min-width: 300px;
+    background-color: transparent;
+    border-radius: 15px;
+    border: 1px solid black;
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    z-index: 1;
+    overflow: hidden;
+    
+  }
+  #gl{
+    width: 100%; 
+    height: 100%;
+  }
+  .gl-overlay2{
+    height:100%;
+    width: 100%;
+    background-color: transparent;
+    border: 2px solid green;
+    border-radius: 15px;
+    /*border: 3px solid green;*/
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    overflow: hidden;
+    position: absolute;
+    z-index: 3;
+  }
+  .gl-overlay{
+    height:100%;
+    width: 100%;
+    background-color: transparent;
+    border: 2px solid green;
+    border-radius: 15px;
+/*border: 3px solid green;*/
+    display:flex;
+    flex-direction: row;
+    margin:auto;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+
+    /*
+    height:100%;
+    width: 100%;
+    background-color: transparent;
+    border: 3px solid green;
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    */
+    }
+   
+  
+
+/* General container styles */
+/*.goal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1d1f21; 
+  }*/
+  
+  /* Goal light container with a background image */
+  .goal-light {
+    width: 80%;
+    height: 300px;
+    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    box-shadow: 0 0 60px rgba(255, 0, 0, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border: 8px solid #b71c1c; /* Add a border that looks like a polished metal frame */
+    background: linear-gradient(135deg, #444, #2b2b2b);
+    overflow: hidden;
+  }
+  
+  /* Light design (top, middle, bottom) */
+  .light {
+    width: 56%;
+    height: 12%;
+    margin-top: 5%;
+    background-color: #666;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease-in-out;
+    z-index: 3;
+  }
+  
+  /* Animation for the goal light flashing */
+  .gl-overlay .light.top {
+    animation: blink 1s linear infinite alternate;
+  }
+  
+  .gl-overlay .light.middle {
+    animation: blink 1.2s linear infinite alternate;
+  }
+  
+  .gl-overlay .light.bottom {
+    animation: blink 1.4s linear infinite alternate;
+  }
+  
+  /* Keyframe for the blinking effect */
+  @keyframes blink {
+    0% {
+      background-color:rgba(165, 56, 49);
+      box-shadow: 0 0 30px rgba(165, 56, 49,1), inset 0 0 25px rgba(0, 0, 0, 0.3);
+    }
+    25% {
+      background-color: rgba(165, 56, 49);
+      box-shadow: 0 0 40px rgba(165, 56, 49,1), inset 0 0 25px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      background-color: rgba(165, 56, 49);
+      box-shadow: 0 0 50px rgba(165, 56, 49,1), inset 0 0 30px rgba(0, 0, 0, 0.4);
+    }
+    75% {
+      background-color: rgba(165, 56, 49);
+      box-shadow: 0 0 40px rgba(165, 56, 49,0.8), inset 0 0 25px rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      background-color: rgba(165, 56, 49);
+      box-shadow: 0 0 30px rgba(165, 56, 49,0.9), inset 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  /* Glow effect on the goal light container */
+  #gl:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 15px;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0));
+    opacity: 0.6;
+    z-index: 0;
+    box-shadow: 0 0 80px rgba(255, 0, 0, 0.5);
+  }
+  
+  
+  
+   
+  
+  
+
 
 /* need to add the rest */
 #color-ANA{

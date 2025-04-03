@@ -5,6 +5,33 @@ import React, {useState,useEffect} from 'react';
 
 function Toggle(props) {
 
+
+    useEffect(() => {
+
+        if(props.type != "statList")
+        {
+            console.log("props.sate[0]:" +  props.state[0])
+            if(flag)//triggered inside of component 
+            {
+                console.log("change inside")
+                setFlag(false);
+            }
+            else //triggered outside of component 
+            {
+                console.log("change outside")
+                setChecked(!checked);
+            }
+        }
+          }, [props.state[0]]);
+
+          useEffect(() => {
+
+            if(props.type != "statList")
+            {
+                setChecked(props.state[0]);
+            }
+              }, []);
+
     function lineInputChange(e)
     {
         setLineState(e.target.value);
@@ -44,8 +71,8 @@ function Toggle(props) {
             props.statState[1](temp);
         }
     }
-
-    const [checked, setChecked] = useState(props.state[0]); //for toggle switch in form
+    const [flag, setFlag] = useState(false); //true if triggered inside component, false if triggered outside
+    const [checked, setChecked] = useState(false);//props.state[0]); //for toggle switch in form
     const [oUState, setOUState] = useState(""); //for toggle switch in form
     const [licFlag, setLicFlag] = useState(true); //flag for line input change (true if value is ""/null)
     const [liValue, setLiValue] = useState(""); //used to be "" 
@@ -68,18 +95,18 @@ function Toggle(props) {
     }
     else if(props.type == 'settings')
     {
-        lineInput = ""
+        lineInput = ""; //should be just ""
         textBefore = <b> Goal light </b> ; //+ "( screen lights up for 20 seconds when a goal is scored ):";
         textAfterTrue = "";
         textAfterFalse = "";
 
         mainToggle = <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={handleClick} onChange={(e) => {}}/>;
-    
+     
     }
     else
     {
         lineInput = <div className='line-container' style={{display: checked ? "flex": "none"}}>
-                <input class="line-input" type='number' value={liValue} onChange={(e) => {lineInputChange(e)}} /> 
+                <input class="line-input" type='number' min={0} max={99} value={liValue} onChange={(e) => {lineInputChange(e)}} /> 
                 <div className='over-under-container'>
                 <div onClick={() => setLineState('Over')} >
                         Over
@@ -134,12 +161,14 @@ function Toggle(props) {
         }
         else if(props.type == 'default' || props.type == 'settings')
         {
+            setFlag(true);
             props.state[1](!props.state[0]);
             setChecked(!checked);
         }
         else
         {
-            setChecked(!checked)
+            console.log("else inside of toggle, I don't know how this case would happen")
+            setChecked(!checked);   
         }
     }
     

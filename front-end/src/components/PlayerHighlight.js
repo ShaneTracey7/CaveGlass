@@ -435,6 +435,8 @@ function PlayerHighlight(props)
         setShowForm(false);
         //resets the cap
         setStatListCap(0);
+        //resets custom/default toggle
+        setChecked(false); //new
     }
 
     function cancelTeamAdd()
@@ -449,6 +451,8 @@ function PlayerHighlight(props)
         setShowTeamForm(false);
         //resets the cap
         setStatListCap(0);
+        //resets custom/default toggle
+        setCheckedTeam(false); //new
     }
 
     function playerOptionClick(id,text,fn,ln,n,hs,tid,pc,s)
