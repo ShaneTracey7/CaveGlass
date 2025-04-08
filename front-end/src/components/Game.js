@@ -45,7 +45,8 @@ function Game(props) {
   const [selectedOption, setSelectedOption] = useState(settings[2]);
   const [showOptions, setShowOptions] = useState(false); //shows dropdown team options
   const [statOptionsState, setStatOptionsState] = useState([props.game.homeTeam,props.game.awayTeam,"Both"]); //keeps track of what teams to show as options (preventing users select same teams multiple times)
-         
+
+  const [scoreReactionData, setScoreReactionData] = useState([]); // format: [<team object>, <player object>] needed to pass to scpore reaction component
     
   const [playerByGameStats, setPlayerByGameStats] = useState([]) //
 
@@ -393,8 +394,8 @@ function Game(props) {
   let settingsForm;
   if (score) //score && settings[1] // if goalight is on or not
   {
-    settingsForm = <div></div>;
-    display = <ScoreReaction scored={setScore}/>;
+    settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
+    display = <ScoreReaction scored={setScore} team={props.game.awayTeam} player={roster[0]}/>;
     info = <p> .</p>
     
   }

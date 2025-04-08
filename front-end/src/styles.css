@@ -1801,6 +1801,16 @@ p{
 /* * * * * * * * * * * * * * *  * *  * * * * * *  * * * Score Reaction  * * * * *  * * * * * * * * * * * * */
 
 
+/* Keyframes for the flashing effect */
+
+@keyframes flash {
+  0% {
+    color: rgb(215, 108, 108);
+  }
+  100% {
+    color: white;
+  }
+}
 
 
 
@@ -1810,11 +1820,217 @@ p{
     height: 100%;
     width: 100%;
     display: flex;
+    flex-direction: column;
+}
+.sr-container{
+    display: flex;
+    flex-direction: column;
+    border: 3px solid white; /* will have to be set to the secondary color of the team in the component*/
+    margin: auto;
+    width: 90%;
+    height: 90%;
+    border-radius: 15px;
+}
+
+#sr-headshot{
+    width: 60%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: 2%;
+}
+.sr-title{
+    display: flex;
+    flex-direction: row;
+    width:fit-content;
+    height: fit-content;
+    margin-top: 20px;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 15px;
+    
+}
+#sr-player-name{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    -webkit-text-stroke: 4px black;
+    color: white;
+    font-size: 7rem;
+    font-style: italic;
+}
+.sr-overlay{
+    height:90%;
+    width: 90%;
+    background-color: transparent;
+    border-radius: 15px;
+/*border: 3px solid green;*/
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    position: absolute;
+    z-index: 2;
+}
+.sr-overlay2{
+    height:100%;
+    width: 100%;
+    background-color: transparent;
+    border-radius: 15px;
+
+    display:flex;
+    flex-direction: column;
+    margin:auto;
+    position: absolute;
+    z-index: 3;
+}
+
+#sr-bg-logo{
+    display: block;
+    width: 100%;
+    height:100%;
+    filter: grayscale(100%);
+    opacity: 20%;
+    overflow: hidden;
+    margin: auto;
+}
+
+#sr-goal-text{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    -webkit-text-stroke: 5px black;
+    color: white;
+    font-size: 10rem;
+    animation: flash 1s infinite alternate; 
+    
+}
+
+#sr-goal-number{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    -webkit-text-stroke: 8px black;
+    color: white;
+    font-size: 30rem;
+    margin: auto;
+    
+}
+#gl{
+    width: 70px;
+    height: 140px;
+    margin-top: 25px;  
+}
+
+@media (min-aspect-ratio: 1/1) {
+    #sr-headshot{
+        width: auto;
+        height: 60%;
+  }
+}
+  @media (max-aspect-ratio: 1/1) {
+    #sr-headshot{
+        width: 60%;
+        height: auto;
+  }
+}
+@media only screen and (max-width: 1100px){
+
+    #sr-goal-number{
+        -webkit-text-stroke: 6px black;
+        font-size: 25rem;
+    }
+    #sr-player-name{
+        -webkit-text-stroke: 3px black;
+        font-size: 5rem;
+    }
+    
+}
+@media only screen and (max-width: 750px){
+
+    #sr-goal-number{
+        -webkit-text-stroke: 4px black;
+        font-size: 20rem;
+    }
+    #sr-goal-text{
+        -webkit-text-stroke: 3px black;
+        font-size: 8rem;
+    }
+    #gl{
+        width: 50px;
+        height: 100px;
+        margin-top: 25px;  
+    }
+    #sr-player-name{
+        -webkit-text-stroke: 3px black;
+        font-size: 4rem;
+    }
+    
+}
+
+@media only screen and (max-height: 1100px){
+
+    #sr-goal-number{
+        -webkit-text-stroke: 4px black;
+        font-size: 20rem;
+    }
+    #sr-goal-text{
+        -webkit-text-stroke: 3px black;
+        font-size: 8rem;
+    }
+    #gl{
+        width: 50px;
+        height: 100px;
+        margin-top: 25px;  
+    }
+    #sr-player-name{
+        -webkit-text-stroke: 3px black;
+        font-size: 4rem;
+    }
+    
+}
+@media only screen and (max-height: 750px){
+
+    #sr-goal-number{
+        -webkit-text-stroke: 3px black;
+        font-size: 15rem;
+    }
+    #sr-goal-text{
+        -webkit-text-stroke: 2px black;
+        font-size: 6rem;
+    }
+    #gl{
+        width: 40px;
+        height: 80px;
+        margin-top: 20px;  
+    }
+    #sr-player-name{
+        -webkit-text-stroke: 2px black;
+        font-size: 3rem;
+    }
+    
+}
+
+
+
+/* not in use (for goal light score reaction display)
+.logo-ribbon-row{
+    width: 100%;
+    height: 10%;
+    background-repeat: repeat-x;
+    
+    background-size: 10% 100%;
+    background-position: 0 50%;
+    
+    filter: grayscale(100%);
+
+    opacity: 20%;
+    
 }
 
 .goal-container {
-    height:75%;
-    width: 30%;
+    height: 500px;
+    width: 200px;
     min-height: 600px;
     min-width: 300px;
     background-color: transparent;
@@ -1827,64 +2043,42 @@ p{
     overflow: hidden;
     
   }
-  #gl{
-    width: 100%; 
-    height: 100%;
-  }
-  .gl-overlay2{
-    height:100%;
-    width: 100%;
-    background-color: transparent;
-    border: 2px solid green;
-    border-radius: 15px;
-    /*border: 3px solid green;*/
-    display:flex;
-    flex-direction: column;
-    margin:auto;
-    overflow: hidden;
-    position: absolute;
-    z-index: 3;
-  }
+
+  
   .gl-overlay{
     height:100%;
     width: 100%;
     background-color: transparent;
-    border: 2px solid green;
+    
     border-radius: 15px;
-/*border: 3px solid green;*/
+
     display:flex;
     flex-direction: row;
     margin:auto;
     overflow: hidden;
     position: relative;
-    z-index: 2;
+    z-index: 3;
 
-    /*
-    height:100%;
-    width: 100%;
-    background-color: transparent;
-    border: 3px solid green;
-    display:flex;
-    flex-direction: column;
-    margin:auto;
-    overflow: hidden;
-    position: relative;
-    z-index: 2;
-    */
     }
-   
+    .gl-overlay2{
+        height:fit-content;
+        margin-top: 80px;
+        width: 100%;
+        background-color: transparent;
+
+        border-radius: 15px;
+        
+        display:flex;
+        flex-direction: column;
+        
+        overflow: hidden;
+        position: absolute;
+        z-index: 4;
+        gap: 22px;
+      }
   
 
-/* General container styles */
-/*.goal-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #1d1f21; 
-  }*/
-  
-  /* Goal light container with a background image */
+
   .goal-light {
     width: 80%;
     height: 300px;
@@ -1900,27 +2094,41 @@ p{
     justify-content: space-between;
     align-items: center;
     position: relative;
-    border: 8px solid #b71c1c; /* Add a border that looks like a polished metal frame */
+    border: 8px solid #b71c1c; 
     background: linear-gradient(135deg, #444, #2b2b2b);
     overflow: hidden;
   }
   
-  /* Light design (top, middle, bottom) */
+  .light-row{
+    display: flex;
+    flex-direction: row;
+    width: 52%;
+    height: 75px;
+    background-color: transparent;
+    margin-left: 80px;
+    margin-right: auto;
+    position: relative;
+    gap: 1px;
+    z-index: 4;
+  }
+
+
   .light {
-    width: 56%;
-    height: 12%;
+    width: 29%;
+    height: 100%;
     margin-top: 5%;
     background-color: #666;
     border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
-    position: relative;
+
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease, box-shadow 0.3s ease-in-out;
-    z-index: 3;
+
   }
   
-  /* Animation for the goal light flashing */
+  
+
   .gl-overlay .light.top {
     animation: blink 1s linear infinite alternate;
   }
@@ -1933,7 +2141,7 @@ p{
     animation: blink 1.4s linear infinite alternate;
   }
   
-  /* Keyframe for the blinking effect */
+
   @keyframes blink {
     0% {
       background-color:rgba(165, 56, 49);
@@ -1957,7 +2165,7 @@ p{
     }
   }
   
-  /* Glow effect on the goal light container */
+
   #gl:before {
     content: '';
     position: absolute;
@@ -1972,12 +2180,10 @@ p{
     box-shadow: 0 0 80px rgba(255, 0, 0, 0.5);
   }
   
-  
-  
-   
-  
-  
+  */
 
+
+  
 
 /* need to add the rest */
 #color-ANA{
