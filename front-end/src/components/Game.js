@@ -1,6 +1,7 @@
 import '../styles.css';
 import React, {useState,useEffect} from 'react';
 import ScoreReaction from './ScoreReaction';
+import Summary from './Summary';
 import axios from 'axios';
 import PlayerHighlight from './PlayerHighlight';
 import Toggle from './Toggle';
@@ -24,6 +25,7 @@ function Game(props) {
   const [roster, setRoster] = useState([]); //set once and used to get names/numbers/pics from api playerIds
   const [isRunningPBP, setIsRunningPBP] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for PBP
   const [isRunningBOX, setIsRunningBOX] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for BOX (player focus)
+  const [isRunningSUM, setIsRunningSUM] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for SUM
   const [period, setPeriod] = useState(props.game.periodDescriptor.number); //current period the game is in
   const [darkMode, setDarkMode] = useState(false); //light and dark mode toggle
   const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
@@ -91,6 +93,25 @@ function Game(props) {
 
   }, [isRunningBOX]); 
 
+//need to test during live game
+  useEffect(() => {
+
+    if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
+    {
+        var timer;
+        if(infoType == 'SUM')
+        {
+        console.log("infoType == 'SUM'");
+        timer = setTimeout(() => getSummary(), 10000) // 10 secs
+        }
+        else
+        {
+        console.log("infoType != 'SUM'");
+        return () => clearTimeout(timer) //stops api calls (current one will still execute)
+        }
+    }
+
+  }, [isRunningSUM]);
 
   const setRosterAPI = () => {
     axios.post('http://localhost:8080', {
@@ -253,6 +274,58 @@ function Game(props) {
        })
     }
 
+      //gets summary
+      const getSummary = () => {
+        axios.post('http://localhost:8080', {
+            type: 'sum',
+            game: props.game.id,
+          }, {
+            headers: {
+            'content-type': 'application/json'
+            }}).then((data) => {
+          
+          console.log(data)
+          if(roster.length == []) //first call
+          {
+            //set roster (necessary to add player to player focus)
+            setRosterAPI();
+            
+            if(statInfo[1] != [data.data.summary.teamGameStats])
+            {
+                setStatInfo([statInfo[0],data.data.summary.teamGameStats]);
+            }
+            setIsRunningSUM(!isRunningSUM);
+            setGameClock(data.data.clock.timeRemaining);
+            console.log("no roster")
+          }
+          else //to be called every 10secs
+          {
+            
+            if(statInfo[1] != [data.data.summary.teamGameStats])
+            {
+                //may need to do the force update here [...name]
+                setStatInfo([statInfo[0],data.data.summary.teamGameStats]);
+            }
+
+            setIsRunningSUM(!isRunningSUM);
+            //Update scoreboard
+            setPeriod(data.data.periodDescriptor.number);
+            setGameClock(data.data.clock.timeRemaining);
+            
+            //not tested
+            if(homeScore != data.data.homeTeam.score)
+            {
+                setHomeScore(data.data.homeTeam.score);
+            }
+            if(awayScore != data.data.awayTeam.score)
+            {
+                setAwayScore(data.data.awayTeam.score);
+            }
+          }
+
+       })
+    }
+
    /*
     function runApiCalls()
     {
@@ -287,7 +360,12 @@ function Game(props) {
         {   
             if(infoType != 'SUM')
             {
-                setInfoType('SUM');
+                getSummary();
+                setTimeout(() => {
+                    setInfoType('SUM');
+                     console.log("Delayed for 1 second.");
+                 }, 1000);
+                
             }
             console.log('SUM')
         }
@@ -527,7 +605,8 @@ function Game(props) {
 
     if(infoType == 'SUM')
     {
-        info = <p> no plays</p>
+        //might need to delay this call
+        info = <Summary teamGameStats={statInfo} darkMode={darkMode} teamsInfo={[props.game.homeTeam,props.game.awayTeam]}> </Summary>;
     }
     else if(infoType == 'BOX')
     {

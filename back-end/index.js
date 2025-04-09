@@ -56,6 +56,27 @@ app.post("/", (req, res) => {
                     res.send('Error!')
                 });
         }
+    else if(req.body.type == "sum")
+        {   
+            let gameID = req.body.game;
+            console.log("gameid: " +gameID)
+            const apiUrl = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);
+            fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                //console.log(response.json());
+                return response.json();
+            })
+            .then(data => {
+                res.send(data)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                res.send('Error!')
+            });
+        }
     else if(req.body.type == "test")   // summary.teamGameStats[0].category -> 'sog' .awayValue -> num
                                         // [5] -> hits, [6] -> blocked shots, [4] -> pim,
         {  

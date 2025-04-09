@@ -2011,179 +2011,152 @@ p{
     
 }
 
+/* * * * * * * * * * * * * * *  * *  * * * * * *  * * * Summary  * * * * *  * * * * * * * * * * * * */
 
+.summary{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    max-width: 1300px;
+    min-width: 400px;
+    margin: auto;
+    height: 65%;
+    min-height: 300px;
+    background-color: transparent;
+    border-radius: 10px;
+    gap: 1%;
+    container: summary;
+    container-type: size;
+}
 
-/* not in use (for goal light score reaction display)
-.logo-ribbon-row{
-    width: 100%;
-    height: 10%;
-    background-repeat: repeat-x;
-    
-    background-size: 10% 100%;
-    background-position: 0 50%;
-    
-    filter: grayscale(100%);
-
-    opacity: 20%;
+.summary-stat{
+    display: flex;
+    flex-direction: column;
+    height: 8%;
+    width: 100%
+}
+.summary-stat-pp{
+    display: flex;
+    flex-direction: column;
+    height: 15%;
+    width: 100%
+}
+.summary-stat-text{
+    color: gray;
+    font-size: 1.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding:0;
+}
+.home-summary-stat-value{
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-left: 0;
+    margin-right: auto;
+    padding:0;
+}
+.away-summary-stat-value{
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-left: auto;
+    margin-right: 0;
+    padding:0;
+}
+.home-summary-stat-value-pp{
+    font-size: 1.5rem;
+    color: gray;
+    margin-left: 0;
+    margin-right: auto;
+    margin-top: 0;
+    padding:0;
+}
+.away-summary-stat-value-pp{
+    font-size: 1.5rem;
+    color: gray;
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: 0;
+    padding:0;
+}
+.bottom-summary-stat-pp{
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
     
 }
 
-.goal-container {
-    height: 500px;
-    width: 200px;
-    min-height: 600px;
-    min-width: 300px;
-    background-color: transparent;
-    border-radius: 15px;
-    border: 1px solid black;
-    display:flex;
-    flex-direction: column;
-    margin:auto;
-    z-index: 1;
-    overflow: hidden;
-    
-  }
-
-  
-  .gl-overlay{
-    height:100%;
+.top-summary-stat{
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
     width: 100%;
-    background-color: transparent;
-    
-    border-radius: 15px;
-
-    display:flex;
-    flex-direction: row;
-    margin:auto;
-    overflow: hidden;
-    position: relative;
-    z-index: 3;
-
-    }
-    .gl-overlay2{
-        height:fit-content;
-        margin-top: 80px;
-        width: 100%;
-        background-color: transparent;
-
-        border-radius: 15px;
-        
-        display:flex;
-        flex-direction: column;
-        
-        overflow: hidden;
-        position: absolute;
-        z-index: 4;
-        gap: 22px;
-      }
-  
-
-
-  .goal-light {
-    width: 80%;
-    height: 300px;
-    
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 20px;
-    box-shadow: 0 0 60px rgba(255, 0, 0, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    border: 8px solid #b71c1c; 
-    background: linear-gradient(135deg, #444, #2b2b2b);
-    overflow: hidden;
-  }
-  
-  .light-row{
+}
+.bottom-summary-stat{
     display: flex;
     flex-direction: row;
-    width: 52%;
-    height: 75px;
-    background-color: transparent;
-    margin-left: 80px;
-    margin-right: auto;
-    position: relative;
-    gap: 1px;
-    z-index: 4;
-  }
-
-
-  .light {
-    width: 29%;
+    height: 70%;
+}
+.home-summary-stat-line{
     height: 100%;
-    margin-top: 5%;
-    background-color: #666;
-    border-radius: 10px;
-    margin-left: auto;
+    border-radius: 5px;
+    margin-left: 0;
     margin-right: auto;
+    
+}
+.away-summary-stat-line{
+    height: 100%;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: 0;
+    
+}
+.home-summary-title{
+    font-size: 5rem;
+    font-weight: bold;
+    margin-left: 0;
+    margin-right: auto;
+    color:white;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.away-summary-title{
+    font-size: 5rem;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: 0;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.summary-title-container{
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+}
 
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease-in-out;
-
-  }
-  
-  
-
-  .gl-overlay .light.top {
-    animation: blink 1s linear infinite alternate;
-  }
-  
-  .gl-overlay .light.middle {
-    animation: blink 1.2s linear infinite alternate;
-  }
-  
-  .gl-overlay .light.bottom {
-    animation: blink 1.4s linear infinite alternate;
-  }
-  
-
-  @keyframes blink {
-    0% {
-      background-color:rgba(165, 56, 49);
-      box-shadow: 0 0 30px rgba(165, 56, 49,1), inset 0 0 25px rgba(0, 0, 0, 0.3);
+/* as user resizes scoreboard */
+@container summary (height < 650px){
+    .home-summary-stat-value{
+        font-size: 1.5rem;
     }
-    25% {
-      background-color: rgba(165, 56, 49);
-      box-shadow: 0 0 40px rgba(165, 56, 49,1), inset 0 0 25px rgba(0, 0, 0, 0.2);
+    .away-summary-stat-value{
+        font-size: 1.5rem;
+       
     }
-    50% {
-      background-color: rgba(165, 56, 49);
-      box-shadow: 0 0 50px rgba(165, 56, 49,1), inset 0 0 30px rgba(0, 0, 0, 0.4);
+    .home-summary-stat-value-pp{
+        font-size: 1.25rem;
+       
     }
-    75% {
-      background-color: rgba(165, 56, 49);
-      box-shadow: 0 0 40px rgba(165, 56, 49,0.8), inset 0 0 25px rgba(0, 0, 0, 0.3);
+    .away-summary-stat-value-pp{
+        font-size: 1.25rem;
     }
-    100% {
-      background-color: rgba(165, 56, 49);
-      box-shadow: 0 0 30px rgba(165, 56, 49,0.9), inset 0 0 20px rgba(0, 0, 0, 0.2);
+    .home-summary-title{
+        font-size: 4rem;
     }
-  }
-  
-
-  #gl:before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border-radius: 15px;
-    background: radial-gradient(circle, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0));
-    opacity: 0.6;
-    z-index: 0;
-    box-shadow: 0 0 80px rgba(255, 0, 0, 0.5);
-  }
-  
-  */
-
-
-  
+    .away-summary-title{
+        font-size: 4rem;
+    }
+}
 
 /* need to add the rest */
 #color-ANA{
@@ -2283,6 +2256,102 @@ p{
     background-color: rgba(4 30 66);
 }
 
+#f-color-ANA{
+    color: rgba(252, 76, 2);
+}
+#f-color-BOS{
+    color: rgba(252, 181, 20);
+}
+#f-color-BUF{
+    color: rgba(0, 48, 135);
+}
+#f-color-CAR{
+    color: rgba(206, 17, 38);
+}
+#f-color-CBJ{
+    color: rgba(0,38,84);
+}
+#f-color-CGY{
+    color: rgba(210, 0, 28);
+}
+#f-color-CHI{
+    color: rgba(207,10,44);
+}
+#f-color-COL{
+    color: rgba(111, 38, 61);
+}
+#f-color-DAL{
+    color: rgba(0, 104, 71);
+}
+#f-color-DET{
+    color: rgba(206,17,38);
+}
+#f-color-EDM{
+    color: rgba(252, 76, 0);
+}
+#f-color-FLA{
+    color: rgba(4,30,66);
+}
+#f-color-LAK{
+    color: rgba(162,170,173);
+}
+#f-color-MIN{
+    color: rgba(2, 73, 48);
+}
+#f-color-MTL{
+    color: rgba(175, 30, 45);
+}
+#f-color-NJD{
+    color: rgba(206, 17, 38);
+}
+#f-color-NSH{
+    color: rgba(255,184,28);
+}
+#f-color-NYI{
+    color: rgba(0,83,155);
+}
+#f-color-NYR{
+    color: rgba(0,56,168);
+}
+#f-color-OTT{
+    color: rgba(218, 26, 50);
+}
+#f-color-PHI{
+    color: rgba(247, 73, 2);
+}
+#f-color-PIT{
+    color: rgba(252,181,20);
+}
+#f-color-SEA{
+    color: rgba(153, 217, 217);
+}
+#f-color-SJS{
+    color: rgba(0, 109, 117);
+}
+#f-color-STL{
+    color: rgba(0, 47, 135);
+}
+#f-color-TBL{
+    color: rgba(0, 40, 104);
+}
+#f-color-TOR{
+    color: rgba(0, 32, 91);
+}
+#f-color-UTA{     
+    color: rgba(105, 179, 231);
+}
+#f-color-VAN{
+    color: rgba(0, 32, 91);
+}
+#f-color-VGK{
+    color: rgba(185,151,91);
+}
+#f-color-WPG{
+    color: rgba(4,30,66);
+}
+#f-color-WSH{
+    color: rgba(4 30 66);
+}
 
 
 
