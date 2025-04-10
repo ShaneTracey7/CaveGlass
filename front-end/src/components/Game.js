@@ -16,12 +16,14 @@ import darkModeLogo from '../pics/dark-mode.png';
 import lightModeLogo from '../pics/light-mode.png';
 import cog from '../pics/cog.svg';
 import redx from '../pics/red-x.png';
+import PlayByPlay from './PlayByPlay';
 
 function Game(props) {
+
+  const [playArr, setPlayArr] = useState([]); //local instance of plays taken from api (for play-by-play view)
   
   const [score, setScore] = useState(false); //if true score reaction is displayed
   const [infoType, setInfoType] = useState('XXX'); //3 States: Summary(SUM), Box-score(BOX), and Play-by-Play(PBP)
-  const [playArr, setPlayArr] = useState([]); //local instance of plays taken from api (for play-by-play view)
   const [roster, setRoster] = useState([]); //set once and used to get names/numbers/pics from api playerIds
   const [isRunningPBP, setIsRunningPBP] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for PBP
   const [isRunningBOX, setIsRunningBOX] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for BOX (player focus)
@@ -54,6 +56,7 @@ function Game(props) {
 
   const [statInfo,setStatInfo] = useState([]) // an array that gets data from api for playerhighlight format: [playerByGameStats,  teamGameStats]
 
+  
   useEffect(() => {
 
     if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
@@ -143,12 +146,15 @@ function Game(props) {
           setRoster(data.data.rosterSpots);
           if(playArr.length == []) //first call
           {
+            let temp = [...playArr];
           data.data.plays.forEach(element => {
-             let temp = playArr;
+             //let temp = playArr;
              temp.push(element);
-             setPlayArr(temp);
+             //setPlayArr(temp);
         
           });
+          setPlayArr(temp);
+
           setIsRunningPBP(!isRunningPBP);
           setGameClock(data.data.clock.timeRemaining);
           console.log("empty")
@@ -202,11 +208,10 @@ function Game(props) {
                     
                 }
             //}
-            
          }
        })
     }
-
+/*
     const getNFL = () => {
         axios.post('http://localhost:8080', {
             type: 'test',
@@ -218,7 +223,7 @@ function Game(props) {
           //this console.log will be in our frontend console
           console.log(data)
        })
-    }
+    }*/
 
     //gets boxscore
     const getPlayerFocus = () => {
@@ -343,7 +348,7 @@ function Game(props) {
             }
     }*/
 
-    //formats UTC date into {mm/dd/yyyy}
+    //formats UTC date into {mm/dd/yyyy} (not currently in use)
     function formatDate(date)
     {
       var d = new Date(date);
@@ -360,11 +365,12 @@ function Game(props) {
         {   
             if(infoType != 'SUM')
             {
+                setInfoType('SUM');
                 getSummary();
-                setTimeout(() => {
-                    setInfoType('SUM');
+                /*setTimeout(() => {
+                    
                      console.log("Delayed for 1 second.");
-                 }, 1000);
+                 }, 1000);*/
                 
             }
             console.log('SUM')
@@ -386,58 +392,14 @@ function Game(props) {
             {
                 setInfoType('PBP');
                 getPlaybyPlay();
-                setTimeout(() => {
+               /* setTimeout(() => {
                    // setInfoType('PBP');
                     console.log("Delayed for 1 second.");
-                }, 1000);
+                }, 1000);*/
 
             }
             console.log('PBP')
         }
-    }
-
-    function formatPeriod(num)
-    {
-        switch(num) {
-            case 1:
-                return "1st";
-            case 2:
-                return "2nd";
-            case 3:
-                return "3rd";
-            case 4:
-                return "OT";
-            case 5:
-                return "SO";
-            default:
-        }
-    }
-
-    //capitalizes each word in a sentence(string)
-    function capitalizeEachWord(str)
-    {
-        let newStr = str.charAt(0).toUpperCase();
-        let flag = false;
-        for (let i = 1; i < str.length; i++) {
-            if(str[i] == ' ')
-            {   
-                flag = true;
-                newStr = newStr + str[i];
-            }
-            else
-            {
-                if(flag)
-                {
-                    newStr = newStr + str.charAt(i).toUpperCase();
-                    flag = false;
-                }
-                else
-                {
-                    newStr = newStr + str[i];
-                }
-            }
-          }
-          return newStr;
     }
 
     function exitSettings()
@@ -558,9 +520,7 @@ function Game(props) {
     {
         toolbar = <div id="toolbar-hidden" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
             <img id="show-arrow" onClick={() => {setShowToolbar(true)}} src={downArrow} alt="show"/>
-                
         </div>
-        
     }
 
     if(showScoreBoard)
@@ -590,7 +550,6 @@ function Game(props) {
         <img className="score-board-logo" src={props.game.awayTeam.darkLogo} alt={props.game.awayTeam.abbrev}/>
         <img id="hide-arrow" className='ha-white' onClick={() => {setShowScoreBoard(false)}} src={upArrowWhite} alt="hide"/>
         </div>
-
     }
     else
     {
@@ -610,14 +569,17 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>
+        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>;
 
     }
     else if(infoType == 'PBP')
     {
+        info = <PlayByPlay playArr={playArr} game={props.game} darkMode={darkMode} roster={roster} period={period}></PlayByPlay>;
 
+        /*
         let pArr = [];
 
+        
         playArr.forEach(play => {
             
             if(!play.hasOwnProperty("typeDescKey"))
@@ -922,7 +884,7 @@ function Game(props) {
                     <div>{pArr[(arrlength - index)]}</div>
                 ))}
                 </div>
-            </div>;
+            </div>;*/
     }
     else
     {

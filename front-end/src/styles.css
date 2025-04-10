@@ -128,6 +128,7 @@
     border: 3px solid black;
     width: 70%;
     min-width: 200px;
+    max-width: 1000px;
     margin: auto;
     box-shadow: 5px 5px 10px 1px;
     
@@ -2012,19 +2013,24 @@ p{
 }
 
 /* * * * * * * * * * * * * * *  * *  * * * * * *  * * * Summary  * * * * *  * * * * * * * * * * * * */
+.basic-container{
+    height:100%;
+    width:100%;
+}
 
 .summary{
     display: flex;
     flex-direction: column;
     width: 70%;
     max-width: 1300px;
-    min-width: 400px;
+    min-width: 600px;
     margin: auto;
     height: 65%;
-    min-height: 300px;
+    min-height: 600px;
+    max-height: 1300px;
     background-color: transparent;
     border-radius: 10px;
-    gap: 1%;
+    gap: 2%;
     container: summary;
     container-type: size;
 }
@@ -2038,7 +2044,7 @@ p{
 .summary-stat-pp{
     display: flex;
     flex-direction: column;
-    height: 15%;
+    height: fit-content;
     width: 100%
 }
 .summary-stat-text{
@@ -2096,21 +2102,20 @@ p{
 .bottom-summary-stat{
     display: flex;
     flex-direction: row;
-    height: 70%;
+    height: fit-content;/*70%;*/
 }
 .home-summary-stat-line{
-    height: 100%;
-    border-radius: 5px;
+    height: 17px;
+    border-radius: 5px 0 0 5px;
     margin-left: 0;
     margin-right: auto;
     
 }
 .away-summary-stat-line{
-    height: 100%;
-    border-radius: 5px;
+    height: 17px;
+    border-radius: 0 5px 5px 0;
     margin-left: auto;
     margin-right: 0;
-    
 }
 .home-summary-title{
     font-size: 5rem;
@@ -2155,6 +2160,12 @@ p{
     }
     .away-summary-title{
         font-size: 4rem;
+    }
+    .home-summary-stat-line{
+        height: 15px;
+    }
+    .away-summary-stat-line{
+        height: 15px;
     }
 }
 

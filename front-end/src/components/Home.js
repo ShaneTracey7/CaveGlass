@@ -5,12 +5,18 @@ import axios from 'axios';
 
 function Main(props)
 {
-  let loadingSpinner = <div class="loader"></div>;
+    let loadingSpinner = <div class="loader"></div>;
     //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
     const [gameArr, setGameArr] = useState([]); //if true score reaction is displayed,
     const [gameList, setGameList] = useState(loadingSpinner); //if true score reaction is displayed,
     const isLoading = useRef(true); //needed to create a loading state
     
+   //This function is called when component is create (called only once)
+    useEffect(() => { 
+
+      apiGetGames();//getting today's game data from NHL api
+    }, []);
+
     useEffect(() => {
       
       isLoading.current = true;
@@ -68,6 +74,28 @@ function Main(props)
    console.log('in useeffect'); 
   }, [gameArr]);
 
+  //data will be the string we send from our server
+  const apiGetGames = () => {
+    axios.get('http://localhost:8080').then((data) => {
+      //this console.log will be in our frontend console
+      console.log(data)
+      //might crash if no games that day
+      let temp = [];
+      let games = data.data.gameWeek[0].games;
+      games.forEach((element, index)=> {
+         temp.push(element);
+         if(index == (games.length - 1))
+         {
+            setGameArr(temp);
+         }
+      });
+   })
+   /*setTimeout(() => {
+    //setShowGames((gameArr.length > 0));
+    console.log("Delayed for 1 seconds.");
+  }, 1000);*/
+  }
+
     function gameClick(index)
     {
       console.log("test" + index)
@@ -112,41 +140,8 @@ function Main(props)
         m = "PM"
       }
       let date_str = h + ":" + min_str + " " + m;
-
       return date_str;
     }
-
-     //data will be the string we send from our server
-  const apiGetGames = () => {
-    axios.get('http://localhost:8080').then((data) => {
-      //this console.log will be in our frontend console
-      console.log(data)
-      //might crash if no games that day
-      //might need to go 'data.data'
-      let temp = [];
-      let games = data.data.gameWeek[0].games;
-      games.forEach((element, index)=> {
-         temp.push(element);
-         if(index == (games.length - 1))
-         {
-            setGameArr(temp);
-         }
-      });
-      
-   })
-   setTimeout(() => {
-    //setShowGames((gameArr.length > 0));
-    console.log("Delayed for 1 seconds.");
-  }, 1000);
-   
-  }
-  //getting today's game data from NHL api
-   // This function will called only once
-   useEffect(() => {
-    console.log("useEffect");
-    apiGetGames();
-  }, [])
-
 
   const footer = <div id="home-footer">
                     <hr class="footer-line"/>
