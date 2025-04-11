@@ -7,6 +7,7 @@ function PlayByPlay(props) {
     let loadingSpinner = <div class="loader"></div>;
     const isLoading = useRef(true); //needed to create a loading state
     const [playList, setPlayList] = useState(loadingSpinner); //if true score reaction is displayed,
+    
 
     //This function is called when component is create (called only once)
     useEffect(() => { 
@@ -14,6 +15,8 @@ function PlayByPlay(props) {
         //apiGetGames();//getting today's game data from NHL api
     }, []);
 
+    let pArr = [];
+    
     useEffect(() => {
           
         isLoading.current = true;
@@ -23,6 +26,7 @@ function PlayByPlay(props) {
         if (props.playArr && Array.isArray(props.playArr) && props.playArr.length > 0) //showGames
         { 
             //possible gameState's: PRE(right b4 game start), FUT(future), OFF, LIVE, FINAL
+            
             props.playArr.forEach(play => {
         
                 if(!play.hasOwnProperty("typeDescKey"))
@@ -55,6 +59,7 @@ function PlayByPlay(props) {
                     let assistStr;
                     let score1;
                     let score2;
+                    let scTeam;
                     
                     if(play.details.eventOwnerTeamId == props.game.homeTeam.id)
                     {
@@ -64,7 +69,7 @@ function PlayByPlay(props) {
                         pic2 = props.game.awayTeam.abbrev
                         pic2_url = props.game.awayTeam.darkLogo;
                         score2 = play.details.awayScore;
-                        
+                        scTeam = props.game.homeTeam;
                     }
                     else
                     {
@@ -74,6 +79,7 @@ function PlayByPlay(props) {
                         pic2 = props.game.homeTeam.abbrev;
                         pic2_url = props.game.homeTeam.darkLogo;
                         score2 = play.details.homeScore;
+                        scTeam = props.game.awayTeam;
                     }
                     if (play.details.hasOwnProperty("assist1PlayerId"))
                     {
@@ -96,7 +102,7 @@ function PlayByPlay(props) {
                         assistStr = "Unassisted";
                     }
                     let player1 = props.roster.find(p1 => {return p1.playerId == play.details.scoringPlayerId});
-        
+
                     let p =  <div className='play-card-goal'>
                                 <div id={"color-"+ pic} className='top-goal-card' style={{backgroundImage: "url(" + pic_url + ")"}}>
                                     <div className='top-goal-card-container'>
@@ -318,9 +324,10 @@ function PlayByPlay(props) {
                 }
                     
                 });
+                
 
             let arrlength = props.playArr.length -1;
-            let pL = <div><p id="period-indicator">{props.game.gameState == 'LIVE' ? (props.period < 4 ? formatPeriod(props.period) + " Period" : formatPeriod(props.period)) : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType)}</p>
+            let pL = <div><p id="period-indicator">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? (props.period < 4 ? formatPeriod(props.period) + " Period" : formatPeriod(props.period)) : (props.game.periodDescriptor.periodType == 'REG' ? "FINAL" : "FINAL/" + props.game.periodDescriptor.periodType)}</p>
                 <div className='playList'> {props.playArr.map((play,index) => (
                     <div>{pArr[(arrlength - index)]}</div>
                 ))}
@@ -343,9 +350,7 @@ function PlayByPlay(props) {
         }
     
         console.log('in useeffect'); 
-    }, [props.playArr]);
-
-    let pArr = [];
+    }, [props.playArr,props.darkMode,props.game,props.roster,props.period]); //might need to add goalCount
 
     //capitalizes each word in a sentence(string)
     function capitalizeEachWord(str)

@@ -86,9 +86,7 @@ function Summary(props) {
       }
     }
        console.log('in useeffect'); 
-      }, [props.teamGameStats]);
-      
-
+      }, [props.teamGameStats,props.teamsInfo, props.darkMode ]); //only run when the game stats change
 
     function setName(statName)
     {   

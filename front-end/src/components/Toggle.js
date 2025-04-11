@@ -119,7 +119,7 @@ function Toggle(props) {
                 </div>
             </div>
 
-        textBefore = "Display Style: " + props.index + " "; //new for testing
+        textBefore = "Display Style: ";// + props.index + " "; //new for testing
         textAfterTrue = "Line:";
         textAfterFalse = "Total";
 

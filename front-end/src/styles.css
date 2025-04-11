@@ -140,6 +140,7 @@
     border: 3px solid black;
     width: 70%;
     min-width: 200px;
+    max-width: 1000px;
     margin: auto;
     box-shadow: 5px 5px 10px 1px;
     
@@ -2124,6 +2125,7 @@ p{
     margin-right: auto;
     color:white;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    -webkit-text-stroke: 2px white;
 }
 .away-summary-title{
     font-size: 5rem;
@@ -2131,6 +2133,7 @@ p{
     margin-left: auto;
     margin-right: 0;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    -webkit-text-stroke: 2px white;
 }
 .summary-title-container{
     display: flex;

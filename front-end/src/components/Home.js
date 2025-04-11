@@ -25,10 +25,10 @@ function Main(props)
     { 
     //will show start time, "live", or "Ended"
     let status = []
-    //possible gameState's: PRE(right b4 game start), FUT(future), OFF, LIVE, FINAL
+    //possible gameState's: PRE(right b4 game start), FUT(future), OFF, LIVE, FINAL, CRIT(idk why, seems to be near the end of games)
     gameArr.forEach(game => {
       
-      if(game.gameState == 'LIVE') //if(game.startTimeUTC)
+      if(game.gameState == 'LIVE' || game.gameState == 'CRIT') //if(game.startTimeUTC)
       {
         let live = <img id="live-img" src={ require("../pics/live-icon.png")} alt="LIVE"/>
         status.push(live)
@@ -104,10 +104,10 @@ function Main(props)
         console.log("hasn't started");
 
         //only availible rn for testing
-        props.setgame(gameArr[index]);
-        props.setingame(true);
+       // props.setgame(gameArr[index]);
+       // props.setingame(true);
       }
-      else // 'LIVE', 'FINAL', 'END' or etc
+      else // 'LIVE', 'FINAL', 'END' , 'CRIT' or etc
       {
         console.log("live or ended");
         props.setgame(gameArr[index]);

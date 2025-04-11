@@ -12,32 +12,34 @@ app.post("/", (req, res) => {
     if(req.body.type == "pbp")
     {   let gameID = req.body.game;
         console.log("gameid: " +gameID)
-        const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); 
-        fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            //console.log(response.json());
-            return response.json();
-        })
-        .then(data => {
-            res.send(data)
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            res.send('Error!')
-        });
+        const apiUrl1 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); 
+        let apiUrl2 = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);          
+        Promise.all([fetch(apiUrl1), fetch(apiUrl2)])
+            .then(([response1, response2]) => {
+                // Check if both responses are ok (status 200-299)
+                if (response1.ok && response2.ok) {
+                    return Promise.all([response1.json(), response2.json()]);
+                }
+                throw new Error("One or both fetch requests failed");
+            })
+            .then(([data1, data2]) => {
+                console.log("Data1:", data1);
+                console.log("Data2:", data2);
+                res.send([data1,data2]) // Run func3 after both fetch requests are completed
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                res.send('Error!')
+            });
     }
     else if(req.body.type == "box")
-        {   let boxData;
-            let gsData;
+        {   
             let gameID = req.body.game;
             console.log("gameid: " +gameID)
             console.log("in box") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
 
             const apiUrl1 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/boxscore"); 
-            let apiUrl2 = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);
+            let apiUrl2 = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);          
             Promise.all([fetch(apiUrl1), fetch(apiUrl2)])
                 .then(([response1, response2]) => {
                     // Check if both responses are ok (status 200-299)
@@ -119,8 +121,8 @@ app.get('/', (req, res) => {
     today = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
     console.log(today)
     //maybe add a timeout?
-                                                                    //today
-    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-28"); //YYYY-MM-DD
+                                                                    //today "2025-01-28"
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + today); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
         if (!response.ok) {

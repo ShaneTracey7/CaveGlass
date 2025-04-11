@@ -1,5 +1,5 @@
 import '../styles.css';
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,useRef} from 'react';
 import ScoreReaction from './ScoreReaction';
 import Summary from './Summary';
 import axios from 'axios';
@@ -35,6 +35,7 @@ function Game(props) {
   //const [homeSOG, setHomeSOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
   //const [awaySOG, setAwaySOG] = useState(0) //sOG displayed in scoreboard (not in use with retro scoreboard)
   const [gameClock, setGameClock] = useState("") //gameClock
+  const [inIntermission, setInIntermission] = useState(false); //if true game is in intermission
   const [players, setPlayers] = useState([]); //players active inside player focus (each player has format: [playerId, fullname + number, firstname, lastname, number, headshot,teamId, positionCode, stat array])
   const [teamStats, setTeamStats] = useState([]); // team stats active inside player focus (each team stat has format: [teamId, fullname, isHome, stat array])
 
@@ -51,15 +52,24 @@ function Game(props) {
   const [statOptionsState, setStatOptionsState] = useState([props.game.homeTeam,props.game.awayTeam,"Both"]); //keeps track of what teams to show as options (preventing users select same teams multiple times)
 
   const [scoreReactionData, setScoreReactionData] = useState([]); // format: [<team object>, <player object>] needed to pass to scpore reaction component
-    
-  const [playerByGameStats, setPlayerByGameStats] = useState([]) //
+  
+  //const [playerByGameStats, setPlayerByGameStats] = useState([]) //
 
   const [statInfo,setStatInfo] = useState([]) // an array that gets data from api for playerhighlight format: [playerByGameStats,  teamGameStats]
+  const goalCount = useRef(0); //to keep track if there has been a change in score, leading to triggering of score reaction
 
-  
   useEffect(() => {
 
-    if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
+    /*if(props.game.gameState == "LIVE")
+    {*/
+        goalCount.current = props.game.homeTeam.score + props.game.awayTeam.score;
+   // }
+
+  }, []); 
+
+  useEffect(() => {
+
+    if(props.game.gameState == "LIVE" || props.game.gameState == "CRIT") //only have api calls running on interval if game is live
     {
         var timer;
         if(infoType == 'PBP')
@@ -79,7 +89,7 @@ function Game(props) {
   //need to test during live game
   useEffect(() => {
 
-    if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
+    if(props.game.gameState == "LIVE" || props.game.gameState == "CRIT") //only have api calls running on interval if game is live
     {
         var timer;
         if(infoType == 'BOX')
@@ -99,7 +109,7 @@ function Game(props) {
 //need to test during live game
   useEffect(() => {
 
-    if(props.game.gameState == "LIVE") //only have api calls running on interval if game is live
+    if(props.game.gameState == "LIVE" || props.game.gameState == "CRIT") //only have api calls running on interval if game is live
     {
         var timer;
         if(infoType == 'SUM')
@@ -127,8 +137,8 @@ function Game(props) {
       //this console.log will be in our frontend console
       console.log(data)
       //might crash if no games that day
-      setRoster(data.data.rosterSpots);
-    
+      setRoster(data.data[0].rosterSpots);
+
     })};
 
     //data will be the string we send from our server
@@ -143,11 +153,11 @@ function Game(props) {
           //this console.log will be in our frontend console
           console.log(data)
           //might crash if no games that day
-          setRoster(data.data.rosterSpots);
+          setRoster(data.data[0].rosterSpots);
           if(playArr.length == []) //first call
           {
             let temp = [...playArr];
-          data.data.plays.forEach(element => {
+          data.data[0].plays.forEach(element => {
              //let temp = playArr;
              temp.push(element);
              //setPlayArr(temp);
@@ -156,16 +166,38 @@ function Game(props) {
           setPlayArr(temp);
 
           setIsRunningPBP(!isRunningPBP);
-          setGameClock(data.data.clock.timeRemaining);
+          setGameClock(data.data[0].clock.timeRemaining);
+          setInIntermission(data.data[0].clock.inIntermission);
           console.log("empty")
           }
           else //to be called every 10secs
           {
             
             setIsRunningPBP(!isRunningPBP);
-            setPeriod(data.data.periodDescriptor.number);
-            setGameClock(data.data.clock.timeRemaining);
+            setPeriod(data.data[0].periodDescriptor.number);
+            setGameClock(data.data[0].clock.timeRemaining);
+            setInIntermission(data.data[0].clock.inIntermission);
             //Update scoreboard
+
+            //check if more goals have been scored
+            if(goalCount.current != (data.data[1].homeTeam.score + data.data[1].awayTeam.score)) //a goal has been scored
+            {
+                console.log("goalCount.current: " + goalCount.current + " sum: " + (data.data[1].homeTeam.score + data.data[1].awayTeam.score));
+                goalCount.current = data.data[1].homeTeam.score + data.data[1].awayTeam.score;
+
+                
+                //get team and player data of who scored
+                let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
+                let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
+                let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+
+                if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
+                {
+                    setScoreReactionData([team,player]);
+                    setScore(true);
+                }
+            }
+
             //not tested
             /*
             if(homeSOG != data.data.homeTeam.sog)
@@ -176,17 +208,17 @@ function Game(props) {
             {
                 setAwaySOG(data.data.awayTeam.sog);
             }*/
-            if(homeScore != data.data.homeTeam.score)
+            if(homeScore != data.data[0].homeTeam.score)
             {
-                setHomeScore(data.data.homeTeam.score);
+                setHomeScore(data.data[0].homeTeam.score);
             }
-            if(awayScore != data.data.awayTeam.score)
+            if(awayScore != data.data[0].awayTeam.score)
             {
-                setAwayScore(data.data.awayTeam.score);
+                setAwayScore(data.data[0].awayTeam.score);
             }
 
             //check difference 
-            let apiPlays = data.data.plays;
+            let apiPlays = data.data[0].plays;
             let dif = (apiPlays.length) - (playArr.length) + 8;
             console.log("Dif: " + dif);
           /*  if(dif > 0)
@@ -250,6 +282,7 @@ function Game(props) {
             }
             setIsRunningBOX(!isRunningBOX);
             setGameClock(data.data[0].clock.timeRemaining);
+            setInIntermission(data.data[0].clock.inIntermission);
             console.log("no roster")
           }
           else //to be called every 10secs
@@ -264,7 +297,28 @@ function Game(props) {
             //Update scoreboard
             setPeriod(data.data[0].periodDescriptor.number);
             setGameClock(data.data[0].clock.timeRemaining);
+            setInIntermission(data.data[0].clock.inIntermission);
             
+
+            //check if more goals have been scored
+            if(goalCount.current != (data.data[1].homeTeam.score + data.data[1].awayTeam.score)) //a goal has been scored
+            {
+                console.log("goalCount.current: " + goalCount.current + " sum: " + (data.data[1].homeTeam.score + data.data[1].awayTeam.score));
+                goalCount.current = data.data[1].homeTeam.score + data.data[1].awayTeam.score;
+
+                //get team and player data of who scored
+                let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
+                let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
+                let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+                
+                if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
+                {
+                    setScoreReactionData([team,player]);
+                    setScore(true);
+                }
+                
+            }
+
             //not tested
             if(homeScore != data.data[0].homeTeam.score)
             {
@@ -301,6 +355,7 @@ function Game(props) {
             }
             setIsRunningSUM(!isRunningSUM);
             setGameClock(data.data.clock.timeRemaining);
+            setInIntermission(data.data.clock.inIntermission);
             console.log("no roster")
           }
           else //to be called every 10secs
@@ -316,7 +371,25 @@ function Game(props) {
             //Update scoreboard
             setPeriod(data.data.periodDescriptor.number);
             setGameClock(data.data.clock.timeRemaining);
+            setInIntermission(data.data.clock.inIntermission);
             
+            //check if more goals have been scored
+            if(goalCount.current != (data.data.homeTeam.score + data.data.awayTeam.score)) //a goal has been scored
+            {
+                goalCount.current = data.data.homeTeam.score + data.data.awayTeam.score;
+
+                //get team and player data of who scored
+                let endpoint = data.data.summary.scoring[data.data.periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
+                let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
+                let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+                
+                if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
+                {
+                    setScoreReactionData([team,player]);
+                    setScore(true);
+                }
+            }
+
             //not tested
             if(homeScore != data.data.homeTeam.score)
             {
@@ -432,10 +505,10 @@ function Game(props) {
   let toolbar;
   let scoreboard;
   let settingsForm;
-  if (score) //score && settings[1] // if goalight is on or not
+  if (score) // if goalight is on or not
   {
     settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
-    display = <ScoreReaction scored={setScore} team={props.game.awayTeam} player={roster[0]}/>;
+    display = <ScoreReaction scored={setScore} team={scoreReactionData[0]} player={scoreReactionData[1]}/>;
     info = <p> .</p>
     
   }
@@ -535,10 +608,10 @@ function Game(props) {
             </div>
         
         <div className='score-board-info-middle'>
-        <p id="game-clock">{props.game.gameState == 'LIVE' ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
+        <p id="game-clock">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
         <div className='score-board-period-container-retro'>
             <p className='score-board-period-label-retro'> Period </p>
-            <p id="score-board-period-retro">{props.game.gameState == 'LIVE' ? (period) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
+            <p id="score-board-period-retro">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? (inIntermission ? ("int") : period > 3 ? ("OT") : (period)) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
         </div>
         </div>
         
@@ -574,7 +647,7 @@ function Game(props) {
     }
     else if(infoType == 'PBP')
     {
-        info = <PlayByPlay playArr={playArr} game={props.game} darkMode={darkMode} roster={roster} period={period}></PlayByPlay>;
+        info = <PlayByPlay playArr={playArr} game={props.game} darkMode={darkMode} roster={roster} period={period} totalGoals={homeScore+awayScore}></PlayByPlay>;
 
         /*
         let pArr = [];

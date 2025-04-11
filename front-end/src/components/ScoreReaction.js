@@ -7,10 +7,10 @@ function ScoreReaction(props)
     //props.team = <team object>
     //props.player = <player object>
 
-   /* setTimeout(() => {
+   setTimeout(() => {
         props.scored(false)
         console.log("Delayed for 20 second.");
-      }, 20000);*/
+      }, 20000);
       
     return(
         <div class="scoreReaction" id={"color-" + props.team.abbrev} > 
