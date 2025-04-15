@@ -13,8 +13,9 @@ function PlayerHighlight(props)
    let gsl = ['Shots Against','Saves','Goals Against','Save %','TOI'];
    let tsl = ['Goals','Shots','Blocks']; //maybe add penalty mins
     
-    const [showForm, setShowForm] = useState(false); //playerForm
-    const [showTeamForm, setShowTeamForm] = useState(false); //teamForm
+   
+    //props.show[0], props.show[1] = showForm, setShowForm
+    //props.showTeam[0], props.showTeam[1] = showTeamForm, setShowTeamForm
     const [showOptions, setShowOptions] = useState(false); //shows dropdown player options
     const [showTeamOptions, setShowTeamOptions] = useState(false); //shows dropdown team options
     const [selectedPlayer, setSelectedPlayer] = useState([0,"Select a Player","","",0,"",0,"",[]]); //format: [playerId, fullname + number, firstname, lastname, number, headshot,teamId, positionCode, stat array]
@@ -422,6 +423,25 @@ function PlayerHighlight(props)
         }
     }
 
+
+    function handleModalShow(type)
+    {
+        if(type == 'team')
+        {
+            props.showTeam[1](true);
+            props.show[1](false);
+            props.setShowSettings(false);
+            props.setShowHelp(false);
+        }
+        else if(type == 'player')
+        {
+            props.showTeam[1](false);
+            props.show[1](true);
+            props.setShowSettings(false);
+            props.setShowHelp(false);
+        }
+    }
+
     function cancelAdd()
     {
         //CLEAR selectedPlayer
@@ -432,7 +452,7 @@ function PlayerHighlight(props)
         setGoalieStatList(gsl);
         setSkaterStatList(ssl);
         //hide modal
-        setShowForm(false);
+        props.show[1](false);//setShowForm(false);
         //resets the cap
         setStatListCap(0);
         //resets custom/default toggle
@@ -448,7 +468,7 @@ function PlayerHighlight(props)
         //repopulate goalie and skater stat options
         setTeamStatList(tsl);
         //hide modal
-        setShowTeamForm(false);
+        props.showTeam[1](false);//setShowTeamForm(false);
         //resets the cap
         setStatListCap(0);
         //resets custom/default toggle
@@ -513,8 +533,8 @@ function PlayerHighlight(props)
     let display;
     let buttons; //arr of buttons to be displayed
     buttons = <div className='player-focus-button-container'>
-                        <button className='mode-button-dark' onClick={() => {setShowForm(true)}} disabled={(showTeamForm) ?  true : false} > Add Player </button>
-                        <button className='mode-button-dark' onClick={() => {setShowTeamForm(true)}} disabled={(showForm) ?  true : false}> Add Team </button>{/*disabled={showForm && showTeamForm ? true : false} */}
+                        <button className='mode-button-dark' onClick={() => {handleModalShow('player')}} disabled={(props.show[0]) ?  true : false} > Add Player </button>
+                        <button className='mode-button-dark' onClick={() => {handleModalShow('team')}} disabled={(props.showTeam[0]) ?  true : false}> Add Team </button>{/*disabled={showForm && showTeamForm ? true : false} */}
                 </div>;
    
     if (props.players[0].length != 0 && props.teamStats[0].length != 0)
@@ -632,7 +652,7 @@ function PlayerHighlight(props)
             <li class="selected-stat-element" key={cs[0]} ><p class='player-option-text'>{cs[0]}</p> <Toggle cap={[statListCap,setStatListCap]} type="statList" state={[false]}  statState={[customStats,setCustomStats]} size='small' index={i}></Toggle>   <img className='stat-delete-img' onClick={() => {removeStat(cs)}} src={whitex} alt="delete"/> </li>
         ));
     
-        let playerForm = <form className='player-form' style={{display: showForm ? "flex": "none"}}>
+        let playerForm = <form className='player-form' style={{display: props.show[0] ? "flex": "none"}}>
             <img id="player-form-cancel" onClick={cancelAdd} src={redx} alt="exit"/>
             <div class="player-select-container">
                 <div class="player-select-selected" onClick={() => {if (statListCap < 12){ setShowOptions(true)}}} > {selectedPlayer[1]}</div>
@@ -660,7 +680,7 @@ function PlayerHighlight(props)
             {/*<p>{"statlistcap: " + statListCap}</p>*/} {/* only here for testing*/}
         </form>;
 
-         let teamForm = <form className='player-form' style={{display: showTeamForm ? "flex": "none"}}>
+         let teamForm = <form className='player-form' style={{display: props.showTeam[0] ? "flex": "none"}}>
             <img id="player-form-cancel" onClick={cancelTeamAdd} src={redx} alt="exit"/>
             
             <div class="team-select-container">

@@ -17,7 +17,6 @@
     height: 100vh;
 }
 
-
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
     margin-left: auto;
@@ -870,11 +869,66 @@
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * Game.js Component * * * * * * * * * * * * * * * * * * * * * * * */
+#help-icons{
+    height:25px;
+    width:25px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.help-answer{
+    margin-left: 0;
+    margin-right: auto;
+    width: fit-content;
+}
+.help-question{
+    margin-top: 15px;
+    margin-bottom: 5px;
+    margin-left: 0;
+    margin-right: auto;
+    font-weight: bold;
+    width: fit-content;
+}
+.help-subtitle{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.help-content{
+    height:fit-content;
+    max-height: 300px;
+    height: 100%;
+    width: 90%;
+    overflow-y: scroll;
+    /*border: 2px solid blue;*/
+    margin-left: auto;
+    margin-right: auto;
+}
+.help-list{
+    width: 95%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.help-list > li{
+    width:fit-content;
+    margin-left: 0;
+    margin-right: auto;
+    overflow-wrap: normal;
+}
+.help-content::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
 #settings-input{
     border-radius: 5px;
     padding: 5px;
     border: 5px solid rgb(191, 217, 250);
 }
+#toolbar-help{
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+
+}
+
 
 #whistle-img{
     width: 50px;

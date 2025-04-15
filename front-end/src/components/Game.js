@@ -15,6 +15,7 @@ import summaryLogo from '../pics/summary.png';
 import darkModeLogo from '../pics/dark-mode.png';
 import lightModeLogo from '../pics/light-mode.png';
 import cog from '../pics/cog.svg';
+import help from '../pics/help.png';
 import redx from '../pics/red-x.png';
 import PlayByPlay from './PlayByPlay';
 
@@ -41,9 +42,13 @@ function Game(props) {
 
   const [showToolbar, setShowToolbar] = useState(true) //determines if toolbar should be hidden or not
   const [showScoreBoard, setShowScoreBoard] = useState(true) //determines if scoreboard should be hidden or not
-  const [showSettings, setShowSettings] = useState(false) //determines if settings modal should be hidden or not
+  const [showSettings, setShowSettings] = useState(false); //determines if settings modal should be hidden or not
+  const [showHelp, setShowHelp] = useState(false); //determines if help modal should be hidden or not
   const [settings, setSettings] = useState([0,true,props.game.homeTeam.placeName.default]) // format: [<delay>,<goallight (true or false)>, <what team> ]
-  
+  const [showForm, setShowForm] = useState(false); //playerForm in playerhightlight
+  const [showTeamForm, setShowTeamForm] = useState(false); //teamForm in playerhightlight
+
+
   // for settings form
   const [goalLightOn, setGoalLightOn] = useState(true);
   const [delay, setDelay] = useState(settings[0]);
@@ -475,6 +480,24 @@ function Game(props) {
         }
     }
 
+    function handleModalShow(type)
+    {
+        if(type == 'settings')
+        {
+            setShowSettings(true);
+            setShowHelp(false);
+            setShowForm(false);
+            setShowTeamForm(false);
+        }
+        else if(type == 'help')
+        {
+            setShowSettings(false);
+            setShowHelp(true);
+            setShowForm(false);
+            setShowTeamForm(false);
+        }
+    }
+
     function exitSettings()
     {
         setDelay(settings[0]);
@@ -505,9 +528,11 @@ function Game(props) {
   let toolbar;
   let scoreboard;
   let settingsForm;
+  let helpModal;
   if (score) // if goalight is on or not
   {
     settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
+    helpModal = <div></div>;
     display = <ScoreReaction scored={setScore} team={scoreReactionData[0]} player={scoreReactionData[1]}/>;
     info = <p> .</p>
     
@@ -549,6 +574,40 @@ function Game(props) {
             
             <div id="player-form-add" onClick={updateSettings}>Save Changes</div> 
         </form>;
+
+    helpModal = <div className='player-form' style={{display: showHelp ? "flex": "none"}}>
+                    <img id="player-form-cancel" onClick={() => {setShowHelp(false)}} src={redx} alt="exit"/>
+                    <div className='help-content'>
+                        <h1 className='help-subtitle'>FAQ's</h1>
+                        <div className='help-question'>How to adjust for a stream delay?</div>
+                        <div className='help-answer'>If your stream is ahead, there isn't anything that can be done, but if it's behind follow the steps below:</div>
+                        <ul className='help-list'>
+                            <li>Click the <img id="help-icons" src={cog} alt="cog"/>  icon on the toolbar to open the settings modal</li>
+                            <li>Click the Delay Test button &#40; This will return to you the current time on the game clock &#41;</li>
+                            <li>Enter the difference between the game clock on your stream and the return value into the Stream Delay text field</li>
+                            <li>Finish by hitting the Save button</li>
+                        </ul>
+                        <div className='help-question'>Why can't I click on some of the games?</div>
+                        <div className='help-answer'>If nothing happens when you click on a game listed on the home page, it's because it hasn't started yet.</div>
+                        <div className='help-question'>Why does game clock run inbetween periods?</div>
+                        <div className='help-answer'>The game clock is displaying the amount of time left in intermission and the period will be set to 'INT'.</div>
+                        <div className='help-question'>Why can I only see the toolbar and scoreboard?</div>
+                        <div className='help-answer'>Once you click on the game you want to follow on the home page, you will be directed to the game page. There you will have to select 1 of the 3 viewing modes &#40; Summary, Player Focus, and Play By Play &#41; on the toolbar to start tracking the game.</div>
+                        <div className='help-question'>How often does CaveGlass update?</div>
+                        <div className='help-answer'>While inside of a live game and in a selected mode, CaveGlass will update data every 10 seconds.</div>
+                        
+                        <h1 className='help-subtitle'>Tips</h1>
+                        <ul className='help-list'>
+                            <li>You can hide/show the toolbar and scoreboard by clicking the <img id="help-icons" src={upArrow} alt="arrow"/> or <img id="help-icons" src={downArrow} alt="arrow"/> icons in the top right corner</li>
+                            <li>If your window is wider than 1400px, you can increase size of the scoreboard by dragging the bottom right corner</li>
+                            <li>You can resize the player cards and the team cards within Player Focus mode by dragging the bottom right corner</li>
+                            <li>You can change the background of the screen to black &#40; preferred mode  when you click the Dark Mode button </li>
+                            <li>CaveGlass is meant to be used in full screen with the browser's toolbar hidden, you can adjust this in your browser's view settings</li>
+                            <li>You can set the score reaction &#40; view that pops up when there is a goal &#41; to only fire based off the team you are rooting for in settings</li>
+                        </ul>
+                    </div>
+                </div>;
+
     /*
         <div id='score-board'> 
         <div id='score-board-container'> 
@@ -584,9 +643,9 @@ function Game(props) {
                     <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='toolbar-logo' src={playByPlayLogo} alt="play-by-play"/></div>
                 </div>
                 <img class="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
-                <img class="mode-button-img" id="settings-cog" onClick={() => {setShowSettings(true)}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
-                
-                <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
+                <img class="mode-button-img" id="toolbar-help" onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
+                <img class="mode-button-img" id="settings-cog" onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
+               <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
             </div>
     }
     else
@@ -642,7 +701,7 @@ function Game(props) {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} ></PlayerHighlight>;
+        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} setShowHelp={setShowHelp} setShowSettings={setShowSettings} show={[showForm,setShowForm]} showTeam={[showTeamForm,setShowTeamForm]}></PlayerHighlight>;
 
     }
     else if(infoType == 'PBP')
@@ -980,6 +1039,7 @@ customSelects.forEach(function (select) {
     return (
       <div className={darkMode ? 'Game-dark': 'Game'}>
       {settingsForm}
+      {helpModal}
       {display}
       {info}
       </div>

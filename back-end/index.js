@@ -121,8 +121,8 @@ app.get('/', (req, res) => {
     today = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
     console.log(today)
     //maybe add a timeout?
-                                                                    //today "2025-01-28"
-    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + today); //YYYY-MM-DD
+                                                                    //today 2025-01-28
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-28"); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
         if (!response.ok) {
