@@ -60,8 +60,10 @@ function Game(props) {
   
   //const [playerByGameStats, setPlayerByGameStats] = useState([]) //
 
-  const [statInfo,setStatInfo] = useState([]) // an array that gets data from api for playerhighlight format: [playerByGameStats,  teamGameStats]
+  const [statInfo,setStatInfo] = useState([]); // an array that gets data from api for playerhighlight format: [playerByGameStats,  teamGameStats]
   const goalCount = useRef(0); //to keep track if there has been a change in score, leading to triggering of score reaction
+  const [gameClockPing,setGameClockPing] = useState(""); //used to get value of game clock from ping api call
+
 
   useEffect(() => {
 
@@ -70,7 +72,9 @@ function Game(props) {
         goalCount.current = props.game.homeTeam.score + props.game.awayTeam.score;
    // }
 
-  }, []); 
+  }, []);
+
+  
 
   useEffect(() => {
 
@@ -89,7 +93,7 @@ function Game(props) {
         }
     }
 
-  }, [isRunningPBP]); 
+  }, [isRunningPBP]);
 
   //need to test during live game
   useEffect(() => {
@@ -159,6 +163,11 @@ function Game(props) {
           console.log(data)
           //might crash if no games that day
           setRoster(data.data[0].rosterSpots);
+
+
+
+        //wait delay length before it sets useStates
+
           if(playArr.length == []) //first call
           {
             let temp = [...playArr];
@@ -177,57 +186,45 @@ function Game(props) {
           }
           else //to be called every 10secs
           {
-            
             setIsRunningPBP(!isRunningPBP);
-            setPeriod(data.data[0].periodDescriptor.number);
             setGameClock(data.data[0].clock.timeRemaining);
-            setInIntermission(data.data[0].clock.inIntermission);
-            //Update scoreboard
-
-            //check if more goals have been scored
-            if(goalCount.current != (data.data[1].homeTeam.score + data.data[1].awayTeam.score)) //a goal has been scored
+            if(!data.data[0].clock.inIntermission) //not in intermission
             {
-                console.log("goalCount.current: " + goalCount.current + " sum: " + (data.data[1].homeTeam.score + data.data[1].awayTeam.score));
-                goalCount.current = data.data[1].homeTeam.score + data.data[1].awayTeam.score;
+                setPeriod(data.data[0].periodDescriptor.number);
+                //check if more goals have been scored
+                if(goalCount.current != (data.data[1].homeTeam.score + data.data[1].awayTeam.score)) //a goal has been scored
+                {
+                    console.log("goalCount.current: " + goalCount.current + " sum: " + (data.data[1].homeTeam.score + data.data[1].awayTeam.score));
+                    goalCount.current = data.data[1].homeTeam.score + data.data[1].awayTeam.score;
 
                 
-                //get team and player data of who scored
-                let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
-                let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
-                let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+                    //get team and player data of who scored
+                    let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
+                    let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
+                    let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
 
-                if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
-                {
-                    setScoreReactionData([team,player]);
-                    setScore(true);
+                    if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
+                    {
+                        setScoreReactionData([team,player]);
+                        setScore(true);
+                    }
                 }
-            }
+                //Update scoreboard
+                if(homeScore != data.data[0].homeTeam.score)
+                    {
+                        setHomeScore(data.data[0].homeTeam.score);
+                    }
+                    if(awayScore != data.data[0].awayTeam.score)
+                    {
+                        setAwayScore(data.data[0].awayTeam.score);
+                    }
 
-            //not tested
-            /*
-            if(homeSOG != data.data.homeTeam.sog)
-            {
-                setHomeSOG(data.data.homeTeam.sog);
-            }
-            if(awaySOG != data.data.awayTeam.sog)
-            {
-                setAwaySOG(data.data.awayTeam.sog);
-            }*/
-            if(homeScore != data.data[0].homeTeam.score)
-            {
-                setHomeScore(data.data[0].homeTeam.score);
-            }
-            if(awayScore != data.data[0].awayTeam.score)
-            {
-                setAwayScore(data.data[0].awayTeam.score);
-            }
-
-            //check difference 
-            let apiPlays = data.data[0].plays;
-            let dif = (apiPlays.length) - (playArr.length) + 8;
-            console.log("Dif: " + dif);
-          /*  if(dif > 0)
-            {*/
+                 //check difference 
+                let apiPlays = data.data[0].plays;
+                let dif = (apiPlays.length) - (playArr.length) + 8;
+                console.log("Dif: " + dif);
+            /*  if(dif > 0)
+                {*/
                 console.log("length b4: " + playArr.length);
                 //replacing the last 8 plays already in (in case of any updates)
                 let te = playArr;
@@ -244,7 +241,19 @@ function Game(props) {
                     console.log("i: " + i)
                     
                 }
-            //}
+            }
+            else //in intermission
+            {
+                console.log("in intermission")
+            }
+            
+            
+            if(inIntermission != data.data[0].clock.inIntermission){
+                setInIntermission(data.data[0].clock.inIntermission);
+            }
+            
+            
+
          }
        })
     }
@@ -337,6 +346,18 @@ function Game(props) {
 
        })
     }
+
+    const pingAPI = () => {
+        axios.post('http://localhost:8080', {
+            type: 'ping',
+            game: props.game.id,
+          }, {
+            headers: {
+            'content-type': 'application/json'
+            }}).then((data) => {
+                console.log(data);
+                setGameClockPing(data.data);
+            })};
 
       //gets summary
       const getSummary = () => {
@@ -504,9 +525,21 @@ function Game(props) {
         setSelectedOption(settings[2]);
         setGoalLightOn(settings[1]);
         setShowSettings(false);
+        setGameClockPing("");
     }
     function updateSettings()
     {
+        if( settings[0] != delay)
+        {
+            //clear all playbyplay, summary values, boxscore values
+
+            //make api calls and push results into array (every 10 secs)
+            //array will be the length of delay / 10 (interval) rounding down + 1 example: 25 sec inteval = 2.5 + 1 = array length 3
+
+            //have algorithm start pulling data from each index of array 
+
+            //essentially there will be a separation from when data is recieved from api and displayed in ui
+        }
         setSettings([delay,goalLightOn,selectedOption]);
         setShowSettings(false);
     }
@@ -560,6 +593,12 @@ function Game(props) {
                     <input class="line-input" id="settings-input" type='number' value={delay} min={0} max={180} onChange={(e) => {setDelay(e.target.value)}} /> 
                 </label>
             </div>
+            <div id="ping-container">
+                <div id="ping-button" onClick={() => {pingAPI()}}>Ping</div>
+                <div id="ping-label"><b>Current value</b> &#40; Game Clock &#41; : </div>
+                    <div id="ping-result">{gameClockPing}</div>
+                
+            </div>
             <div id="form-element"> {/* this toggle state is causing issues */}
                 <Toggle state={[goalLightOn,setGoalLightOn]} type="settings" size='big'></Toggle>
             </div>
@@ -589,8 +628,8 @@ function Game(props) {
                         </ul>
                         <div className='help-question'>Why can't I click on some of the games?</div>
                         <div className='help-answer'>If nothing happens when you click on a game listed on the home page, it's because it hasn't started yet.</div>
-                        <div className='help-question'>Why does game clock run inbetween periods?</div>
-                        <div className='help-answer'>The game clock is displaying the amount of time left in intermission and the period will be set to 'INT'.</div>
+                        <div className='help-question'>Why does the game clock run inbetween periods?</div>
+                        <div className='help-answer'>The game clock is displaying the amount of time left in the intermission and the period will be set to 'INT'.</div>
                         <div className='help-question'>Why can I only see the toolbar and scoreboard?</div>
                         <div className='help-answer'>Once you click on the game you want to follow on the home page, you will be directed to the game page. There you will have to select 1 of the 3 viewing modes &#40; Summary, Player Focus, and Play By Play &#41; on the toolbar to start tracking the game.</div>
                         <div className='help-question'>How often does CaveGlass update?</div>

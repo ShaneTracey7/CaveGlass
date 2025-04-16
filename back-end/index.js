@@ -79,6 +79,28 @@ app.post("/", (req, res) => {
                 res.send('Error!')
             });
         }
+    else if(req.body.type == "ping")
+        {   
+            let gameID = req.body.game;
+            console.log("gameid: " +gameID)
+            const apiUrl = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);
+            fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                //console.log(response.json());
+                return response.json();
+            })
+            .then(data => {
+                let temp = data.clock.timeRemaining;
+                res.send(temp);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                res.send('Error!')
+            });
+        }
     else if(req.body.type == "test")   // summary.teamGameStats[0].category -> 'sog' .awayValue -> num
                                         // [5] -> hits, [6] -> blocked shots, [4] -> pim,
         {  
@@ -121,7 +143,7 @@ app.get('/', (req, res) => {
     today = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
     console.log(today)
     //maybe add a timeout?
-                                                                    //today 2025-01-28
+                                                                    //today //2025-01-28
     const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-28"); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
