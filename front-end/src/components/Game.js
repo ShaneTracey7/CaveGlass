@@ -22,13 +22,16 @@ import PlayByPlay from './PlayByPlay';
 function Game(props) {
 
   const [playArr, setPlayArr] = useState([]); //local instance of plays taken from api (for play-by-play view)
+  //const [allDataArr, setAllDataArr] = useState([]); //switched to useRef
   
   const [score, setScore] = useState(false); //if true score reaction is displayed
   const [infoType, setInfoType] = useState('XXX'); //3 States: Summary(SUM), Box-score(BOX), and Play-by-Play(PBP)
   const [roster, setRoster] = useState([]); //set once and used to get names/numbers/pics from api playerIds
-  const [isRunningPBP, setIsRunningPBP] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for PBP
-  const [isRunningBOX, setIsRunningBOX] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for BOX (player focus)
-  const [isRunningSUM, setIsRunningSUM] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for SUM
+  //const [isRunningPBP, setIsRunningPBP] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for PBP
+  //const [isRunningBOX, setIsRunningBOX] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for BOX (player focus)
+  //const [isRunningSUM, setIsRunningSUM] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for SUM
+  const [isRunningALL, setIsRunningALL] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for ALL
+  const [isRunningALLDelay, setIsRunningALLDelay] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for ALL Delay
   const [period, setPeriod] = useState(props.game.periodDescriptor.number); //current period the game is in
   const [darkMode, setDarkMode] = useState(false); //light and dark mode toggle
   const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
@@ -64,18 +67,67 @@ function Game(props) {
   const goalCount = useRef(0); //to keep track if there has been a change in score, leading to triggering of score reaction
   const [gameClockPing,setGameClockPing] = useState(""); //used to get value of game clock from ping api call
 
+  const delayArrCount = useRef(0); //to keep track where in array allDataArr 
+  const setDelayArrCount = useRef(0); //to keep track where in array allDataArr when setting ui
+  const allDataArr = useRef([]); //array of nhl api instances needed for when delay is in use
 
   useEffect(() => {
 
     /*if(props.game.gameState == "LIVE")
     {*/
         goalCount.current = props.game.homeTeam.score + props.game.awayTeam.score;
+        setInfoType('SUM');
+        getAllData();
    // }
 
   }, []);
 
-  
+  useEffect(() => {
 
+    if(props.game.gameState == "LIVE" || props.game.gameState == "CRIT") //only have api calls running on interval if game is live
+    {
+        var timer;//could cause issues with only 1 timer var  with 2 options
+        if(infoType != 'XXX')
+        {
+            if(settings[0] > 0) //there is a delay
+            {
+                timer = setTimeout(() => getAllDataDelay(), 10000) // 10 secs
+            }
+            else
+            {
+                timer = setTimeout(() => getAllData(), 10000) // 10 secs
+            }
+            console.log("infoType != 'XXX'");
+        }
+        else
+        {
+        console.log("infoType == 'XXX'");
+        return () => clearTimeout(timer) //stops api calls (current one will still execute)
+        }
+    }
+
+  }, [isRunningALL]);
+
+  useEffect(() => {
+
+    if(props.game.gameState == "LIVE" || props.game.gameState == "CRIT") //only have api calls running on interval if game is live
+    {
+        var timer;
+        if(infoType != 'XXX')
+        {
+            
+            timer = setTimeout(() => setDelayAllData(), 10000) // 10 secs   
+            console.log("infoType != 'XXX'");
+        }
+        else
+        {
+        console.log("infoType == 'XXX'");
+        return () => clearTimeout(timer) //stops api calls (current one will still execute)
+        }
+    }
+
+  }, [isRunningALLDelay]);
+/*
   useEffect(() => {
 
     if(props.game.gameState == "LIVE" || props.game.gameState == "CRIT") //only have api calls running on interval if game is live
@@ -134,7 +186,7 @@ function Game(props) {
     }
 
   }, [isRunningSUM]);
-
+*/
   const setRosterAPI = () => {
     axios.post('http://localhost:8080', {
         type: 'pbp',
@@ -150,6 +202,215 @@ function Game(props) {
 
     })};
 
+function setDelayAllData()
+{
+    //set values based off allDataArr
+    let index = setDelayArrCount.current % (Math.floor(settings[0]/10) + 1);
+    let data = allDataArr.current[index];
+    //console.log("let index = " + index);
+    //console.log("let data = " + data);
+
+    setIsRunningALLDelay(!isRunningALLDelay);
+    setGameClock(data[0].clock.timeRemaining);
+    if(!data[0].clock.inIntermission) //not in intermission
+    {
+        setPeriod(data[0].periodDescriptor.number);
+
+        //check if more goals have been scored
+        if(goalCount.current != (data[1].homeTeam.score + data[1].awayTeam.score)) //a goal has been scored
+        {
+            console.log("goalCount.current: " + goalCount.current + " sum: " + (data[1].homeTeam.score + data[1].awayTeam.score));
+            goalCount.current = data[1].homeTeam.score + data[1].awayTeam.score;
+
+        
+            //get team and player data of who scored
+            let endpoint = data[1].summary.scoring[data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
+            let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
+            let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+
+            if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
+            {
+                setScoreReactionData([team,player]);
+                setScore(true);
+            }
+        }
+        //Update scoreboard
+        if(homeScore != data[0].homeTeam.score)
+            {
+                setHomeScore(data[0].homeTeam.score);
+            }
+            if(awayScore != data[0].awayTeam.score)
+            {
+                setAwayScore(data[0].awayTeam.score);
+            }
+        
+        //update summary & player focus
+        if(statInfo != [data[2].playerByGameStats,data[1].summary.teamGameStats])
+        {
+            setStatInfo([data[2].playerByGameStats,data[1].summary.teamGameStats]);
+        }
+
+        //update playbyplay
+        let apiPlays = data[0].plays;
+        setPlayArr(apiPlays);
+    }
+    else //in intermission
+    {
+        console.log("in intermission")
+    }
+    
+    if(inIntermission != data[0].clock.inIntermission){
+        setInIntermission(data[0].clock.inIntermission);
+    }
+
+    setDelayArrCount.current = setDelayArrCount.current + 1;
+}
+
+//data will be the string we send from our server
+const getAllDataDelay = () => {
+    axios.post('http://localhost:8080', {
+        type: 'all',
+        game: props.game.id,
+      }, {
+        headers: {
+        'content-type': 'application/json'
+        }}).then((data) => {
+      //this console.log will be in our frontend console
+        console.log(data);
+        let temp = [...allDataArr.current];
+        if(allDataArr.current.length < (Math.floor(settings[0]/10) + 1)) //array not fully populated
+        {
+            temp.push(data.data);
+        }
+        else //array fully populated
+        {
+            let index = delayArrCount.current % (Math.floor(settings[0]/10) + 1);
+            temp[index] = data.data;
+        }
+        delayArrCount.current = delayArrCount.current + 1;
+        //setAllDataArr(temp);
+        allDataArr.current = temp;
+        //console.log("allDataArr(in get): " + allDataArr.current);
+        //console.log("temp: " + temp);
+        setIsRunningALL(!isRunningALL);
+   })
+}
+//data will be the string we send from our server
+const getAllData = () => {
+    axios.post('http://localhost:8080', {
+        type: 'all',
+        game: props.game.id,
+      }, {
+        headers: {
+        'content-type': 'application/json'
+        }}).then((data) => {
+      //this console.log will be in our frontend console
+      console.log(data)
+
+    //wait delay length before it sets useStates
+    if(roster.length == []) //first call
+    {
+      //set roster (necessary to add player to player focus)
+      setRosterAPI();
+      
+      if(statInfo != [data.data[2].playerByGameStats,data.data[1].summary.teamGameStats])
+      {
+          setStatInfo([data.data[2].playerByGameStats,data.data[1].summary.teamGameStats]);
+      }
+
+      let temp = [...playArr];
+      data.data[0].plays.forEach(element => {
+         temp.push(element);
+      });
+      setPlayArr(temp);
+
+      setIsRunningALL(!isRunningALL);
+      setGameClock(data.data[0].clock.timeRemaining);
+      setInIntermission(data.data[0].clock.inIntermission);
+      console.log("first ALL DATA call");
+      
+    }
+      else //to be called every 10secs
+      {
+
+        setIsRunningALL(!isRunningALL);
+        setGameClock(data.data[0].clock.timeRemaining);
+        if(!data.data[0].clock.inIntermission) //not in intermission
+        {
+            setPeriod(data.data[0].periodDescriptor.number);
+
+            //check if more goals have been scored
+            if(goalCount.current != (data.data[1].homeTeam.score + data.data[1].awayTeam.score)) //a goal has been scored
+            {
+                console.log("goalCount.current: " + goalCount.current + " sum: " + (data.data[1].homeTeam.score + data.data[1].awayTeam.score));
+                goalCount.current = data.data[1].homeTeam.score + data.data[1].awayTeam.score;
+
+            
+                //get team and player data of who scored
+                let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
+                let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
+                let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+
+                if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
+                {
+                    setScoreReactionData([team,player]);
+                    setScore(true);
+                }
+            }
+            //Update scoreboard
+            if(homeScore != data.data[0].homeTeam.score)
+                {
+                    setHomeScore(data.data[0].homeTeam.score);
+                }
+                if(awayScore != data.data[0].awayTeam.score)
+                {
+                    setAwayScore(data.data[0].awayTeam.score);
+                }
+            
+            //update summary & player focus
+            if(statInfo != [data.data[2].playerByGameStats,data.data[1].summary.teamGameStats])
+            {
+                setStatInfo([data.data[2].playerByGameStats,data.data[1].summary.teamGameStats]);
+            }
+
+            //update playbyplay
+             //check difference 
+            let apiPlays = data.data[0].plays;
+            setPlayArr(apiPlays);
+            /*let dif = (apiPlays.length) - (playArr.length) + 8;
+            console.log("Dif: " + dif);
+        /*  if(dif > 0)
+            {*//*
+            console.log("length b4: " + playArr.length);
+            //replacing the last 8 plays already in (in case of any updates)
+            let te = playArr;
+            te.length = (playArr.length - 8);
+            setPlayArr(te);
+            let startingLength = playArr.length;
+            console.log("length aft: " + playArr.length);
+            for(let i=0; i < dif; i++)
+            {
+                let temp = playArr;
+                temp.push(apiPlays[(startingLength + i )]);
+                setPlayArr(temp);
+                console.log(apiPlays[(startingLength + i )]);
+                console.log("i: " + i)
+                
+            }*/
+        }
+        else //in intermission
+        {
+            console.log("in intermission")
+        }
+        
+        if(inIntermission != data.data[0].clock.inIntermission){
+            setInIntermission(data.data[0].clock.inIntermission);
+        }
+
+     }
+   })
+}
+/*
     //data will be the string we send from our server
     const getPlaybyPlay = () => {
         axios.post('http://localhost:8080', {
@@ -224,7 +485,7 @@ function Game(props) {
                 let dif = (apiPlays.length) - (playArr.length) + 8;
                 console.log("Dif: " + dif);
             /*  if(dif > 0)
-                {*/
+                {
                 console.log("length b4: " + playArr.length);
                 //replacing the last 8 plays already in (in case of any updates)
                 let te = playArr;
@@ -257,19 +518,6 @@ function Game(props) {
          }
        })
     }
-/*
-    const getNFL = () => {
-        axios.post('http://localhost:8080', {
-            type: 'test',
-            game: props.game.id,
-          }, {
-            headers: {
-            'content-type': 'application/json'
-            }}).then((data) => {
-          //this console.log will be in our frontend console
-          console.log(data)
-       })
-    }*/
 
     //gets boxscore
     const getPlayerFocus = () => {
@@ -346,7 +594,7 @@ function Game(props) {
 
        })
     }
-
+*/
     const pingAPI = () => {
         axios.post('http://localhost:8080', {
             type: 'ping',
@@ -358,7 +606,7 @@ function Game(props) {
                 console.log(data);
                 setGameClockPing(data.data);
             })};
-
+/*
       //gets summary
       const getSummary = () => {
         axios.post('http://localhost:8080', {
@@ -429,24 +677,8 @@ function Game(props) {
 
        })
     }
-
-   /*
-    function runApiCalls()
-    {
-        // your function code here
-        console.log("calling api");
-        var to = setTimeout(runApiCalls, 10000);
-            if(infoType == 'PBP')
-            {
-                getPlaybyPlay();
-                to = setTimeout(runApiCalls, 10000);
-            }
-            else
-            {
-                clearTimeout(to);
-            }
-    }*/
-
+*/
+   
     //formats UTC date into {mm/dd/yyyy} (not currently in use)
     function formatDate(date)
     {
@@ -465,12 +697,7 @@ function Game(props) {
             if(infoType != 'SUM')
             {
                 setInfoType('SUM');
-                getSummary();
-                /*setTimeout(() => {
-                    
-                     console.log("Delayed for 1 second.");
-                 }, 1000);*/
-                
+                //getSummary();
             }
             console.log('SUM')
         }
@@ -479,8 +706,7 @@ function Game(props) {
             if(infoType != 'BOX')
             {
                 setInfoType('BOX');
-                getPlayerFocus();
-                console.log('called box')
+                //getPlayerFocus();
             }
             console.log('BOX')
         }
@@ -490,11 +716,7 @@ function Game(props) {
             if(infoType != 'PBP')
             {
                 setInfoType('PBP');
-                getPlaybyPlay();
-               /* setTimeout(() => {
-                   // setInfoType('PBP');
-                    console.log("Delayed for 1 second.");
-                }, 1000);*/
+                //getPlaybyPlay();
 
             }
             console.log('PBP')
@@ -527,20 +749,36 @@ function Game(props) {
         setShowSettings(false);
         setGameClockPing("");
     }
-    function updateSettings()
+    function updateSettings() 
     {
-        if( settings[0] != delay)
+        if(settings[0] != delay ) //new delay
         {
-            //clear all playbyplay, summary values, boxscore values
-
-            //make api calls and push results into array (every 10 secs)
-            //array will be the length of delay / 10 (interval) rounding down + 1 example: 25 sec inteval = 2.5 + 1 = array length 3
-
-            //have algorithm start pulling data from each index of array 
-
-            //essentially there will be a separation from when data is recieved from api and displayed in ui
+            if((props.game.gameState == "LIVE" || props.game.gameState == "CRIT") && (delay > 3) && (delay <= 180)) //only allow delay if game is live
+            {
+                setSettings([delay,goalLightOn,selectedOption]);
+                //clear all playbyplay, summary values, boxscore values (maybe not, will be tough to do without casuing issues)
+                //make api calls and push results into array (every 10 secs)
+                getAllDataDelay();
+                
+                //start displaying data by pulling from array, waiting the correct amount of time to start
+                setTimeout(() => setDelayAllData(), (delay*1000))
+                //have algorithm start pulling data from each index of array 
+                //array will be the length of delay / 10 (interval) rounding down + 1 example: 25 sec inteval = 2.5 + 1 = array length 3
+                //essentially there will be a separation from when data is recieved from api and displayed in ui
+                //console.log("settings[0] != delay AND running delay")
+            }
+            else
+            {   //console.log("settings[0] != delay AND not running delay")
+                setDelay(settings[0]);
+            }
         }
-        setSettings([delay,goalLightOn,selectedOption]);
+        else
+        {
+           //console.log("settings[0] == delay")
+            setSettings([delay,goalLightOn,selectedOption]);
+            
+        }
+        
         setShowSettings(false);
     }
     
@@ -554,6 +792,12 @@ function Game(props) {
     function testScore()
     {
         setScore(true);
+    }
+
+    function leaveGame()
+    {
+        setInfoType('XXX');
+        props.setingame(false);
     }
 
   let display;
@@ -671,10 +915,13 @@ function Game(props) {
         </div>
         </div>
         */
+
+    
+
     if(showToolbar)
     {
         toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
-                <img id="back-arrow" onClick={() => props.setingame(false)} src={ require("../pics/back-arrow.png")} alt="Back"/>
+                <img id="back-arrow" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
                 <img className="cg-logo-small" onClick={testScore} src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
                     <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={summaryLogo} alt="summary"/></div>
