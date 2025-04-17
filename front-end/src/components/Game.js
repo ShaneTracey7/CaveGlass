@@ -21,6 +21,10 @@ import PlayByPlay from './PlayByPlay';
 
 function Game(props) {
 
+ let backendUrl = 'http://localhost:8080'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
+
+
+    
   const [playArr, setPlayArr] = useState([]); //local instance of plays taken from api (for play-by-play view)
   //const [allDataArr, setAllDataArr] = useState([]); //switched to useRef
   
@@ -254,7 +258,7 @@ function setDelayAllData()
 
 //data will be the string we send from our server
 const getAllDataDelay = () => {
-    axios.post('http://localhost:8080', {
+    axios.post(backendUrl, {
         type: 'all',
         game: props.game.id,
       }, {
@@ -283,7 +287,7 @@ const getAllDataDelay = () => {
 }
 //data will be the string we send from our server
 const getAllData = () => {
-    axios.post('http://localhost:8080', {
+    axios.post(backendUrl, {
         type: 'all',
         game: props.game.id,
       }, {
@@ -582,7 +586,7 @@ const getAllData = () => {
     }
 */
     const pingAPI = () => {
-        axios.post('http://localhost:8080', {
+        axios.post(backendUrl, {
             type: 'ping',
             game: props.game.id,
           }, {
@@ -594,7 +598,7 @@ const getAllData = () => {
             })};
 
     const setRosterAPI = () => {
-        axios.post('http://localhost:8080', {
+        axios.post(backendUrl, {
             type: 'roster',
             game: props.game.id,
         }, {

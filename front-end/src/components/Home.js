@@ -5,6 +5,8 @@ import axios from 'axios';
 
 function Main(props)
 {
+    let backendUrl = 'http://localhost:8080'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
+
     let loadingSpinner = <div class="loader"></div>;
     //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
     const [gameArr, setGameArr] = useState([]); //if true score reaction is displayed,
@@ -76,7 +78,7 @@ function Main(props)
 
   //data will be the string we send from our server
   const apiGetGames = () => {
-    axios.get('http://localhost:8080').then((data) => {
+    axios.get(backendUrl).then((data) => {
       //this console.log will be in our frontend console
       console.log(data)
       //might crash if no games that day
