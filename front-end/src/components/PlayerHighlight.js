@@ -10,7 +10,7 @@ function PlayerHighlight(props)
 {
 
    let ssl = ['Goals','Assists','Points','+/-','TOI','Shots','Blocks','Hits','Face-off'];
-   let gsl = ['Shots Against','Saves','Goals Against','Save %','TOI'];
+   let gsl = ['Shots Against','Saves','Goals Against','Save','TOI'];
    let tsl = ['Goals','Shots','Blocks']; //maybe add penalty mins
     
    
@@ -214,8 +214,9 @@ function PlayerHighlight(props)
                 case 'Saves': return apiPlayer.saves;
                 case 'Shots Against': return apiPlayer.shotsAgainst;
                 case 'Goals Against': return apiPlayer.goalsAgainst;
-                case 'Save %': return Math.round(apiPlayer.savePctg * 1000)/1000; //not always there in api (backup doesn't have it) (shows up a NaN)
+                //case 'Save %': return Math.round(apiPlayer.savePctg * 1000)/1000; //not always there in api (backup doesn't have it) (shows up a NaN)
                 //default: return statName.toLowerCase();
+                case 'Save': return isNaN(apiPlayer.savePctg) ? 0 + '%' : (apiPlayer.savePctg * 100).toFixed(1) + '%';
             }
         }
         else

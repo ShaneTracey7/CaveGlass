@@ -9,7 +9,35 @@ app.use(express.json());
 
 app.post("/", (req, res) => {
     console.log("req.body.type: " + req.body.type);
-    if(req.body.type == "pbp")
+    if(req.body.type == "all")
+        {   
+            let gameID = req.body.game;
+            console.log("gameid: " +gameID)
+            console.log("in all") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
+            const apiUrl1 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); //pbp
+            const apiUrl2 = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);             //summary
+            const apiUrl3 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/boxscore");   //playerfocus(box)
+            Promise.all([fetch(apiUrl1), fetch(apiUrl2), fetch(apiUrl3)])
+                .then(([response1, response2, response3]) => {
+                    // Check if both responses are ok (status 200-299)
+                    if (response1.ok && response2.ok && response3.ok) {
+                        return Promise.all([response1.json(), response2.json(), response3.json()]);
+                    }
+                    throw new Error("One or more fetch requests failed");
+                })
+                .then(([data1, data2, data3]) => {
+                    console.log("Data1:", data1);
+                    console.log("Data2:", data2);
+                    console.log("Data2:", data3);
+                    res.send([data1,data2,data3]) 
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    res.send('Error!')
+                });
+        }
+        /*
+    else if(req.body.type == "pbp")
     {   let gameID = req.body.game;
         console.log("gameid: " +gameID)
         const apiUrl1 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); 
@@ -79,33 +107,7 @@ app.post("/", (req, res) => {
                 res.send('Error!')
             });
         }
-    else if(req.body.type == "all")
-        {   
-            let gameID = req.body.game;
-            console.log("gameid: " +gameID)
-            console.log("in all") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
-            const apiUrl1 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); //pbp
-            const apiUrl2 = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID);             //summary
-            const apiUrl3 = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/boxscore");   //playerfocus(box)
-            Promise.all([fetch(apiUrl1), fetch(apiUrl2), fetch(apiUrl3)])
-                .then(([response1, response2, response3]) => {
-                    // Check if both responses are ok (status 200-299)
-                    if (response1.ok && response2.ok && response3.ok) {
-                        return Promise.all([response1.json(), response2.json(), response3.json()]);
-                    }
-                    throw new Error("One or more fetch requests failed");
-                })
-                .then(([data1, data2, data3]) => {
-                    console.log("Data1:", data1);
-                    console.log("Data2:", data2);
-                    console.log("Data2:", data3);
-                    res.send([data1,data2,data3]) 
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    res.send('Error!')
-                });
-        }
+    */
     else if(req.body.type == "ping")
         {   
             let gameID = req.body.game;
@@ -116,7 +118,6 @@ app.post("/", (req, res) => {
                 if (!response.ok) {
                 throw new Error('Network response was not ok');
                 }
-                //console.log(response.json());
                 return response.json();
             })
             .then(data => {
@@ -128,32 +129,28 @@ app.post("/", (req, res) => {
                 res.send('Error!')
             });
         }
-    else if(req.body.type == "test")   // summary.teamGameStats[0].category -> 'sog' .awayValue -> num
-                                        // [5] -> hits, [6] -> blocked shots, [4] -> pim,
-        {  
+    else if(req.body.type == "roster")
+        {   
             let gameID = req.body.game;
             console.log("gameid: " +gameID)
-            console.log("in test") //https://api.sleeper.app/v1/league/1125318770018463744/rosters
-            const apiUrl = String("https://api-web.nhle.com/v1/wsc/game-story/" + gameID); 
-            //const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/landing"); 
+            const apiUrl = String("https://api-web.nhle.com/v1/gamecenter/" + gameID + "/play-by-play"); 
             fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
                 throw new Error('Network response was not ok');
                 }
-                //console.log(response.json());
                 return response.json();
             })
             .then(data => {
-                res.send(data)
-                console.log(data)
+                let temp = data.rosterSpots;
+                res.send(temp);
             })
             .catch(error => {
                 console.error('Error:', error);
                 res.send('Error!')
             });
-            
         }
+    
     else
     {   
         console.log("error");
@@ -171,7 +168,7 @@ app.get('/', (req, res) => {
     console.log(today)
     //maybe add a timeout?
                                                                     //today //2025-01-28
-    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + today); //YYYY-MM-DD
+    const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + "2025-01-28"); //YYYY-MM-DD
     fetch(apiUrl)
     .then(response => {
         if (!response.ok) {

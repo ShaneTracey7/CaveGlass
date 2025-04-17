@@ -187,20 +187,6 @@ function Game(props) {
 
   }, [isRunningSUM]);
 */
-  const setRosterAPI = () => {
-    axios.post('http://localhost:8080', {
-        type: 'pbp',
-        game: props.game.id,
-      }, {
-        headers: {
-        'content-type': 'application/json'
-        }}).then((data) => {
-      //this console.log will be in our frontend console
-      console.log(data)
-      //might crash if no games that day
-      setRoster(data.data[0].rosterSpots);
-
-    })};
 
 function setDelayAllData()
 {
@@ -606,6 +592,21 @@ const getAllData = () => {
                 console.log(data);
                 setGameClockPing(data.data);
             })};
+
+    const setRosterAPI = () => {
+        axios.post('http://localhost:8080', {
+            type: 'roster',
+            game: props.game.id,
+        }, {
+            headers: {
+            'content-type': 'application/json'
+            }}).then((data) => {
+        //this console.log will be in our frontend console
+        console.log(data)
+        //might crash if no games that day
+        setRoster(data.data);
+
+    })};
 /*
       //gets summary
       const getSummary = () => {
@@ -809,7 +810,7 @@ const getAllData = () => {
   if (score) // if goalight is on or not
   {
     settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
-    helpModal = <div></div>;
+    helpModal = <div></div>; //for testing: team={props.game.homeTeam} player={roster[0]}
     display = <ScoreReaction scored={setScore} team={scoreReactionData[0]} player={scoreReactionData[1]}/>;
     info = <p> .</p>
     
@@ -922,7 +923,7 @@ const getAllData = () => {
     {
         toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
                 <img id="back-arrow" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
-                <img className="cg-logo-small" onClick={testScore} src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
+                <img className="cg-logo-small" /*onClick={testScore}*/ src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
                     <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={summaryLogo} alt="summary"/></div>
                     <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={playerFocusLogo} alt="player focus"/></div>
