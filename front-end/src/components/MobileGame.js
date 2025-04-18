@@ -81,29 +81,29 @@ function MobileGame(props) {
         }
     
     return (
-         <div id='score-board-retro'> 
+         <div id='score-board-retro-m'> 
                 <img id="hide-arrow" className='ha-white' onClick={() => {props.setingame(false)}} src={upArrowWhite} alt="back"/>
-                <img className="score-board-logo" src={ props.game.homeTeam.darkLogo} alt={props.game.homeTeam.abbrev}/>
-                    <div className='score-board-info'>
-                        <p className='score-board-location'>{props.game.homeTeam.placeName.default}</p>
-                        <p className='score-board-name'>{props.game.homeTeam.commonName.default}</p>
-                        <p className='score-board-score-retro'>{homeScore}</p>
+                <img className="score-board-logo-m" src={ props.game.homeTeam.darkLogo} alt={props.game.homeTeam.abbrev}/>
+                    <div className='score-board-info-m'>
+                        <p className='score-board-location-m'>{props.game.homeTeam.placeName.default}</p>
+                        <p className='score-board-name-m'>{props.game.homeTeam.commonName.default}</p>
+                        <p className='score-board-score-retro-m'>{homeScore}</p>
                     </div>
                 
-                <div className='score-board-info-middle'>
+                <div className='score-board-info-middle-m'>
                 <p id="game-clock">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
-                <div className='score-board-period-container-retro'>
-                    <p className='score-board-period-label-retro'> Period </p>
-                    <p id="score-board-period-retro">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? (inIntermission ? ("int") : period > 3 ? ("OT") : (period)) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
+                <div className='score-board-period-container-retro-m'>
+                    <p className='score-board-period-label-retro-m'> Period </p>
+                    <p id="score-board-period-retro-m">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? (inIntermission ? ("int") : period > 3 ? ("OT") : (period)) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>
                 </div>
                 </div>
                 
-                <div className='score-board-info'>
-                    <p className='score-board-location'>{props.game.awayTeam.placeName.default}</p>
-                    <p className='score-board-name'>{props.game.awayTeam.commonName.default}</p>
-                    <p className='score-board-score-retro'>{awayScore}</p>
+                <div className='score-board-info-m'>
+                    <p className='score-board-location-m'>{props.game.awayTeam.placeName.default}</p>
+                    <p className='score-board-name-m'>{props.game.awayTeam.commonName.default}</p>
+                    <p className='score-board-score-retro-m'>{awayScore}</p>
                 </div>
-                <img className="score-board-logo" src={props.game.awayTeam.darkLogo} alt={props.game.awayTeam.abbrev}/>
+                <img className="score-board-logo-m" src={props.game.awayTeam.darkLogo} alt={props.game.awayTeam.abbrev}/>
                 </div>
   );
 }

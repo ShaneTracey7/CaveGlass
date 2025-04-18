@@ -1,6 +1,6 @@
 /* stylesheet for mobile views */
 
-#score-board-retro{
+#score-board-retro-m{
     margin: auto;
     border-radius: 10px;
     border: 4px solid gray;
@@ -15,7 +15,7 @@
     container-type: size;
     
 }
-#score-board-period-retro{
+#score-board-period-retro-m{
     font-weight: 800;
     font-size: 4.5vw;
     font-family: Scoreboard;
@@ -31,7 +31,7 @@
     margin-right: auto;
     color: yellow;
 }
-.score-board-period-container-retro{
+.score-board-period-container-retro-m{
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -40,7 +40,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.score-board-period-label-retro{
+.score-board-period-label-retro-m{
     margin-top: auto;
     margin-bottom: auto;
     margin-right: 20px;
@@ -51,7 +51,7 @@
 }
 
 
-#game-clock{
+#game-clock-m{
     font-weight: 800;
     font-size: 5vw;
     font-family: Scoreboard;
@@ -71,7 +71,7 @@
     border-bottom: 4px solid gray;
 }
 
-.score-board-score-retro{
+.score-board-score-retro-m{
     font-weight: 800;
     font-size: 5vw;
     font-family: Scoreboard;
@@ -89,7 +89,7 @@
     margin-right: auto;
     
 }
-.score-board-info{
+.score-board-info-m{
     display: flex;
     flex-direction: column;
     margin-top: auto;
@@ -106,7 +106,7 @@
     font-style: italic;
     
 }
-.score-board-info-middle{
+.score-board-info-middle-m{
     display: flex;
     flex-direction: column;
     margin-top: 0;
@@ -123,19 +123,19 @@
     
 }
 
-.score-board-location{
+.score-board-location-m{
     margin-top: 0;
     padding-bottom: 0;
     font-size: 2.75vw; /* sized based on character HEIGHT: 1/2 height is width*/
 }
-.score-board-name{
+.score-board-name-m{
     margin-top: 0;
     font-size: 3.3vw;
     font-weight: bold;
 }
 
 
-.score-board-logo{
+.score-board-logo-m{
     /*min-width: 100px;
     min-height: 100px;
     max-height: 200px;*/
@@ -148,41 +148,41 @@
 }
 
 
-#display{
+#display-m{
     padding-top: 20px;
 }
 
 @media (min-aspect-ratio: 1/1) { /*wider than tall*/
-    #score-board-retro {
+    #score-board-retro-m {
         transform: rotate(0deg);
           transform-origin: center;
       }
 }
 @media (max-aspect-ratio: 1/1) {/*taller than wide*/
     
-  #score-board-retro {
+  #score-board-retro-m {
     transform: rotate(90deg);
       transform-origin: center;
   }
-  .score-board-logo{
+  .score-board-logo-m{
     width:20vh;
   }
-  #gameClock{
+  #gameClock-m{
     font-size: 5vh;
   }
-  .score-board-location{
+  .score-board-location-m{
     font-size: 2.75vh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
-.score-board-name{
+.score-board-name-m{
     font-size: 3.3vh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
-.score-board-score-retro{
+.score-board-score-retro-m{
     font-size: 5vh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
-#score-board-period-retro{
+#score-board-period-retro-m{
     font-size: 4.5vh;
 }
-#score-board-period-label-retro{
+#score-board-period-label-retro-m{
     font-size: 4vh;
 }
 }
