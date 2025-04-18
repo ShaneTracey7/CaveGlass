@@ -1,4 +1,4 @@
-import '../styles.css';
+import '../mobileStyles.css';
 import React, {useState,useEffect,useRef} from 'react';
 import upArrowWhite from '../pics/up-arrow-white.png';
 import axios from 'axios';
