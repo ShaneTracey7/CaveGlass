@@ -2,7 +2,7 @@
   "name": "cave-glass",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://<Username>.github.io/CaveGlass",
+  "homepage": "https://ShaneTracey7.github.io/CaveGlass",
   "dependencies": {
     "axios": "^1.7.9",
     "cors": "^2.8.5",
