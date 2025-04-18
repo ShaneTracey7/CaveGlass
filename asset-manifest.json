@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/CaveGlass/static/css/main.d56a840e.css",
+    "main.js": "/CaveGlass/static/js/main.5660e2e9.js",
+    "static/media/cg-logo-1.png": "/CaveGlass/static/media/cg-logo-1.1e05864be7a942010f01.png",
+    "static/media/goal-light.png": "/CaveGlass/static/media/goal-light.8d6b1c3335d4ddd4e791.png",
+    "static/media/player-focus.png": "/CaveGlass/static/media/player-focus.9c5c06622d455b1f1708.png",
+    "static/media/dark-mode.png": "/CaveGlass/static/media/dark-mode.9e3f99f6e5f58e976acf.png",
+    "static/media/play-by-play.png": "/CaveGlass/static/media/play-by-play.87ef7c6a87c0185f82c4.png",
+    "static/media/goal-light-sr.png": "/CaveGlass/static/media/goal-light-sr.cbb1277ac2f596df3394.png",
+    "static/media/light-mode.png": "/CaveGlass/static/media/light-mode.09461f0d549db1936ba3.png",
+    "static/media/summary.png": "/CaveGlass/static/media/summary.5bf11ddf18451a5ec482.png",
+    "static/media/whistle-white.png": "/CaveGlass/static/media/whistle-white.d220798ddbb6f88e5229.png",
+    "static/media/whistle.png": "/CaveGlass/static/media/whistle.d555dd32e2fb5ec6d047.png",
+    "static/media/scoreboard.ttf": "/CaveGlass/static/media/scoreboard.da0f8a9407b64807f084.ttf",
+    "static/media/help.png": "/CaveGlass/static/media/help.6808157e7fa1cb873052.png",
+    "static/media/back-arrow.png": "/CaveGlass/static/media/back-arrow.8c02f4257732a6da7c7b.png",
+    "static/media/cog.svg": "/CaveGlass/static/media/cog.a609073d11f572e10e6fdbe23b69e31c.svg",
+    "index.html": "/CaveGlass/index.html",
+    "static/media/up-arrow.svg": "/CaveGlass/static/media/up-arrow.0092877aaaf18764c3a09fb68b5d62ea.svg",
+    "static/media/down-arrow.svg": "/CaveGlass/static/media/down-arrow.e54a33207a41b70bdc8f5c70dadcbe20.svg",
+    "main.d56a840e.css.map": "/CaveGlass/static/css/main.d56a840e.css.map",
+    "main.5660e2e9.js.map": "/CaveGlass/static/js/main.5660e2e9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d56a840e.css",
+    "static/js/main.5660e2e9.js"
+  ]
+}
