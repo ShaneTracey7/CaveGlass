@@ -150,7 +150,7 @@
 }
 .basic-container-m{
     height: 100vh;
-    width: 100vw;
+   /* width: 100vw; might be ok here*/
 }
 
 @media (min-aspect-ratio: 1/1) { /*wider than tall*/
@@ -162,7 +162,7 @@
     
     .basic-container-m{
         height: 100vw;
-        width: 100vh;
+        /* width: 100vw; it doesn't like this for some reason*/
     }
   #score-board-retro-m {
       transform: rotate(90deg);
@@ -171,25 +171,25 @@
       width: calc(100dvh - 8px);
     }
   .score-board-logo-m{
-    width:20vh;
+    width:20dvh;
     height: auto
   }
   #gameClock-m{
-    font-size: 5vh;
+    font-size: 5dvh;
   }
   .score-board-location-m{
-    font-size: 2.75vh; /* sized based on character HEIGHT: 1/2 height is width*/
+    font-size: 2.75dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 .score-board-name-m{
-    font-size: 3.3vh; /* sized based on character HEIGHT: 1/2 height is width*/
+    font-size: 3.3dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 .score-board-score-retro-m{
-    font-size: 5vh; /* sized based on character HEIGHT: 1/2 height is width*/
+    font-size: 5dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 #score-board-period-retro-m{
-    font-size: 4.5vh;
+    font-size: 4.5dvh;
 }
 #score-board-period-label-retro-m{
-    font-size: 4vh;
+    font-size: 4dvh;
 }
 }
