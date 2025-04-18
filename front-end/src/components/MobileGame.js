@@ -1,15 +1,19 @@
 import '../styles.css';
 import React, {useState,useEffect,useRef} from 'react';
 import upArrowWhite from '../pics/up-arrow-white.png';
+import axios from 'axios';
 
 function MobileGame(props) { 
     
+    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
+
     const [period, setPeriod] = useState(props.game.periodDescriptor.number); //current period the game is in
     const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
     const [awayScore, setAwayScore] = useState(props.game.awayTeam.hasOwnProperty("score") ? props.game.awayTeam.score : 0) //score displayed in scoreboard
     const [gameClock, setGameClock] = useState("") //gameClock
     const [inIntermission, setInIntermission] = useState(false); //if true game is in intermission
-      
+    const [isRunningALL, setIsRunningALL] = useState(false);
+
      useEffect(() => {
     
         getAllData();
