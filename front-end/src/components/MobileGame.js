@@ -91,7 +91,7 @@ function MobileGame(props) {
                     </div>
                 
                 <div className='score-board-info-middle-m'>
-                <p id="game-clock">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
+                <p id="game-clock-m">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? gameClock : (props.game.gameState == 'FUT' ? "20:00" : "00:00")}</p>
                 <div className='score-board-period-container-retro-m'>
                     <p className='score-board-period-label-retro-m'> Period </p>
                     <p id="score-board-period-retro-m">{(props.game.gameState == 'LIVE' || props.game.gameState == 'CRIT') ? (inIntermission ? ("int") : period > 3 ? ("OT") : (period)) : (props.game.gameState == 'FUT' ? 1 : (props.game.periodDescriptor.periodType == 'REG' ? "F" : "F/" + props.game.periodDescriptor.periodType))}</p>

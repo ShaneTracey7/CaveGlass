@@ -147,11 +147,6 @@
     margin-right: auto;
 }
 
-
-#display-m{
-    padding-top: 20px;
-}
-
 @media (min-aspect-ratio: 1/1) { /*wider than tall*/
     #score-board-retro-m {
         transform: rotate(0deg);
