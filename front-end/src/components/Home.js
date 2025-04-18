@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function Main(props)
 {
-    let backendUrl = 'http://localhost:8080'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
+    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
 
     let loadingSpinner = <div class="loader"></div>;
     //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
