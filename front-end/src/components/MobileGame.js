@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function MobileGame(props) { 
     
-    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
+    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
 
     const [period, setPeriod] = useState(props.game.periodDescriptor.number); //current period the game is in
     const [homeScore, setHomeScore] = useState(props.game.homeTeam.hasOwnProperty("score") ? props.game.homeTeam.score : 0) //score displayed in scoreboard
@@ -81,7 +81,6 @@ function MobileGame(props) {
         }
     
     return (
-    <div className='Game'>
          <div id='score-board-retro'> 
                 <img id="hide-arrow" className='ha-white' onClick={() => {props.setingame(false)}} src={upArrowWhite} alt="back"/>
                 <img className="score-board-logo" src={ props.game.homeTeam.darkLogo} alt={props.game.homeTeam.abbrev}/>
@@ -106,9 +105,6 @@ function MobileGame(props) {
                 </div>
                 <img className="score-board-logo" src={props.game.awayTeam.darkLogo} alt={props.game.awayTeam.abbrev}/>
                 </div>
-    
-   
-    </div>
   );
 }
 

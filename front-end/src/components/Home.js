@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function Main(props)
 {
-    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint'
+    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
 
     let loadingSpinner = <div class="loader"></div>;
     //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
@@ -21,63 +21,81 @@ function Main(props)
 
     useEffect(() => {
       
-      isLoading.current = true;
-      
-    if (gameArr.length > 0) //showGames
-    { 
-    //will show start time, "live", or "Ended"
-    let status = []
-    //possible gameState's: PRE(right b4 game start), FUT(future), OFF, LIVE, FINAL, CRIT(idk why, seems to be near the end of games)
-    gameArr.forEach(game => {
-      
-      if(game.gameState == 'LIVE' || game.gameState == 'CRIT') //if(game.startTimeUTC)
+      //isLoading.current = true; moved this
+    if (isLoading.current)
+    {
+      let gL = <div className="loader"></div>;
+      if(gameList != gL)
       {
-        let live = <img id="live-img" src={ require("../pics/live-icon.png")} alt="LIVE"/>
-        status.push(live)
+        setGameList(gL);
       }
-      else if(game.gameState == 'FINAL' || game.gameState == 'OFF')
-      {
-        let final = <p className='game-status'> {game.homeTeam.score}-{game.awayTeam.score} FINAL</p>
-        status.push(final)
-      }
-      else  // 'FUT' aka game hasn't started yet
-      {
+      
+    }
+    else
+    {
+
+      if (gameArr.length > 0) //showGames
+      { 
+      //will show start time, "live", or "Ended"
+      let status = []
+      //possible gameState's: PRE(right b4 game start), FUT(future), OFF, LIVE, FINAL, CRIT(idk why, seems to be near the end of games)
+      gameArr.forEach(game => {
+      
+        if(game.gameState == 'LIVE' || game.gameState == 'CRIT') //if(game.startTimeUTC)
+        {
+          let live = <img id="live-img" src={ require("../pics/live-icon.png")} alt="LIVE"/>
+          status.push(live)
+        }
+        else if(game.gameState == 'FINAL' || game.gameState == 'OFF')
+        {
+          let final = <p className='game-status'> {game.homeTeam.score}-{game.awayTeam.score} FINAL</p>
+          status.push(final)
+        }
+        else  // 'FUT' aka game hasn't started yet
+        {
         
-        let fut = <p className='game-status'>{formatTime(game.startTimeUTC)}</p>
-        status.push(fut)
-      }
-    });
-    //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
-    let gL = <div className='gameList'> {gameArr.map((game, index) => (
-      <div className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
-        {status[index]}
-        <div className='cardContainer'>
-          <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
-          <p>vs.</p> 
-          <img className="logo" src={game.awayTeam.logo} alt={game.awayTeam.abbrev}/>
-        </div>
-      </div>))}
-      </div>;
-      isLoading.current = false;
+          let fut = <p className='game-status'>{formatTime(game.startTimeUTC)}</p>
+          status.push(fut)
+        }
+      });
+      //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
+      let gL = <div className='gameList'> {gameArr.map((game, index) => (
+        <div className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
+          {status[index]}
+          <div className='cardContainer'>
+            <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
+            <p>vs.</p> 
+            <img className="logo" src={game.awayTeam.logo} alt={game.awayTeam.abbrev}/>
+          </div>
+        </div>))}
+        </div>;
       
-    setGameList(gL);
-  }
-  else
-  {
-    let gL = <p id="player-highlight-message" > No Games Today</p> ;
-    setTimeout(() => {
+        //isLoading.current = false; moved this
+      
+      setGameList(gL);
+    }
+    else
+    {
+      let gL = <p id="player-highlight-message" > No Games Today</p> ;
+      setGameList(gL);
+    /* setTimeout(() => {
       if(isLoading.current)
       {
         setGameList(gL);
-        isLoading.current = false;
+        //isLoading.current = false; moved this
       }
-    },2000)
+    },2000)*/
+      
+    }
   }
    console.log('in useeffect'); 
   }, [gameArr]);
 
   //data will be the string we send from our server
   const apiGetGames = () => {
+
+    isLoading.current = true;
+
     axios.get(backendUrl).then((data) => {
       //this console.log will be in our frontend console
       console.log(data)
@@ -91,6 +109,16 @@ function Main(props)
             setGameArr(temp);
          }
       });
+
+      isLoading.current = false;
+      /*if(games.length === 0)
+      {
+        isLoading.current = false;
+      }
+      else
+      {
+        isLoading.current = true;
+      }*/
    })
    /*setTimeout(() => {
     //setShowGames((gameArr.length > 0));

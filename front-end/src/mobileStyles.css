@@ -1,0 +1,188 @@
+/* stylesheet for mobile views */
+
+#score-board-retro{
+    margin: auto;
+    border-radius: 10px;
+    border: 4px solid gray;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    background-color: rgb(30, 30, 30);
+    display: flex;
+    flex-direction: row;
+    resize: none;
+    overflow: hidden;
+    container-name: scoreboard;
+    container-type: size;
+    
+}
+#score-board-period-retro{
+    font-weight: 800;
+    font-size: 4.5vw;
+    font-family: Scoreboard;
+    text-align: right;
+    width:fit-content;
+    /*padding-left: 50px;*/
+    padding-right: 10px;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    color: yellow;
+}
+.score-board-period-container-retro{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.score-board-period-label-retro{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 20px;
+    font-weight: bold;
+    font-size: 4vw;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic
+}
+
+
+#game-clock{
+    font-weight: 800;
+    font-size: 5vw;
+    font-family: Scoreboard;
+    text-align: right;
+    width:fit-content;
+    /*padding-left: 50px;*/
+    padding-right: 10px;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: auto;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    color: red;
+    border-right: 4px solid gray;
+    border-left: 4px solid gray;
+    border-bottom: 4px solid gray;
+}
+
+.score-board-score-retro{
+    font-weight: 800;
+    font-size: 5vw;
+    font-family: Scoreboard;
+    text-align: right;
+   /*padding-left: 8%;*/
+    /*padding-right: 8%;*/
+    width:fit-content;
+    padding-left: 50px;
+    padding-right: 10px;
+    padding-bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.score-board-info{
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    height: fit-content;
+    width: 10vw;
+    color: white;
+    /*font-size: 1rem;*/
+
+    /* mainly for retro*/
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic;
+    
+}
+.score-board-info-middle{
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    color: white;
+    font-size: 1rem;
+
+    /* mainly for retro*/
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic;
+    
+}
+
+.score-board-location{
+    margin-top: 0;
+    padding-bottom: 0;
+    font-size: 2.75vw; /* sized based on character HEIGHT: 1/2 height is width*/
+}
+.score-board-name{
+    margin-top: 0;
+    font-size: 3.3vw;
+    font-weight: bold;
+}
+
+
+.score-board-logo{
+    /*min-width: 100px;
+    min-height: 100px;
+    max-height: 200px;*/
+    width:20vw;
+    height:auto;
+    margin-top:auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#display{
+    padding-top: 20px;
+}
+
+@media (min-aspect-ratio: 1/1) { /*wider than tall*/
+    #score-board-retro {
+        transform: rotate(0deg);
+          transform-origin: center;
+      }
+}
+@media (max-aspect-ratio: 1/1) {/*taller than wide*/
+    
+  #score-board-retro {
+    transform: rotate(90deg);
+      transform-origin: center;
+  }
+  .score-board-logo{
+    width:20vh;
+  }
+  #gameClock{
+    font-size: 5vh;
+  }
+  .score-board-location{
+    font-size: 2.75vh; /* sized based on character HEIGHT: 1/2 height is width*/
+}
+.score-board-name{
+    font-size: 3.3vh; /* sized based on character HEIGHT: 1/2 height is width*/
+}
+.score-board-score-retro{
+    font-size: 5vh; /* sized based on character HEIGHT: 1/2 height is width*/
+}
+#score-board-period-retro{
+    font-size: 4.5vh;
+}
+#score-board-period-label-retro{
+    font-size: 4vh;
+}
+}
