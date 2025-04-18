@@ -53,7 +53,7 @@
 
 #game-clock-m{
     font-weight: 800;
-    font-size: 8vw;
+    font-size: 7vw;
     font-family: Scoreboard;
     text-align: right;
     width:fit-content;
@@ -176,7 +176,7 @@
     height: auto
   }
   #game-clock-m{
-    font-size: 10dvh;
+    font-size: 7dvh;
   }
   .score-board-location-m{
     font-size: 2.75dvh; /* sized based on character HEIGHT: 1/2 height is width*/
@@ -185,7 +185,7 @@
     font-size: 3.3dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 .score-board-score-retro-m{
-    font-size: 10dvh; /* sized based on character HEIGHT: 1/2 height is width*/
+    font-size: 8dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 #score-board-period-retro-m{
     font-size: 6dvh;
