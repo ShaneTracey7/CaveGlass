@@ -81,6 +81,8 @@ function MobileGame(props) {
         }
     
     return (
+        <div className='basic-container-m'>
+        <div id="spacer"></div>
          <div id='score-board-retro-m'> 
                 <img id="hide-arrow" className='ha-white' onClick={() => {props.setingame(false)}} src={upArrowWhite} alt="back"/>
                 <img className="score-board-logo-m" src={ props.game.homeTeam.darkLogo} alt={props.game.homeTeam.abbrev}/>
@@ -104,6 +106,7 @@ function MobileGame(props) {
                     <p className='score-board-score-retro-m'>{awayScore}</p>
                 </div>
                 <img className="score-board-logo-m" src={props.game.awayTeam.darkLogo} alt={props.game.awayTeam.abbrev}/>
+                </div>
                 </div>
   );
 }
