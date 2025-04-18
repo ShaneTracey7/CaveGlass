@@ -17,7 +17,7 @@
 }
 #score-board-period-retro-m{
     font-weight: 800;
-    font-size: 4.5vw;
+    font-size: 9vw;
     font-family: Scoreboard;
     text-align: right;
     width:fit-content;
@@ -45,7 +45,7 @@
     margin-bottom: auto;
     margin-right: 20px;
     font-weight: bold;
-    font-size: 4vw;
+    font-size: 8vw;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-style: italic
 }
@@ -53,7 +53,7 @@
 
 #game-clock-m{
     font-weight: 800;
-    font-size: 5vw;
+    font-size: 10vw;
     font-family: Scoreboard;
     text-align: right;
     width:fit-content;
@@ -73,7 +73,7 @@
 
 .score-board-score-retro-m{
     font-weight: 800;
-    font-size: 5vw;
+    font-size: 10vw;
     font-family: Scoreboard;
     text-align: right;
    /*padding-left: 8%;*/
@@ -139,7 +139,7 @@
     /*min-width: 100px;
     min-height: 100px;
     max-height: 200px;*/
-    width:20vw;
+    width:15vw;
     height:auto;
     margin-top:auto;
     margin-bottom: auto;
@@ -155,9 +155,9 @@
 }
 
 @media (min-aspect-ratio: 1/1) { /*wider than tall*/
-    #spacer {
+    /*#spacer {
         height: calc(100vh - 100dvh - 8px);
-      }
+      }*/
 }
 @media (max-aspect-ratio: 1/1) {/*taller than wide*/
     
@@ -172,11 +172,11 @@
       width: calc(100dvh - 8px);
     }
   .score-board-logo-m{
-    width:20dvh;
+    width:15dvh;
     height: auto
   }
   #gameClock-m{
-    font-size: 5dvh;
+    font-size: 10dvh;
   }
   .score-board-location-m{
     font-size: 2.75dvh; /* sized based on character HEIGHT: 1/2 height is width*/
@@ -185,12 +185,12 @@
     font-size: 3.3dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 .score-board-score-retro-m{
-    font-size: 5dvh; /* sized based on character HEIGHT: 1/2 height is width*/
+    font-size: 10dvh; /* sized based on character HEIGHT: 1/2 height is width*/
 }
 #score-board-period-retro-m{
-    font-size: 4.5dvh;
+    font-size: 9dvh;
 }
 #score-board-period-label-retro-m{
-    font-size: 4dvh;
+    font-size: 8dvh;
 }
 }
