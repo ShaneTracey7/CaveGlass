@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function Main(props)
 {
-    let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
+    let backendUrl = 'http://localhost:8080'; //https://caveglass.onrender.com    
 
     let loadingSpinner = <div class="loader"></div>;
     //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
@@ -198,6 +198,7 @@ function Main(props)
             <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
             <div id='home-date-container'>
                 <p id="home-date">{new Date().toDateString()}</p>
+                <p>props.key</p>
             </div>
             {gameList}
             {footer}

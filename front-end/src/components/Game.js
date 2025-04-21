@@ -21,7 +21,7 @@ import PlayByPlay from './PlayByPlay';
 
 function Game(props) {
 
- let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
+ let backendUrl = 'http://localhost:8080'; //https://caveglass.onrender.com     
 
 
     
