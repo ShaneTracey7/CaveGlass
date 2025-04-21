@@ -15,7 +15,7 @@ function App() {
   const [mobileKey, setMobileKey] = useState("0000"); 
   const [enteredKey, setEnteredKey] = useState(0); 
   const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
-  let backendUrl = 'http://localhost:8080';// https://caveglass.onrender.com
+  let backendUrl = 'https://caveglass.onrender.com';//'http://localhost:8080';// https://caveglass.onrender.com
 
    useEffect(() => { 
       //get key from backend
@@ -30,6 +30,7 @@ function App() {
         'content-type': 'application/json'
         }}).then((data) => {
           console.log(data);
+          
           /*
           if(!isNaN(data.key)) //NEEDS TO BE A NUMBER
           {
@@ -37,6 +38,7 @@ function App() {
             setMobileConnection(false);
           }*/
    })
+   console.log("api get key was called");
 }
 
 const apiCheckKey = () => {
@@ -82,7 +84,6 @@ const apiCheckKey = () => {
 
     return (
       <div className="App">
-      {test.current}
       {mobileKey}
       {display}
       
