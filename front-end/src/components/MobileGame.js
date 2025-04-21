@@ -1,6 +1,6 @@
 import '../mobileStyles.css';
 import React, {useState,useEffect,useRef} from 'react';
-import upArrowWhite from '../pics/up-arrow-white.png';
+import backArrow from '../pics/back-arrow.png';
 import axios from 'axios';
 
 function MobileGame(props) { 
@@ -84,7 +84,7 @@ function MobileGame(props) {
         <div className='basic-container-m'>
         <div id="spacer"></div>
          <div id='score-board-retro-m'> 
-                <img id="hide-arrow" className='ha-white' onClick={() => {props.setingame(false)}} src={upArrowWhite} alt="back"/>
+                <img id="hide-arrow" className='ha-white' onClick={() => {props.setingame(false)}} src={backArrow} alt="back"/>
                 <img className="score-board-logo-m" src={ props.game.homeTeam.darkLogo} alt={props.game.homeTeam.abbrev}/>
                     <div className='score-board-info-m'>
                         <p className='score-board-location-m'>{props.game.homeTeam.placeName.default}</p>

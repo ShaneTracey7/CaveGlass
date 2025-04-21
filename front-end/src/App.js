@@ -11,6 +11,11 @@ function App() {
   
   const [inGame, setInGame] = useState(false); //if true score reaction is displayed,
   const [game, setGame] = useState([]); 
+  const test = <p> Testing</p>;
+   useEffect(() => { 
+  
+      setTimeout(() => {test = <div></div>}, 5000) // 10 secs
+      }, []);
 
   let display;
   if (inGame)
@@ -40,6 +45,7 @@ function App() {
     return (
       <div className="App">
       {display}
+      {test}
       </div>
     );
 }

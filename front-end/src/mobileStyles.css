@@ -153,6 +153,9 @@
     height: 100vh;
    /* width: 100vw; might be ok here*/
 }
+.ha-white{
+    background-color: white;
+}
 
 @media (min-aspect-ratio: 1/1) { /*wider than tall*/
     /*#spacer {

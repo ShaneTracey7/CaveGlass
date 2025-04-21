@@ -126,6 +126,7 @@ function Main(props)
   }, 1000);*/
   }
 
+
     function gameClick(index)
     {
       console.log("test" + index)
