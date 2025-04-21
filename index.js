@@ -218,7 +218,7 @@ app.post('/api/users', async (req, res) => {
         try {
             
             const result = await pool.query(
-              "INSERT INTO'MobileKeys' (key) VALUES ($1) ",[key]
+              "INSERT INTO 'MobileKeys' (key) VALUES ($1) ",[key]
             );
         
             res.status(201).json({ key });//or res.send(key);
