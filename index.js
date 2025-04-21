@@ -2,6 +2,11 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const { Pool } = require('pg'); // Import the pg module
+//const port = process.env.PORT || 3000;
+//const cookieParser = require('cookie-parser');
+
+//app.use(cookieParser());
 
 app.use(cors());
 
@@ -150,6 +155,20 @@ app.post("/", (req, res) => {
                 res.send('Error!')
             });
         }
+    else if(req.body.type == "setKey")
+        {   
+            let key = Math.floor(Math.random() * (9998 - 1001 + 1)) + 1001;
+            //res.cookie('key', key);
+            //res.send('key has been set!');
+            //res.send(key);
+        }
+    else if(req.body.type == "checkKey")
+        {   
+            
+            res.cookie('key', key);
+            res.send('key has been set!');
+            //res.send(key);
+        }
     
     else
     {   
@@ -190,6 +209,51 @@ app.get('/', (req, res) => {
     .then((json) => console.log(json));
     */
 })
+
+// POST route to add a new user
+app.post('/api/users', async (req, res) => {
+     if( req.body.type == "setKey")
+     {
+        const key = Math.floor(Math.random() * (9998 - 1001 + 1)) + 1001;
+        try {
+            /*
+            const result = await pool.query(
+              'INSERT INTO users (name, email) VALUES ($1, $2) '[key]
+            );
+        
+            res.status(201).json({ key });//or res.send(key);
+            */
+            const result = await pool.query('SELECT NOW()'); // Just an example query to check the connection
+                res.json(result.rows);
+
+
+          } catch (error) {
+            console.error('Error inserting user:', error);
+            res.status(500).send('Server error');
+          }
+     }
+  
+     });
+
+// Get PostgreSQL connection string from environment variables
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL, // Connection string will be stored in environment variable
+    ssl: {
+      rejectUnauthorized: false,  // Ensures that SSL is used if Render requires it
+    },
+  });
+  
+  // Sample route to test the connection to PostgreSQL
+  app.get('/', async (req, res) => {
+    try {
+      // Query the PostgreSQL database
+      const result = await pool.query('SELECT NOW()'); // Just an example query to check the connection
+      res.json(result.rows); // Respond with the query result (current timestamp)
+    } catch (err) {
+      console.error('Error querying PostgreSQL:', err);
+      res.status(500).send('Error connecting to PostgreSQL');
+    }
+  });
 
 app.listen(8080, () => {
       console.log('server listening on port 8080')
