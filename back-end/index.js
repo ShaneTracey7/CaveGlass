@@ -216,16 +216,16 @@ app.post('/api/users', async (req, res) => {
      {
         const key = Math.floor(Math.random() * (9998 - 1001 + 1)) + 1001;
         try {
-            /*
+            
             const result = await pool.query(
-              'INSERT INTO users (name, email) VALUES ($1, $2) '[key]
+              'INSERT INTO MobileKeys (key) VALUES ($1) '[key]
             );
         
             res.status(201).json({ key });//or res.send(key);
-            */
+            /*
             const result = await pool.query('SELECT NOW()'); // Just an example query to check the connection
                 res.json(result.rows);
-
+                */
 
           } catch (error) {
             console.error('Error inserting user:', error);
@@ -255,6 +255,7 @@ const pool = new Pool({
     }
   });
 
+  //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
 app.listen(8080, () => {
       console.log('server listening on port 8080')
 })

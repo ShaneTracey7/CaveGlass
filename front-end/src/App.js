@@ -31,12 +31,15 @@ function App() {
         }}).then((data) => {
           console.log(data);
           
-          /*
+          
           if(!isNaN(data.key)) //NEEDS TO BE A NUMBER
           {
             setMobileKey(data.key);
             setMobileConnection(false);
-          }*/
+          }
+          else{
+            console.log("not a number");
+          }
    })
    console.log("api get key was called");
 }
