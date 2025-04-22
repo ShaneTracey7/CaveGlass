@@ -12,6 +12,47 @@ function Mobile(props) {
     const [enteredKey, setEnteredKey] = useState(0); 
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
     
+    const apiCheckKey = () => {
+        if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
+        {
+            let key = Number(enteredKey);
+            if(key > 1000 && key < 9999) //4 digit number
+            {
+             
+                axios.post(backendUrl + '/api/users', {
+                    type: 'checkKey',
+                    key: key,
+                }, {
+                    headers: {
+                    'content-type': 'application/json'
+                    }}).then((data) => {
+                    console.log(data);
+                  
+                    if(data.data.check)
+                    {
+                        setMobileConnection(true);
+                    }
+                    else{
+                        console.log("not a number");
+                    }
+
+                });
+            }
+            else
+            {
+                console.log("key is number outisde of range");
+                return;
+            }
+        }
+        else //good to check
+        {
+            console.log("key is not a number");
+            return;
+        }
+        
+       console.log("api get key was called");
+    }
+
     let display = <div className='mobile-container'>
                         <img className="cg-logo-1" id="main-home-logo" src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
                         <input type="text" maxLength="4" id="mobile-key-input" placeholder="4-Digit Code" onChange={(e) => setEnteredKey(e.target.value)}></input>
@@ -40,48 +81,6 @@ function Mobile(props) {
             </div>;   
         }
       }, [mobileConnection]);  
-
-
-        const apiCheckKey = () => {
-            if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
-            {
-                let key = Number(enteredKey);
-                if(key > 1000 && key < 9999) //4 digit number
-                {
-                 
-                    axios.post(backendUrl + '/api/users', {
-                        type: 'checkKey',
-                        key: key,
-                    }, {
-                        headers: {
-                        'content-type': 'application/json'
-                        }}).then((data) => {
-                        console.log(data);
-                      
-                        if(data.data.check)
-                        {
-                            setMobileConnection(true);
-                        }
-                        else{
-                            console.log("not a number");
-                        }
-
-                    });
-                }
-                else
-                {
-                    console.log("key is number outisde of range");
-                    return;
-                }
-            }
-            else //good to check
-            {
-                console.log("key is not a number");
-                return;
-            }
-            
-           console.log("api get key was called");
-        }
     
     return (
         <div className='mobile'>
