@@ -12,6 +12,7 @@ function Mobile(props) {
     const [enteredKey, setEnteredKey] = useState(0); 
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
     
+    
     const apiCheckKey = () => {
         if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
         {
@@ -53,18 +54,19 @@ function Mobile(props) {
        console.log("api check key was called");
     }
 
-    let display = <div className='mobile-container'>
+    let displayV = <div className='mobile-container'>
                         <img className="cg-logo-1" id="main-home-logo" src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
                         <input type="text" maxLength="4" id="mobile-key-input" placeholder="4-Digit Code" onChange={(e) => setEnteredKey(e.target.value)}></input>
                         <div id="mobile-enter-button" onClick={apiCheckKey}>Enter</div>
                     </div>;     
+    const [display, setDisplay] = useState(displayV);  
 
      useEffect(() => {
-
+        let d ="";
         console.log(" in use effect mobileConnection: " + mobileConnection);
         if(mobileConnection)
         {
-            display = <div className='mobile-remote'>
+            d = <div className='mobile-remote'>
                  <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Up Arrow"/>
                  <div className='remote-middle-container'>
                     <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Down Arrow"/>
@@ -72,15 +74,17 @@ function Mobile(props) {
                     <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Down Arrow"/>
                  </div>
                  <img className="mobile-remote-arrow" id="up-Arrow" src={downArrow} alt="Down Arrow"/>
-            </div>;            
+            </div>;  
+            setDisplay(d);          
         }
         else
         {
-            display = <div className='mobile-container'>
+            d = <div className='mobile-container'>
                 <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
                 <input type="text" maxLength='4' id="mobile-key-input" placeholder="4-Digit Code" value={enteredKey} onChange={(e) => setEnteredKey(e.target.value)}></input>
                 <div id="mobile-enter-button" onClick={apiCheckKey}>Enter</div>
-            </div>;   
+            </div>;  
+            setDisplay(d);   
         }
       }, [mobileConnection]);  
     
