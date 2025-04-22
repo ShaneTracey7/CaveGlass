@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import '../styles.css';
 import axios from 'axios';
-
+import qrCode from '../pics/cg-qr-code.png';
 
 function Main(props)
 {
@@ -195,10 +195,18 @@ function Main(props)
    /* <button className="main-button" onClick={apiGetGames}>Test Api call</button> */
     return(
         <div id="home-page">
-            <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
-            <div id='home-date-container'>
-                <p id="home-date">{new Date().toDateString()}</p>
-                <p>{props.mobileKey}</p> 
+          <div className='home-header-info'>
+              <div className='home-mobile-info'>
+                 <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
+                 <div id='home-date-container'>
+                     <p id="home-date">{new Date().toDateString()}</p>
+                 </div>
+               </div>
+              <div className='home-mobile-info-qr'>
+                <div id='mobile-info-text'> RC via Mobile</div>
+                <img id="qr-code"src={qrCode} alt="QR"/>
+                <div id='mobile-key'>{ "Code: " + props.mobileKey}</div>
+              </div>
             </div>
             {gameList}
             {footer}

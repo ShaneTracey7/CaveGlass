@@ -18,10 +18,55 @@
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
+    /*margin-left: calc(50% - 150px);
+    margin-right: auto;*/
+}
+.home-mobile-info{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+}
+#mobile-info-text{
+    font-size: 1.25rem;
+    color:black;
+    font-weight: bold;
     margin-left: auto;
     margin-right: auto;
+}
+.home-mobile-info-qr{
+    display:flex;
+    flex-direction: column;
+    background-color: rgba(221, 233, 244);
+    border-radius: 20px;
+    padding:15px;
+    margin-bottom: 20px;
+    margin-top: 20px;
     
 }
+.home-header-info{
+    display:flex;
+    flex-direction: row;
+    margin-left: calc(50% - 150px);
+    margin-right: auto;
+    gap:50px;
+}
+#qr-code{
+    width: 170px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+#mobile-key{
+    font-size: 1.5rem;
+    color:white;
+    background-color: black;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+}
+
 
 #home-page{
     display: flex;

@@ -231,8 +231,24 @@ app.post('/api/users', async (req, res) => {
             res.status(500).send('Server error');
           }
      }
-  
-     });
+     else if(req.body.type == "checkKey")
+     {
+        const key = req.body.key;
+        console.log("key: " + key);
+        try {
+            const result = await pool.query('SELECT * FROM "MobileKeys" WHERE key = $1', [key]);
+            if (result.rows.length > 0) {
+                res.status(200).json({ check: true });
+            } else {
+                res.status(404).json({ check: false });
+            }
+          } catch (error) {
+            console.error('Error checking user:', error);
+            res.status(500).send('Server error');
+          }
+     }
+     
+    });
 
 // Get PostgreSQL connection string from environment variables
 const pool = new Pool({

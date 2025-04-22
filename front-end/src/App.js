@@ -7,6 +7,7 @@ import MobileGame from './components/MobileGame';
 import { isMobile } from 'react-device-detect';
 import './styles.css';
 import axios from 'axios';
+import Mobile from './components/Mobile';
 
 function App() {
   
@@ -77,7 +78,7 @@ const apiCheckKey = () => {
   {
     if( isMobile)
     {
-      display = <Home setgame={setGame} setingame={setInGame}/>;
+      display = <Mobile/>;
     }
     else
     {
@@ -87,7 +88,7 @@ const apiCheckKey = () => {
 
     return (
       <div className="App">
-      {mobileKey}
+      {/*mobileKey /* only here for testing */}
       {display}
       
       </div>
