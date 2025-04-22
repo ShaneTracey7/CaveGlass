@@ -26,11 +26,12 @@ function App() {
         apiGetKey();
       }
       const handleUnload = () => {
-        const data = { type: 'removeKey', key: mobileKey };
+        const data = { type: 'removeKey', key: mobileKeyRef.current };
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
     
         navigator.sendBeacon(backendUrl + '/key', blob);
         console.log("unloading");
+        console.log("mobilekey: " + mobileKey);
       };
     
       window.addEventListener('unload', handleUnload);
