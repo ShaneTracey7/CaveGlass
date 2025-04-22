@@ -50,7 +50,7 @@ function Mobile(props) {
             return;
         }
         
-       console.log("api get key was called");
+       console.log("api check key was called");
     }
 
     let display = <div className='mobile-container'>
@@ -60,6 +60,8 @@ function Mobile(props) {
                     </div>;     
 
      useEffect(() => {
+
+        console.log(" in use effect mobileConnection: " + mobileConnection);
         if(mobileConnection)
         {
             display = <div className='mobile-remote'>
