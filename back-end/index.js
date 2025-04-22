@@ -215,11 +215,10 @@ app.post('/api/users', async (req, res) => {
      if( req.body.type == "setKey")
      {
         const key = Math.floor(Math.random() * (9998 - 1001 + 1)) + 1001;
+        console.log("key: " + key);
         try {
             
-            const result = await pool.query(
-              'INSERT INTO MobileKeys (key) VALUES ($1) '[key]
-            );
+            const result = await pool.query('INSERT INTO "MobileKeys" (key) VALUES ($1)',[key]);
         
             res.status(201).json({ key });//or res.send(key);
             /*

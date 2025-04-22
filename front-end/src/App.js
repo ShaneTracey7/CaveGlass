@@ -32,9 +32,9 @@ function App() {
           console.log(data);
           
           
-          if(!isNaN(data.key)) //NEEDS TO BE A NUMBER
+          if(!isNaN(data.data.key)) //NEEDS TO BE A NUMBER
           {
-            setMobileKey(data.key);
+            setMobileKey(data.data.key);
             setMobileConnection(false);
           }
           else{
