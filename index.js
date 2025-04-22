@@ -211,7 +211,7 @@ app.get('/', (req, res) => {
 })
 
 // POST route to add a new user
-app.post('/api/users', async (req, res) => {
+app.post('/key', async (req, res) => {
      if( req.body.type == "setKey")
      {
         const key = Math.floor(Math.random() * (9998 - 1001 + 1)) + 1001;
@@ -247,6 +247,24 @@ app.post('/api/users', async (req, res) => {
             res.status(500).send('Server error');
           }
      }
+     else if(req.body.type == "removeKey")
+        {
+           const key = req.body.key;
+           console.log("key: " + key);
+           try {
+            const result = await pool.query('DELETE FROM "MobileKeys" WHERE key = $1', [key]);
+        
+            if (result.rowCount === 0) {
+              return res.status(200).json({ message: 'Item not found' });
+            }
+        
+            res.status(200).json({ message: 'Item deleted successfully' });
+          } catch (err) {
+            console.error('Error deleting item:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
+        
+        }
      
     });
 
@@ -258,6 +276,7 @@ const pool = new Pool({
     },
   });
   
+  /*
   // Sample route to test the connection to PostgreSQL
   app.get('/', async (req, res) => {
     try {
@@ -268,7 +287,7 @@ const pool = new Pool({
       console.error('Error querying PostgreSQL:', err);
       res.status(500).send('Error connecting to PostgreSQL');
     }
-  });
+  });*/
 
   //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
 app.listen(8080, () => {
