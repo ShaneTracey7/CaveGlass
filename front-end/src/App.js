@@ -89,7 +89,6 @@ const apiCheckKey = () => {
     return (
       <div className="App">
       {/*mobileKey /* only here for testing */}
-      <p> just to test</p>
       {display}
       
       </div>
