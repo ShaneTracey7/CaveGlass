@@ -14,6 +14,7 @@ function App() {
   const [inGame, setInGame] = useState(false); //if true score reaction is displayed,
   const [game, setGame] = useState([]); 
   const [mobileKey, setMobileKey] = useState("0000"); 
+  const mobileKeyRef = useRef(0);
   const [enteredKey, setEnteredKey] = useState(0); 
   const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
   let backendUrl = 'https://caveglass.onrender.com';//'http://localhost:8080';// https://caveglass.onrender.com
@@ -39,6 +40,10 @@ function App() {
         window.removeEventListener('unload', handleUnload);
       };
       }, []);
+
+      useEffect(() => {
+        mobileKeyRef.current = mobileKey;
+      }, [mobileKey]);
 
   const apiGetKey = () => {
     axios.post(backendUrl + '/key', {
