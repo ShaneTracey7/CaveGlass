@@ -198,7 +198,7 @@ function Main(props)
             <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
             <div id='home-date-container'>
                 <p id="home-date">{new Date().toDateString()}</p>
-                <p>props.key</p> {/* will need to add brackets around props.key */}
+                <p>{props.mobileKey}</p> 
             </div>
             {gameList}
             {footer}

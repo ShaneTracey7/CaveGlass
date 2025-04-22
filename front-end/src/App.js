@@ -81,7 +81,7 @@ const apiCheckKey = () => {
     }
     else
     {
-      display = <Home key={mobileKey} setgame={setGame} setingame={setInGame}/>;
+      display = <Home mobileKey={mobileKey} setgame={setGame} setingame={setInGame}/>;
     }
   }
 
