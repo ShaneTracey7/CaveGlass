@@ -24,13 +24,17 @@ function App() {
       {
         apiGetKey();
       }
+      const handleUnload = () => {
+        const data = { type: 'removeKey', key: mobileKey };
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    
+        navigator.sendBeacon(backendUrl + '/key', blob);
+      };
+    
+      window.addEventListener('unload', handleUnload);
+    
       return () => {
-        // This runs on unmount (component disposal)
-        if(!isMobile)
-          {
-            apiRemoveKey();
-          }
-        console.log('Component is being unmounted');
+        window.removeEventListener('unload', handleUnload);
       };
       }, []);
 
