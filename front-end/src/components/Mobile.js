@@ -56,7 +56,7 @@ function Mobile(props) {
 
     let displayV = <div className='mobile-container'>
                         <img className="cg-logo-1" id="main-home-logo" src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
-                        <input type="text" maxLength="4" id="mobile-key-input" placeholder="4-Digit Code" onChange={(e) => setEnteredKey(e.target.value)}></input>
+                        <input type="text" maxLength="4" id="mobile-key-input" placeholder="4-Digit Code" value={enteredKey} onChange={(e) => setEnteredKey(e.target.value)}></input>
                         <div id="mobile-enter-button" onClick={apiCheckKey}>Enter</div>
                     </div>;     
     const [display, setDisplay] = useState(displayV);  
@@ -86,7 +86,7 @@ function Mobile(props) {
             </div>;  
             setDisplay(d);   
         }
-      }, [mobileConnection]);  
+      }, [mobileConnection,enteredKey]);  
     
     return (
         <div className='mobile'>
