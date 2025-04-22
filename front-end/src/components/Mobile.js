@@ -13,10 +13,10 @@ function Mobile(props) {
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
     
     let display = <div className='mobile-container'>
-                    <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
-                    <input type="number" max='9999' id="mobile-key-input" placeholder="4-Digit Code" onChange={(e) => setEnteredKey(e.target.value)}></input>
-                    <div id="mobile-enter-button">Enter</div>
-                </div>;   
+                        <img className="cg-logo-1" id="main-home-logo" src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
+                        <input type="text" maxLength="4" id="mobile-key-input" placeholder="4-Digit Code" onChange={(e) => setEnteredKey(e.target.value)}></input>
+                        <div id="mobile-enter-button" onClick={apiCheckKey}>Enter</div>
+                    </div>;     
 
      useEffect(() => {
         if(mobileConnection)
@@ -40,7 +40,7 @@ function Mobile(props) {
             </div>;   
         }
       }, [mobileConnection]);  
-      
+
 
         const apiCheckKey = () => {
             if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
