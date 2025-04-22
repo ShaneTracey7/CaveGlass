@@ -20,7 +20,7 @@ function Mobile(props) {
             if(key > 1000 && key < 9999) //4 digit number
             {
              
-                axios.post(backendUrl + '/api/users', {
+                axios.post(backendUrl + '/key', {
                     type: 'checkKey',
                     key: key,
                 }, {

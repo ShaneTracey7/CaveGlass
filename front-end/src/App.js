@@ -24,10 +24,18 @@ function App() {
       {
         apiGetKey();
       }
+      return () => {
+        // This runs on unmount (component disposal)
+        if(!isMobile)
+          {
+            apiRemoveKey();
+          }
+        console.log('Component is being unmounted');
+      };
       }, []);
 
   const apiGetKey = () => {
-    axios.post(backendUrl + '/api/users', {
+    axios.post(backendUrl + '/key', {
         type: 'setKey',
       }, {
         headers: {
@@ -46,6 +54,19 @@ function App() {
           }
    })
    console.log("api get key was called");
+  }
+
+  const apiRemoveKey = () => {
+    axios.post(backendUrl + '/key', {
+        type: 'removeKey',
+        key: mobileKey,
+      }, {
+        headers: {
+        'content-type': 'application/json'
+        }}).then((data) => {
+          console.log(data.data.message);
+        })
+   console.log("api remove key was called");
   }
 
 
