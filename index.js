@@ -253,7 +253,7 @@ app.post('/key', async (req, res) => {
      else if(req.body.type == "removeKey")
         {
            const key = req.body.key;
-           console.log("key: " + key);
+           console.log("remove key: " + key);
            try {
             const result = await pool.query('DELETE FROM "MobileKeys" WHERE key = $1', [key]);
         
