@@ -29,11 +29,13 @@ function App() {
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
     
         navigator.sendBeacon(backendUrl + '/key', blob);
+        console.log("unloading");
       };
     
       window.addEventListener('unload', handleUnload);
     
       return () => {
+        
         window.removeEventListener('unload', handleUnload);
       };
       }, []);
@@ -59,7 +61,7 @@ function App() {
    })
    console.log("api get key was called");
   }
-
+/*
   const apiRemoveKey = () => {
     axios.post(backendUrl + '/key', {
         type: 'removeKey',
@@ -72,7 +74,7 @@ function App() {
         })
    console.log("api remove key was called");
   }
-
+*/
 
   let display;
   if (inGame)

@@ -8,7 +8,10 @@ const { Pool } = require('pg'); // Import the pg module
 
 //app.use(cookieParser());
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://shanetracey7.github.io', //new
+    credentials: true
+}));
 
 app.use(express.json());
 
@@ -250,7 +253,7 @@ app.post('/key', async (req, res) => {
      else if(req.body.type == "removeKey")
         {
            const key = req.body.key;
-           console.log("key: " + key);
+           console.log("remove key: " + key);
            try {
             const result = await pool.query('DELETE FROM "MobileKeys" WHERE key = $1', [key]);
         
