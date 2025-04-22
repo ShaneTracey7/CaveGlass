@@ -39,7 +39,8 @@ function Mobile(props) {
                 <div id="mobile-enter-button" onClick={apiCheckKey}>Enter</div>
             </div>;   
         }
-      }, [mobileConnection]);
+      }, [mobileConnection]);  
+      
 
         const apiCheckKey = () => {
             if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
