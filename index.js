@@ -9,7 +9,7 @@ const { Pool } = require('pg'); // Import the pg module
 //app.use(cookieParser());
 
 app.use(cors({
-    origin: 'https://shanetracey7.github.io/CaveGlass', //new
+    origin: 'https://shanetracey7.github.io', //new
     credentials: true
 }));
 
