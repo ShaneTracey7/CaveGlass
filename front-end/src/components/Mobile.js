@@ -9,10 +9,10 @@ function Mobile(props) {
     
     let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
 
-    const [enteredKey, setEnteredKey] = useState(0); 
+    const [enteredKey, setEnteredKey] = useState("0000"); 
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
-    
-    
+    const [showError, setShowError] = useState(""); //maybe should be ref
+
     const apiCheckKey = () => {
         if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
         {
@@ -32,21 +32,25 @@ function Mobile(props) {
                     if(data.data.check)
                     {
                         setMobileConnection(true);
+                        setShowError("");
                     }
                     else{
-                        console.log("not a number");
+                        setShowError("Code does not match");
+                        console.log("key does not match");
                     }
 
                 });
             }
             else
             {
-                console.log("key is number outisde of range");
+                setShowError("Code must have 4-digits");
+                console.log("key is number outside of range");
                 return;
             }
         }
         else //good to check
         {
+            setShowError("Code must be a number");
             console.log("key is not a number");
             return;
         }
@@ -82,6 +86,7 @@ function Mobile(props) {
             d = <div className='mobile-container'>
                 <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
                 <input type="text" maxLength='4' id="mobile-key-input" placeholder="4-Digit Code" value={enteredKey} onChange={(e) => setEnteredKey(e.target.value)}></input>
+                <div id='mobile-error-message' style={{display: showError == "" ? "none": "flex"}}>{showError}</div>
                 <div id="mobile-enter-button" onClick={apiCheckKey}>Enter</div>
             </div>;  
             setDisplay(d);   

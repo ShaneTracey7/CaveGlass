@@ -20,7 +20,10 @@ function App() {
 
    useEffect(() => { 
       //get key from backend
-      apiGetKey();
+      if(!isMobile)
+      {
+        apiGetKey();
+      }
       }, []);
 
   const apiGetKey = () => {
@@ -43,22 +46,7 @@ function App() {
           }
    })
    console.log("api get key was called");
-}
-
-const apiCheckKey = () => {
-  axios.post(backendUrl, {
-      type: 'checkKey',
-      key: enteredKey,
-    }, {
-      headers: {
-      'content-type': 'application/json'
-      }}).then((data) => {
-        if(data.data)
-        {
-          setMobileConnection(true);
-        }
- })
-}
+  }
 
 
   let display;

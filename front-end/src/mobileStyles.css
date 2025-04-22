@@ -1,9 +1,13 @@
 /* stylesheet for mobile views */
 
 .mobile{
-    width: 100%;
-    height: 100%;
     overflow: hidden;
+}
+#mobile-error-message{
+    color: rgb(195, 11, 11);
+    font-size: 1rem;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 .mobile-container{
     width: fit-content;
@@ -223,9 +227,16 @@
     /*#spacer {
         height: calc(100vh - 100dvh - 8px);
       }*/
+      .mobile{
+        width: 100vw;
+        height: 100dvh;
+    }
 }
 @media (max-aspect-ratio: 1/1) {/*taller than wide*/
-    
+    .mobile{
+        width: 100dvh;
+        height: 100vw;
+    }
     .basic-container-m{
         height: 100vh;
         width: 100vw;

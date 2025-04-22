@@ -240,7 +240,7 @@ app.post('/api/users', async (req, res) => {
             if (result.rows.length > 0) {
                 res.status(200).json({ check: true });
             } else {
-                res.status(404).json({ check: false });
+                res.status(200).json({ check: false });
             }
           } catch (error) {
             console.error('Error checking user:', error);
