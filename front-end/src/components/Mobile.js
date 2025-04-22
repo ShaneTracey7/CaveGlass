@@ -5,7 +5,7 @@ import axios from 'axios';
 import upArrow from '../pics/up-arrow.svg';
 import downArrow from '../pics/down-arrow.svg';
 
-function MobileGame(props) { 
+function Mobile(props) { 
     
     let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
 
@@ -89,4 +89,4 @@ function MobileGame(props) {
   );
 }
 
-export default MobileGame;
+export default Mobile;
