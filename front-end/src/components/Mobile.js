@@ -4,6 +4,15 @@ import backArrow from '../pics/back-arrow.png';
 import axios from 'axios';
 import upArrow from '../pics/up-arrow.svg';
 import downArrow from '../pics/down-arrow.svg';
+import leftArrow from '../pics/left-arrow.svg';
+import rightArrow from '../pics/right-arrow.svg';
+import sumButton from '../pics/remote-sum.png';
+import focButton from '../pics/remote-foc.png';
+import pbpButton from '../pics/remote-pbp.png';
+import okButton from '../pics/remote-ok.png';
+import homeButton from '../pics/home.svg';
+import stopButton from '../pics/stop-sign.svg';
+
 
 function Mobile(props) { 
     
@@ -11,7 +20,9 @@ function Mobile(props) {
 
     const [enteredKey, setEnteredKey] = useState(""); 
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
-    const [showError, setShowError] = useState(""); //maybe should be ref
+    const [showError, setShowError] = useState(""); //shows error message for incorrect code input
+    const [inGame, setInGame] = useState(true); //default is false //determines whether to show view mode buttons (Summary,Player Focus, PlaybyPlay)
+    const [showInput, setShowInput] = useState(true);  //default is false //determines whether to show an input field
 
     const apiCheckKey = () => {
         if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
@@ -73,11 +84,27 @@ function Mobile(props) {
             d = <div className='mobile-remote'>
                  <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Up Arrow"/>
                  <div className='remote-middle-container'>
-                    <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Down Arrow"/>
-                    <div id='remote-enter-button'>OK</div>
-                    <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Down Arrow"/>
+                    <img className="mobile-remote-arrow" id="left-Arrow" src={leftArrow} alt="Left Arrow"/>
+                    <img className="mobile-remote-arrow" src={okButton} alt="OK"/>
+                    <img className="mobile-remote-arrow" id="right-Arrow" src={rightArrow} alt="Right Arrow"/>
                  </div>
-                 <img className="mobile-remote-arrow" id="up-Arrow" src={downArrow} alt="Down Arrow"/>
+                 <img className="mobile-remote-arrow" id="down-Arrow" src={downArrow} alt="Down Arrow"/>
+
+                 <div className='remote-middle-container' style={{display: showInput == "" ? "flex": "none"}}>
+                    <input type="number" maxLength='3' id="mobile-key-input" placeholder="Enter Value" value={enteredKey} onChange={(e) => setEnteredKey(e.target.value)}></input>
+                
+                 </div>
+
+                 <div className='remote-middle-container' style={{display: inGame  == "" ? "flex": "none"}}>
+                    <img className="mobile-remote-button" src={sumButton} alt="Summary"/>
+                    <img className="mobile-remote-button" src={focButton} alt="Player Focus"/>
+                    <img className="mobile-remote-button" src={pbpButton} alt="Play-by-Play"/>
+                 </div>
+
+                 <div className='remote-middle-container' >
+                    <img className="mobile-remote-button" id="left-Arrow" src={homeButton} alt="Home"/>
+                    <img className="mobile-remote-button" id="right-Arrow" src={stopButton} alt="Stop"/>
+                 </div>
             </div>;  
             setDisplay(d);          
         }

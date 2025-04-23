@@ -83,6 +83,7 @@ function App() {
 */
 
   let display;
+  /*
   if (inGame)
   {
     if( isMobile)
@@ -105,7 +106,23 @@ function App() {
     {
       display = <Home mobileKey={mobileKey} setgame={setGame} setingame={setInGame}/>;
     }
-  }
+  }*/
+    if (isMobile)
+      {
+        display = <Mobile />;
+      }
+      else
+      {
+      
+        if( inGame)
+          {
+            display = <Game game={game} setgame={setGame} setingame={setInGame}/>;
+          }
+          else
+          {
+            display = <Home mobileKey={mobileKey} setgame={setGame} setingame={setInGame}/>;
+          }
+      }
 
     return (
       <div className="App">

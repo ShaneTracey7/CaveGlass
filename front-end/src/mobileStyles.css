@@ -3,6 +3,7 @@
 .mobile{
     height: 100dvh;
     width: 100vw;
+    display: flex;
 }
 #mobile-error-message{
     color: rgb(195, 11, 11);
@@ -21,28 +22,7 @@
     margin-left:auto;
     margin-right:auto;
 }
-.mobile-remote{
-    width: 80%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-}
-.remote-middle-container{
-    display: flex;
-    flex-direction: row;
-    height: fit-content;
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    gap: 5%;
-}
-.mobile-remote-arrow{
-    width: 30%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-}
+
 .mobile-container > img{
     height: auto;
     margin-left: auto;
@@ -81,6 +61,53 @@
 #mobile-enter-button:hover{
     background-color: rgba(0, 100, 0, 0.5);
 }
+/**** * * * * * * * * * * * *  Remote View   * * * * * * * * * * * * ****/
+
+.mobile-remote{
+    width: 80%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+.remote-middle-container{
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 5%;
+}
+.mobile-remote-arrow{
+    width: 30%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+#remote-enter-button{
+    width: 30%;
+    height: auto;
+    font-size: 24vw;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    background-color: gray;
+    border-radius: 50%;
+    border: 3px solid black;
+    font-size: 4dvh;
+    padding: 5%;
+}
+
+.mobile-remote-button{
+    width: 30%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/**** * * * * * * * * * * * *  Mobile Scorebaord View   * * * * * * * * * * * * ****/
 
 #score-board-retro-m{
     margin: auto;
@@ -234,9 +261,6 @@
 .basic-container-m{
     height: 100vh;
    /* width: 100vw; might be ok here*/
-}
-.ha-white{
-    background-color: white;
 }
 
 @media (min-aspect-ratio: 1/1) { /*wider than tall*/
