@@ -14,7 +14,7 @@
     height: 100%;
 }
 .App{
-    height: 100vh;
+    height: 100%; /*was 100vh */
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
