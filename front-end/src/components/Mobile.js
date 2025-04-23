@@ -91,7 +91,7 @@ function Mobile(props) {
             </div>;  
             setDisplay(d);   
         }
-      }, [mobileConnection,enteredKey]);  
+      }, [mobileConnection,enteredKey,showError]);  
     
     return (
         <div className='mobile'>
