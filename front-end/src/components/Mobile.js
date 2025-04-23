@@ -90,12 +90,12 @@ function Mobile(props) {
                  </div>
                  <img className="mobile-remote-arrow" id="down-Arrow" src={downArrow} alt="Down Arrow"/>
 
-                 <div className='remote-middle-container' style={{display: showInput == "" ? "flex": "none"}}>
+                 <div className='remote-middle-container' style={{display: showInput ? "flex": "none"}}>
                     <input type="number" maxLength='3' id="mobile-key-input" placeholder="Enter Value" value={enteredKey} onChange={(e) => setEnteredKey(e.target.value)}></input>
                 
                  </div>
 
-                 <div className='remote-middle-container' style={{display: inGame  == "" ? "flex": "none"}}>
+                 <div className='remote-middle-container' style={{display: inGame ? "flex": "none"}}>
                     <img className="mobile-remote-button" src={sumButton} alt="Summary"/>
                     <img className="mobile-remote-button" src={focButton} alt="Player Focus"/>
                     <img className="mobile-remote-button" src={pbpButton} alt="Play-by-Play"/>
