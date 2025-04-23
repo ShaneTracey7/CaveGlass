@@ -58,7 +58,7 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 1dvh;
-    border: 3px solid gray;
+    border: 4px solid rgba(221, 233, 244);
     text-align: center;
 }
 #mobile-enter-button{
@@ -69,8 +69,8 @@
     color: white;
     background-color: darkgreen;
     border-radius: 15px;
-    border: 4px solid rgba(221, 233, 244);
-    color: black;
+    border: 3px solid black;
+    color: white;
     font-size: 4dvh;
     padding-top: 1dvh;
     padding-bottom: 1dvh;

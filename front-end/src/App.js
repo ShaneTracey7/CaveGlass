@@ -13,7 +13,7 @@ function App() {
   
   const [inGame, setInGame] = useState(false); //if true score reaction is displayed,
   const [game, setGame] = useState([]); 
-  const [mobileKey, setMobileKey] = useState("0000"); 
+  const [mobileKey, setMobileKey] = useState(""); 
   const mobileKeyRef = useRef(0);
   const [enteredKey, setEnteredKey] = useState(0); 
   const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
