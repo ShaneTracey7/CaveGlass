@@ -9,7 +9,7 @@ function Mobile(props) {
     
     let backendUrl = 'https://caveglass.onrender.com'; //https://caveglass.onrender.com    'https://your-app.onrender.com/api/endpoint' 'http://localhost:8080'
 
-    const [enteredKey, setEnteredKey] = useState("0000"); 
+    const [enteredKey, setEnteredKey] = useState(""); 
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
     const [showError, setShowError] = useState(""); //maybe should be ref
 

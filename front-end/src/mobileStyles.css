@@ -60,6 +60,7 @@
     margin-bottom: 1dvh;
     border: 4px solid rgba(221, 233, 244);
     text-align: center;
+    font-size: 5dvh;;
 }
 #mobile-enter-button{
     width: 30%;
