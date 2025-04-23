@@ -71,6 +71,7 @@
     flex-direction: column;
     margin: auto;
     margin-top: 3dvh;
+    margin-bottom: 3dvh;
 }
 .remote-middle-container{
     display: flex;
@@ -90,6 +91,11 @@
     margin-top: 1.5dvh;
     margin-bottom: 1.5dvh;
     gap: 5%;
+}
+
+#remote-bottom-container{
+    margin-top: auto;
+    margin-bottom: 0;
 }
 .mobile-remote-arrow{
     width: 30%;
@@ -113,6 +119,12 @@
 
 .mobile-remote-button{
     width: 30%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mobile-remote-button-bottom{
+    width: 25%;
     height: auto;
     margin-left: auto;
     margin-right: auto;

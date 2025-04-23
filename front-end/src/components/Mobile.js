@@ -21,7 +21,7 @@ function Mobile(props) {
     const [enteredKey, setEnteredKey] = useState(""); 
     const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
     const [showError, setShowError] = useState(""); //shows error message for incorrect code input
-    const [inGame, setInGame] = useState(true); //default is false //determines whether to show view mode buttons (Summary,Player Focus, PlaybyPlay)
+    const [inGame, setInGame] = useState(false); //default is false //determines whether to show view mode buttons (Summary,Player Focus, PlaybyPlay)
     const [showInput, setShowInput] = useState(true);  //default is false //determines whether to show an input field
     const [remoteInput, setRemoteInput] = useState(""); 
 
@@ -109,7 +109,7 @@ function Mobile(props) {
                  <img className="mobile-remote-arrow" id="down-Arrow" src={downArrow} alt="Down Arrow"/>
 
                  <div className='remote-row-container' style={{display: showInput ? "flex": "none"}}>
-                    <input type="number" maxLength='3' id="remote-input" placeholder="Enter Value" value={remoteInput} onChange={(e) => setRemoteInput(e.target.value)}></input>
+                    <input type="number" maxLength='3' id="remote-input" placeholder="Input..." value={remoteInput} onChange={(e) => setRemoteInput(e.target.value)}></input>
                 
                  </div>
 
@@ -119,9 +119,9 @@ function Mobile(props) {
                     <img className="mobile-remote-button" src={pbpButton} alt="Play-by-Play"/>
                  </div>
 
-                 <div className='remote-row-container' >
-                    <img className="mobile-remote-button" onClick={() => {handleHomeClick()}} id="left-Arrow" src={homeButton} alt="Home"/>
-                    <img className="mobile-remote-button" onClick={() => {handleStopClick()}} id="right-Arrow" src={stopButton} alt="Stop"/>
+                 <div className='remote-row-container' id="remote-bottom-container">
+                    <img className="mobile-remote-button-bottom" onClick={() => {handleHomeClick()}} id="left-Arrow" src={homeButton} alt="Home"/>
+                    <img className="mobile-remote-button-bottom" onClick={() => {handleStopClick()}} id="right-Arrow" src={stopButton} alt="Stop"/>
                  </div>
             </div>;  
             setDisplay(d);          
