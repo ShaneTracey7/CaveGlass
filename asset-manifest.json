@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/CaveGlass/static/css/main.e28a571f.css",
+    "main.css": "/CaveGlass/static/css/main.aa4e51db.css",
     "main.js": "/CaveGlass/static/js/main.38524a3f.js",
     "static/media/cg-logo-1.png": "/CaveGlass/static/media/cg-logo-1.1e05864be7a942010f01.png",
     "static/media/goal-light.png": "/CaveGlass/static/media/goal-light.8d6b1c3335d4ddd4e791.png",
@@ -23,11 +23,11 @@
     "static/media/down-arrow.svg": "/CaveGlass/static/media/down-arrow.e54a33207a41b70bdc8f5c70dadcbe20.svg",
     "static/media/right-arrow.svg": "/CaveGlass/static/media/right-arrow.ef7037e25cb19fad09529277b54d17b3.svg",
     "static/media/home.svg": "/CaveGlass/static/media/home.46250771542041fb7e6f38a7cfb8608d.svg",
-    "main.e28a571f.css.map": "/CaveGlass/static/css/main.e28a571f.css.map",
+    "main.aa4e51db.css.map": "/CaveGlass/static/css/main.aa4e51db.css.map",
     "main.38524a3f.js.map": "/CaveGlass/static/js/main.38524a3f.js.map"
   },
   "entrypoints": [
-    "static/css/main.e28a571f.css",
+    "static/css/main.aa4e51db.css",
     "static/js/main.38524a3f.js"
   ]
 }
