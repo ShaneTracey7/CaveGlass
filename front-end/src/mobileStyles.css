@@ -1,13 +1,16 @@
 /* stylesheet for mobile views */
 
 .mobile{
-    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
 }
 #mobile-error-message{
     color: rgb(195, 11, 11);
-    font-size: 1rem;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    font-size: 3dvh;
+    font-weight: bold;
+    margin-bottom: 1dvh;
+    margin-left: auto;
+    margin-right:auto
 }
 .mobile-container{
     width: fit-content;
@@ -41,16 +44,22 @@
     margin-right: auto;
 }
 .mobile-container > img{
-    width: 50%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
+    width: 60%;
+    font-size: 5dvh;
+    margin-top: 5dvh;
+    margin-bottom: 5dvh;
 }
 #mobile-key-input{
     width: 50%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 1dvh;
+    border: 3px solid gray;
+    text-align: center;
 }
 #mobile-enter-button{
     width: 30%;
@@ -60,7 +69,13 @@
     color: white;
     background-color: darkgreen;
     border-radius: 15px;
-    border: 2px solid gray;
+    border: 4px solid rgba(221, 233, 244);
+    color: black;
+    font-size: 4dvh;
+    padding-top: 1dvh;
+    padding-bottom: 1dvh;
+    margin-top: 2dvh;
+    margin-bottom: 5dvh;
 }
 #mobile-enter-button:hover{
     background-color: rgba(0, 100, 0, 0.5);
@@ -228,14 +243,12 @@
         height: calc(100vh - 100dvh - 8px);
       }*/
       .mobile{
-        width: 100vw;
-        height: 100dvh;
+        overflow: scroll;
     }
 }
 @media (max-aspect-ratio: 1/1) {/*taller than wide*/
     .mobile{
-        width: 100dvh;
-        height: 100vw;
+        overflow: hidden;
     }
     .basic-container-m{
         height: 100vh;
