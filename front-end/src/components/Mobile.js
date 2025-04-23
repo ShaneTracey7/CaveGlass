@@ -23,6 +23,7 @@ function Mobile(props) {
     const [showError, setShowError] = useState(""); //shows error message for incorrect code input
     const [inGame, setInGame] = useState(true); //default is false //determines whether to show view mode buttons (Summary,Player Focus, PlaybyPlay)
     const [showInput, setShowInput] = useState(true);  //default is false //determines whether to show an input field
+    const [remoteInput, setRemoteInput] = useState(""); 
 
     const apiCheckKey = () => {
         if(!isNaN(Number(enteredKey)))//NEEDS TO BE A NUMBER
@@ -76,6 +77,23 @@ function Mobile(props) {
                     </div>;     
     const [display, setDisplay] = useState(displayV);  
 
+    function handleStopClick(){
+
+        //set everything to default
+        setMobileConnection(false);
+        setEnteredKey("");
+        setInGame(false);
+        setShowInput(false);
+
+    }
+
+    function handleHomeClick(){
+
+        //call api and get web version to set inGame is false
+
+        setInGame(false);
+    }
+
      useEffect(() => {
         let d ="";
         console.log(" in use effect mobileConnection: " + mobileConnection);
@@ -90,20 +108,20 @@ function Mobile(props) {
                  </div>
                  <img className="mobile-remote-arrow" id="down-Arrow" src={downArrow} alt="Down Arrow"/>
 
-                 <div className='remote-middle-container' style={{display: showInput ? "flex": "none"}}>
-                    <input type="number" maxLength='3' id="mobile-key-input" placeholder="Enter Value" value={enteredKey} onChange={(e) => setEnteredKey(e.target.value)}></input>
+                 <div className='remote-row-container' style={{display: showInput ? "flex": "none"}}>
+                    <input type="number" maxLength='3' id="remote-input" placeholder="Enter Value" value={remoteInput} onChange={(e) => setRemoteInput(e.target.value)}></input>
                 
                  </div>
 
-                 <div className='remote-middle-container' style={{display: inGame ? "flex": "none"}}>
+                 <div className='remote-row-container' style={{display: inGame ? "flex": "none"}}>
                     <img className="mobile-remote-button" src={sumButton} alt="Summary"/>
                     <img className="mobile-remote-button" src={focButton} alt="Player Focus"/>
                     <img className="mobile-remote-button" src={pbpButton} alt="Play-by-Play"/>
                  </div>
 
-                 <div className='remote-middle-container' >
-                    <img className="mobile-remote-button" id="left-Arrow" src={homeButton} alt="Home"/>
-                    <img className="mobile-remote-button" id="right-Arrow" src={stopButton} alt="Stop"/>
+                 <div className='remote-row-container' >
+                    <img className="mobile-remote-button" onClick={() => {handleHomeClick()}} id="left-Arrow" src={homeButton} alt="Home"/>
+                    <img className="mobile-remote-button" onClick={() => {handleStopClick()}} id="right-Arrow" src={stopButton} alt="Stop"/>
                  </div>
             </div>;  
             setDisplay(d);          
