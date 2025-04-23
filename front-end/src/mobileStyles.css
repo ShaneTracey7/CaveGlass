@@ -66,12 +66,10 @@
 
 .mobile-remote{
     width: 80%;
-    height: fit-content;
+    height: 90%;
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 3dvh;
-    margin-bottom: 3dvh;
 }
 .remote-middle-container{
     display: flex;
@@ -103,6 +101,10 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.mobile-remote-arrow:hover{
+    background-color: rgba(0, 0, 0, 0.3);
+}
 #remote-enter-button{
     width: 30%;
     height: auto;
@@ -123,13 +125,18 @@
     margin-left: auto;
     margin-right: auto;
 }
+.mobile-remote-button:hover{
+    background-color: rgba(0, 0, 0, 0.3);
+}
 .mobile-remote-button-bottom{
     width: 25%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
 }
-
+.mobile-remote-button-bottom:hover{
+    background-color: rgba(0, 0, 0, 0.3);
+}
 #remote-input{
     width: 35%;
     height: auto;
