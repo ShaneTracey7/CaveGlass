@@ -11,7 +11,7 @@ import focButton from '../pics/remote-foc.png';
 import pbpButton from '../pics/remote-pbp.png';
 import okButton from '../pics/remote-ok.png';
 import homeButton from '../pics/home.svg';
-import stopButton from '../pics/stop-sign.svg';
+import stopButton from '../pics/stop-sign.png';
 
 
 function Mobile(props) { 
