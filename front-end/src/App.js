@@ -131,10 +131,12 @@ function App() {
       { 
         display = <div className='goal-replay-container'>
                     <img id='goal-replay-back-button' src={require("./pics/back-arrow.png")} alt='Back'/>
-                    <iframe className='goal-replay-iframe' src="https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                    <iframe className='goal-replay-iframe' src="https://players.brightcove.net/6415718365001/D3UCGynRWU_default/index.html?videoId=6367913132112" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                   </div> 
       }
-
+      //https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112
+      //https://players.brightcove.net/6415718365001/D3UCGynRWU_default/index.html?videoId=6367913132112
+     
     return (
       <div className="App">
       {/*mobileKey /* only here for testing */}
