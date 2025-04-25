@@ -844,7 +844,7 @@ const getAllData = () => {
     helpModal = <div></div>; //for testing: team={props.game.homeTeam} player={roster[0]}
  
     display = <div className='goal-replay-container'>
-                  <img id='goal-replay-back-button' onClick={() => {setWatchingReplay(false)}} src={require("./pics/back-arrow.png")} alt='Back'/>
+                  <img id='goal-replay-back-button' onClick={() => {setWatchingReplay(false)}} src={require("../pics/back-arrow.png")} alt='Back'/>
                   <iframe className='goal-replay-iframe' src={replayEndpoint + videoID} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                 </div> 
     
