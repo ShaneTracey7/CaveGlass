@@ -23,6 +23,8 @@ function Game(props) {
 
  let backendUrl = "https://caveglass.onrender.com";   //'http://localhost:8080'; //https://caveglass.onrender.com     
 
+ const replayEndpoint = "https://players.brightcove.net/6415718365001/D3UCGynRWU_default/index.html?videoId=";
+                
 
     
   const [playArr, setPlayArr] = useState([]); //local instance of plays taken from api (for play-by-play view)
@@ -55,7 +57,10 @@ function Game(props) {
   const [showForm, setShowForm] = useState(false); //playerForm in playerhightlight
   const [showTeamForm, setShowTeamForm] = useState(false); //teamForm in playerhightlight
 
-
+  const [showReplay, setShowReplay] = useState(false); //to display a fullscreen goal replay
+  const replayID = useRef(0); //need to complete url of replay vid (can get from nhl goal sharing url)
+  const replayEndpoints = useRef([]); //array of array // [endpoint,team,player] for the goal in which the replay is for
+  const [replayInfo, setReplayInfo] = useState([]); //array of info [replayID,team,player] for replay cards (goals that have the replay)
   // for settings form
   const [goalLightOn, setGoalLightOn] = useState(true);
   const [delay, setDelay] = useState(settings[0]);
@@ -223,6 +228,20 @@ function setDelayAllData()
                 setScoreReactionData([team,player]);
                 setScore(true);
             }
+
+            //add endpoint to replayEndpoints
+            let tempArr = replayEndpoints.current;
+            tempArr.push([endpoint, team, player]);
+            replayEndpoints.current = tempArr;
+        }
+        //check if goal replay has been added
+        if(false/* replayEndpoints.current[replayEndpoints.current.length - 1][0].replay /* need to figure out endpoint for replayURL*/) //if endpoint is there, but no replay
+        {
+            let endpoint = replayEndpoints.current[replayEndpoints.current.length - 1];
+            //add to replay Info
+            let tempArr = [...replayInfo];
+            tempArr.push([endpoint[0], endpoint[1], endpoint[2]]); // [replayID,team,player]
+            setReplayInfo(tempArr);
         }
         //Update scoreboard
         if(homeScore != data[0].homeTeam.score)
@@ -816,8 +835,24 @@ const getAllData = () => {
     settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
     helpModal = <div></div>; //for testing: team={props.game.homeTeam} player={roster[0]}
     display = <ScoreReaction scored={setScore} team={scoreReactionData[0]} player={scoreReactionData[1]}/>;
-    info = <p> .</p>
+    info = <p> .</p>;
     
+  }
+  else if(watchingReplay)
+  {
+    settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
+    helpModal = <div></div>; //for testing: team={props.game.homeTeam} player={roster[0]}
+ 
+    display = <div className='goal-replay-container'>
+                  <img id='goal-replay-back-button' onClick={() => {setWatchingReplay(false)}} src={require("./pics/back-arrow.png")} alt='Back'/>
+                  <iframe className='goal-replay-iframe' src={replayEndpoint + videoID} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                </div> 
+    
+    //https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112
+    //https://players.brightcove.net/6415718365001/D3UCGynRWU_default/index.html?videoId=6367913132112
+    //https://players.brightcove.net/6415718365001/D3UCGynRWU_default/index.html?videoId=6371906647112
+  
+    info = <p> .</p>;
   }
   else
   {    
@@ -988,7 +1023,7 @@ const getAllData = () => {
     if(infoType == 'SUM')
     {
         //might need to delay this call
-        info = <Summary teamGameStats={statInfo} darkMode={darkMode} teamsInfo={[props.game.homeTeam,props.game.awayTeam]}> </Summary>;
+        info = <Summary teamGameStats={statInfo} darkMode={darkMode} /*replays={replayInfo}*/ teamsInfo={[props.game.homeTeam,props.game.awayTeam]}> </Summary>;
     }
     else if(infoType == 'BOX')
     {
