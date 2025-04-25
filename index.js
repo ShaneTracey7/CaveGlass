@@ -16,7 +16,7 @@ app.use(cors({
 */
 const allowedOrigins = [
     'https://shanetracey7.github.io',
-    'http://localhost:8081' // for local testing
+    'http://localhost:3000' // for local testing
   ];
   
   app.use(cors({
