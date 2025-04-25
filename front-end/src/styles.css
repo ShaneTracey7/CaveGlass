@@ -16,6 +16,27 @@
 .App{
     height: 100dvh; /* 100vh */
 }
+
+.goal-replay-container{
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    height: 90%;
+    margin: auto;
+}
+.goal-replay-iframe{
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+#goal-replay-back-button{
+    margin-top: 0;
+    margin-bottom: auto;
+    margin-left: 0;
+    margin-right: auto;
+    width: 5%;
+    height:auto;
+}
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
     /*margin-left: calc(50% - 150px);

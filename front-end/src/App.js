@@ -9,6 +9,7 @@ import './styles.css';
 import axios from 'axios';
 import Mobile from './components/Mobile';
 
+
 function App() {
   
   const [inGame, setInGame] = useState(false); //if true score reaction is displayed,
@@ -127,9 +128,11 @@ function App() {
       }
           */
       if(true)
-      {
-        display = <iframe width="80%" height="80%" src="https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-
+      { 
+        display = <div className='goal-replay-container'>
+                    <img id='goal-replay-back-button' src={require("./pics/back-arrow.png")} alt='Back'/>
+                    <iframe className='goal-replay-iframe' src="https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  </div> 
       }
 
     return (
