@@ -20,16 +20,16 @@
 .goal-replay-container{
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 96%;
-    margin-top:2%;
-    margin-bottom: 2%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 98vw;
+    height: 96dvh;
+    margin-top:2dvh;
+    margin-bottom: 2dvh;
+    margin-left: 0;
+    margin-right: 2vw;
 }
 .goal-replay-iframe{
     width: 95%;
-    height: 100%;
+    height: 100dvh;
     margin: auto;
     margin-left: auto;
     margin-right: 0;
@@ -37,7 +37,7 @@
     margin-bottom: auto;
 }
 #goal-replay-back-button{
-    margin-top: 1.25%;
+    margin-top: 1.25dvh;
     margin-bottom: auto;
     margin-left: 1.25%;
     margin-right: auto;
