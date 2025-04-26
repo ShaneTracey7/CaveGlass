@@ -8,10 +8,27 @@ const { Pool } = require('pg'); // Import the pg module
 
 //app.use(cookieParser());
 
+/*
 app.use(cors({
     origin: 'https://shanetracey7.github.io', //new
     credentials: true
 }));
+*/
+const allowedOrigins = [
+    'https://shanetracey7.github.io',
+    'http://localhost:3000' // for local testing
+  ];
+  
+  app.use(cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true
+  }));
 
 app.use(express.json());
 

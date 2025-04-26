@@ -1,6 +1,6 @@
 
 @font-face { font-family: Scoreboard; src: url('scoreboard.ttf'); } 
-
+.mode-button-img
 .main-button{
     width: 100px;
     height: 50px;
@@ -17,33 +17,6 @@
     height: 100dvh; /* 100vh */
 }
 
-.goal-replay-container{
-    display: flex;
-    flex-direction: row;
-    width: 98vw;
-    height: 96dvh;
-    margin-top:2dvh;
-    margin-bottom: 2dvh;
-    margin-left: 0;
-    margin-right: 2vw;
-}
-.goal-replay-iframe{
-    width: 95%;
-    height: 100%;
-    margin: auto;
-    margin-left: auto;
-    margin-right: 0;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-#goal-replay-back-button{
-    margin-top: 1.25dvh;
-    margin-bottom: auto;
-    margin-left: 1.25%;
-    margin-right: auto;
-    width: 2.5%;
-    height:auto;
-}
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
     /*margin-left: calc(50% - 150px);
@@ -1122,13 +1095,37 @@
 }
 
 .mode-button-img{
-    width: 100px;
-    height:50%;
+    height: 5vw;
+    max-height: 50%;
+    min-height: 30%;
+    margin: auto;
+    padding: 5px;
+    border-radius: 10px;
+}
+.cg-logo-toolbar{
+    height: 5vw;
+    max-height: 50%;
+    min-height: 30%;
+    margin: auto;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.mode-button-img:hover{
+    background-color: rgba(128, 128, 128, 0.2);
+}
+.view-button-img{
+    height: 5vw;
+    max-height: 45%;
+    min-height: 25%;
+    max-width: calc(100% - 10px);
     margin: auto;
     padding: 5px;
     border-radius: 15px;
+    
+
 }
-.mode-button-img:hover{
+.view-button-img:hover{
     background-color: rgba(128, 128, 128, 0.2);
 }
 #settings-cog{
@@ -1138,59 +1135,30 @@
     padding-right: 0;
 }
 
-#back-arrow{
-    width: 10%;
-    min-width: 40px;
-    max-width: 70px;
-    height: auto;
-    margin-top: auto;
-    margin-bottom: auto;
-    border-radius: 50%;
-    padding: 5px;
-    /*border: 5px solid white;*/
-    margin-left: auto;
-    margin-right: auto;
+#left-toolbar-buttons{
+    margin-left: 1vw;
+    margin-right: 0;
 }
+
+#right-toolbar-buttons{
+     margin-left: 0;
+     margin-right: 1vw;
+ }
 #back-arrow:hover{
     background-color: rgba(128, 128, 128, 0.2);
 }
 .toolbar-button{
    /* border: 1px solid green; */
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 120px;
+    margin:auto;
+    width: 6vw;
     height: 100%;
     background-color: gray; 
     /*border-radius: 15px;*/
-    line-height: 40px;
-    font-weight: bold;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    font-size: 1.25rem;
     display: flex;
     flex-direction: row;
 }
-
-.toolbar-logo{
-    width: 65%;
-    height:50%;
-    padding:5px;
-    border-radius: 5px;
-    margin:auto;
-}
-#toolbar-button-group{
-    display: flex;
-    flex-direction: row;
-    gap:10px;
-    margin-right: auto;
-    margin-left: auto;
-
-}
-
-.toolbar-button:hover .toolbar-logo{
-    background-color: rgba(128, 128, 128, 0.2);
-}
-
 .toolbar-button-selected{
     margin-top: auto;
     margin-bottom: auto;
@@ -1203,6 +1171,28 @@
     background-size: 100% 100%;
     font-size: 0;
 }
+
+.toolbar-logo{
+    width: 65%;
+    height:50%;
+    padding:5px;
+    border-radius: 5px;
+    margin:auto;
+}
+#toolbar-button-group{
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+.toolbar-button:hover .toolbar-logo{
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+
 
 .toolbar-button-selected:hover{
     background-color: rgb(159, 164, 255,0.7); 
@@ -1494,6 +1484,88 @@ p{
     color: white;
     font-weight: bold;
     font-size: 1.25rem;
+}
+/* * * * * * * * * * * * * * * Replays * * * * * * * * * */
+.goal-replay-container{
+    display: flex;
+    flex-direction: row;
+    width: 98vw;
+    height: 96dvh;
+    margin-top:2dvh;
+    margin-bottom: 2dvh;
+    margin-left: 0;
+    margin-right: 2vw;
+}
+.goal-replay-iframe{
+    width: 95%;
+    height: 100%;
+    margin: auto;
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+#goal-replay-back-button{
+    margin-top: 1.25dvh;
+    margin-bottom: auto;
+    margin-left: 1.25%;
+    margin-right: auto;
+    width: 2.5%;
+    height:auto;
+}
+
+#replay-view{
+display: flex;
+flex-direction: column;
+width: 70%;
+max-width: 1300px;
+min-width: 600px;
+margin: auto;
+height: 65%;
+min-height: 600px;
+max-height: 1300px;
+background-color: transparent;
+
+} 
+.replay-list{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height:fit-content;
+    max-height: 80% ;
+    overflow-y: scroll;
+    background-color: #3498db;
+    margin: auto;
+}
+.replay-card{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 20%;
+}
+.replay-card:hover{
+    opacity: 0.8;
+}
+.replay-headshot{
+    height: 80%;
+    width: auto;
+    margin-left: 5%;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.replay-card-text-container
+{
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+    color: white;
+
+}
+#replay-title{
+    font-size: 10rem;
+    color: black;
+    margin: auto;
 }
 /* * * * * * * * * * * * * * * Score board * * * * * * * * * */
 

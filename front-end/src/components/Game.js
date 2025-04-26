@@ -17,6 +17,7 @@ import lightModeLogo from '../pics/light-mode.png';
 import cog from '../pics/cog.svg';
 import help from '../pics/help.png';
 import redx from '../pics/red-x.png';
+import replayIcon from '../pics/replay.svg';
 import PlayByPlay from './PlayByPlay';
 
 function Game(props) {
@@ -336,6 +337,39 @@ const getAllData = () => {
       setIsRunningALL(!isRunningALL);
       setGameClock(data.data[0].clock.timeRemaining);
       setInIntermission(data.data[0].clock.inIntermission);
+
+      //get all replay data
+      let tempReplay = [];
+      
+      let replayEndpoint = data.data[1].summary.scoring;
+      replayEndpoint.forEach(period => {
+
+        period.goals.forEach(goal => {
+
+            //get team data
+            let team = goal.isHome ? props.game.homeTeam : props.game.awayTeam;
+            //get player data
+            let player = roster.find(p => {return p.playerId == goal.playerId}); //can't work because roster is empty
+            //get url
+            let id = goal.highlightClip;
+            //get score and time left
+            let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + period.periodDescriptor.number + ")";
+            //set to arr
+            tempReplay.push([id,team,player,scoreInfo])
+            console.log("replay: " +id + " " + team + " " + player + " " + scoreInfo);
+          });
+      });
+      
+      //set replays
+      if(tempReplay.length > 0)
+      {
+        setReplayInfo(tempReplay) ;
+      }
+      else
+      {
+        console.log("no replays")
+      }
+
       console.log("first ALL DATA call");
       
     }
@@ -734,6 +768,15 @@ const getAllData = () => {
             }
             console.log('BOX')
         }
+        else if(type == 'REP')
+            {
+                if(infoType != 'REP')
+                {
+                    setInfoType('REP');
+                    //getPlayerFocus();
+                }
+                console.log('REP')
+            }
         else //type == 'PBP'
         {   
             //automatically update by calling api every 10-15 secs and handle the new data(go by difference in length of play array anc check if there are any goals from the new plays retrieved, if so, set the score to true)
@@ -822,6 +865,12 @@ const getAllData = () => {
     {
         setInfoType('XXX');
         props.setingame(false);
+    }
+
+    function handleReplayCarcClick(id)
+    {
+        replayID.current = id;
+        setShowReplay(true);
     }
 
   let display;
@@ -961,17 +1010,21 @@ const getAllData = () => {
     if(showToolbar)
     {
         toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
-                <img id="back-arrow" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
-                <img className="cg-logo-small" /*onClick={testScore}*/ src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
+                <img id="left-toolbar-buttons" class="mode-button-img" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
+                <img /*className="cg-logo-small" */id="left-toolbar-buttons" class="cg-logo-toolbar"/*onClick={testScore}*/ src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
-                    <div id="SUM" className={infoType == "SUM" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={summaryLogo} alt="summary"/></div>
-                    <div id="BOX" className={infoType == "BOX" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='toolbar-logo' src={playerFocusLogo} alt="player focus"/></div>
-                    <div id="PBP" className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'} onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='toolbar-logo' src={playByPlayLogo} alt="play-by-play"/></div>
-                </div>
-                <img class="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
-                <img class="mode-button-img" id="toolbar-help" onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
-                <img class="mode-button-img" id="settings-cog" onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
-               <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
+                    <div id="SUM" className='toolbar-button' onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={summaryLogo} alt="summary"/></div>
+                    <div id="BOX" className='toolbar-button' onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={playerFocusLogo} alt="player focus"/></div>
+                    <div id="PBP" className='toolbar-button'/*className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'}*/ onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='mode-button-img' src={playByPlayLogo} alt="play-by-play"/></div>
+                    <img class="mode-button-img" onClick={() => {toolbarClick("REP")}} src={replayIcon} alt="Replay"/>
+                    
+                </div> 
+                    <img id="right-toolbar-buttons" class="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
+                    <img id="right-toolbar-buttons" class="mode-button-img" onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
+                    <img id="right-toolbar-buttons" class="mode-button-img" onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
+               
+                
+                <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
             </div>
     }
     else
@@ -1030,6 +1083,24 @@ const getAllData = () => {
         info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} setShowHelp={setShowHelp} setShowSettings={setShowSettings} show={[showForm,setShowForm]} showTeam={[showTeamForm,setShowTeamForm]}></PlayerHighlight>;
 
     }
+    else if(infoType == 'REP')
+        {
+            info = <div id="replay-view" >
+                    <div id='replay-title'> Goal Replays </div>
+                    <div className='replay-list' >
+                        {replayInfo.map((replay, index) => (
+                            <div key={index} className='replay-card' id={"color-"+ replay[1].abbrev} onClick={() => {handleReplayCarcClick(replay[0])}}>
+                               {/*} <img className='replay-headshot' src={replay[2].headshot} alt="profile"/> */}
+                                <div className='replay-card-text-container'>
+                                    <div> {/*replay[2].firstName.default + " " + replay[2].lastName.default*/}</div>
+                                    <div> {replay[3]}</div> {/* games score + time of goal  */}
+                                </div>
+                            </div>
+                            ))}
+                    </div>;
+                </div>
+    
+        }
     else if(infoType == 'PBP')
     {
         info = <PlayByPlay playArr={playArr} game={props.game} darkMode={darkMode} roster={roster} period={period} totalGoals={homeScore+awayScore}></PlayByPlay>;

@@ -66,13 +66,7 @@ function Summary(props) {
                         <p className='away-summary-title' id={"f-color-" + props.teamsInfo[1].abbrev}  >{props.teamsInfo[1].placeName.default}</p>
                     </div>
                     {statArr}
-                    {/*<div className='replay-list' >
-                        {props.replays.map((replay, index) => (
-                            <div className='replay-card'>
-
-                            </div>
-                            ))}
-                    </div>;*/}
+                    
                 </div>;
 
         isLoading.current = false;
