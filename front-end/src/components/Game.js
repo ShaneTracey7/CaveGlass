@@ -894,7 +894,7 @@ const getAllData = () => {
  
     display = <div className='goal-replay-container'>
                   <img id='goal-replay-back-button' onClick={() => {setShowReplay(false)}} src={require("../pics/back-arrow.png")} alt='Back'/>
-                  <iframe className='goal-replay-iframe' src={replayEndpoint + replayID} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  <iframe className='goal-replay-iframe' src={replayEndpoint + replayID.current} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                 </div> 
     
     //https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112
