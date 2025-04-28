@@ -33,7 +33,8 @@ function Game(props) {
   
   const [score, setScore] = useState(false); //if true score reaction is displayed
   const [infoType, setInfoType] = useState('XXX'); //3 States: Summary(SUM), Box-score(BOX), and Play-by-Play(PBP)
-  const [roster, setRoster] = useState([]); //set once and used to get names/numbers/pics from api playerIds
+  //const [roster, setRoster] = useState([]); //set once and used to get names/numbers/pics from api playerIds
+  const roster = useRef([]);
   //const [isRunningPBP, setIsRunningPBP] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for PBP
   //const [isRunningBOX, setIsRunningBOX] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for BOX (player focus)
   //const [isRunningSUM, setIsRunningSUM] = useState(false); //just a toggle (true or false doesn't mean anything) to trigger useEffect into continuing api calls for SUM
@@ -57,10 +58,12 @@ function Game(props) {
   const [settings, setSettings] = useState([0,true,props.game.homeTeam.placeName.default]) // format: [<delay>,<goallight (true or false)>, <what team> ]
   const [showForm, setShowForm] = useState(false); //playerForm in playerhightlight
   const [showTeamForm, setShowTeamForm] = useState(false); //teamForm in playerhightlight
+  const [showReplayNotification, setShowReplayNotifcation] = useState(false); //to notify user that a goal replay has become available
 
   const [showReplay, setShowReplay] = useState(false); //to display a fullscreen goal replay
   const replayID = useRef(0); //need to complete url of replay vid (can get from nhl goal sharing url)
   const replayEndpoints = useRef([]); //array of array // [endpoint,team,player] for the goal in which the replay is for
+  const firstReplayCall = useRef(true); //a flag so replays can be set when appropriote
   const [replayInfo, setReplayInfo] = useState([]); //array of info [replayID,team,player] for replay cards (goals that have the replay)
   // for settings form
   const [goalLightOn, setGoalLightOn] = useState(true);
@@ -222,7 +225,7 @@ function setDelayAllData()
             //get team and player data of who scored
             let endpoint = data[1].summary.scoring[data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
             let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
-            let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+            let player = roster.current.find(p1 => {return p1.playerId == endpoint.playerId});
 
             if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
             {
@@ -235,15 +238,38 @@ function setDelayAllData()
             tempArr.push([endpoint, team, player]);
             replayEndpoints.current = tempArr;
         }
-        //check if goal replay has been added
-        if(false/* replayEndpoints.current[replayEndpoints.current.length - 1][0].replay /* need to figure out endpoint for replayURL*/) //if endpoint is there, but no replay
-        {
-            let endpoint = replayEndpoints.current[replayEndpoints.current.length - 1];
-            //add to replay Info
-            let tempArr = [...replayInfo];
-            tempArr.push([endpoint[0], endpoint[1], endpoint[2]]); // [replayID,team,player]
-            setReplayInfo(tempArr);
-        }
+            //hasn't been tested yet
+            if(replayEndpoints.current.length > replayInfo.length) //at least 1 goal has scored but hasn't recieved replay url
+            {   
+                let tempArr = [...replayInfo];
+                let dif = replayEndpoints.current.length - replayInfo.length; //how many goals have been scored that havent recieved replay url
+                for(let i = 0; i < dif; i++) //need loop because 2 goals can be scored within like 2 mins and it can take up to 5 mins for a goal replay to load
+                {
+                    let currentReplay = data[1].summary.scoring[data[1].periodDescriptor.number - 1].goals.reverse()[(dif - i - 1)];
+                    if(!(replayEndpoints.current[replayEndpoints.current.length - (dif - i)][0].highlightClip.hasOwnProperty("highlightClip")) && currentReplay.hasOwnProperty("highlightClip")) //if endpoint is there, but no replay
+                    {
+                        let endpoint = replayEndpoints.current[replayEndpoints.current.length - (dif - i)];
+                        //add to replay Info
+                        
+                        let goal = endpoint[0];                                                                                                                                             //could be an issue
+                        let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + /*periodFormat(period.periodDescriptor.number)*/+ ")";
+                        
+                        //add to array
+                        tempArr.push([goal.highlightClip, endpoint[1], endpoint[2]], scoreInfo, goal.goalsToDate); // [replayID,team,player, scoreInfo,gtd]
+                        console.log("replay: " +goal.highlightClip + " " + endpoint[1]+ " " + endpoint[2]+ " " + scoreInfo + " " + goal.goalsToDate);
+
+                        //set off replay notifcation
+                        setShowReplayNotifcation(true);
+                        setTimeout(() => setShowReplayNotifcation(false), 7000); 
+            
+                    }
+                    
+
+                }
+                //set to arr
+                setReplayInfo(tempArr);
+            }
+        
         //Update scoreboard
         if(homeScore != data[0].homeTeam.score)
             {
@@ -318,10 +344,12 @@ const getAllData = () => {
       console.log(data)
 
     //wait delay length before it sets useStates
-    if(roster.length == []) //first call
+    if(roster.current.length == []) //first call
     {
       //set roster (necessary to add player to player focus)
-      setRosterAPI();
+      //setRosterAPI();
+      //setRoster(data.data[0].rosterSpots);
+      roster.current = data.data[0].rosterSpots;
       
       if(statInfo != [data.data[2].playerByGameStats,data.data[1].summary.teamGameStats])
       {
@@ -338,37 +366,47 @@ const getAllData = () => {
       setGameClock(data.data[0].clock.timeRemaining);
       setInIntermission(data.data[0].clock.inIntermission);
 
-      //get all replay data
-      let tempReplay = [];
-      
-      let replayEndpoint = data.data[1].summary.scoring;
-      replayEndpoint.forEach(period => {
+      //replay info
+      if(firstReplayCall.current) //add replay info
+      {
+          //get all replay data
+          let tempReplay = [];
+          let replayEndpoint = data.data[1].summary.scoring;
 
-        period.goals.forEach(goal => {
+          replayEndpoint.forEach(period => {
 
-            //get team data
-            let team = goal.isHome ? props.game.homeTeam : props.game.awayTeam;
-            //get player data
-            let player = roster.find(p => {return p.playerId == goal.playerId}); //can't work because roster is empty
-            //get url
-            let id = goal.highlightClip;
-            //get score and time left
-            let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + period.periodDescriptor.number + ")";
-            //set to arr
-            tempReplay.push([id,team,player,scoreInfo])
-            console.log("replay: " +id + " " + team + " " + player + " " + scoreInfo);
+              period.goals.forEach(goal => {
+
+                  //get team data
+                  let team = goal.isHome ? props.game.homeTeam : props.game.awayTeam;
+                  //get player data
+                  let player = roster.current.find(p => {return p.playerId == goal.playerId}); //can't work because roster is empty
+                  //get url
+                  let id = goal.highlightClip;
+                  //get goalsToDate
+                  let gtd = goal.goalsToDate;
+                  //get score and time left
+                  let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + periodFormat(period.periodDescriptor.number) + ")";
+                  //set to arr
+                  tempReplay.push([id,team,player,scoreInfo,gtd])
+                  console.log("replay: " +id + " " + team + " " + player + " " + scoreInfo);
+              });
           });
-      });
-      
-      //set replays
-      if(tempReplay.length > 0)
-      {
-        setReplayInfo(tempReplay) ;
+
+          //set replays
+          if(tempReplay.length > 0)
+          {
+              setReplayInfo(tempReplay) ;
+          }
+          else
+          {
+          console.log("no replays")
+          }
+
+          firstReplayCall.current = false;
       }
-      else
-      {
-        console.log("no replays")
-      }
+
+
 
       console.log("first ALL DATA call");
       
@@ -392,14 +430,52 @@ const getAllData = () => {
                 //get team and player data of who scored
                 let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
                 let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
-                let player = roster.find(p1 => {return p1.playerId == endpoint.playerId});
+                let player = roster.current.find(p1 => {return p1.playerId == endpoint.playerId});
 
                 if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
                 {
                     setScoreReactionData([team,player]);
                     setScore(true);
                 }
+
+                //add endpoint to replayEndpoints
+                let tempArr = replayEndpoints.current;
+                tempArr.push([endpoint, team, player]);
+                replayEndpoints.current = tempArr;
             }
+
+            //hasn't been tested yet
+            if(replayEndpoints.current.length > replayInfo.length) //at least 1 goal has scored but hasn't recieved replay url
+            {   
+                let tempArr = [...replayInfo];
+                let dif = replayEndpoints.current.length - replayInfo.length; //how many goals have been scored that haveent recieved replay url
+                for(let i = 0; i < dif; i++)
+                {
+                    let currentReplay = data[1].summary.scoring[data[1].periodDescriptor.number - 1].goals.reverse()[(dif - i - 1)];
+                    if(!(replayEndpoints.current[replayEndpoints.current.length - (dif - i)][0].highlightClip.hasOwnProperty("highlightClip")) && currentReplay.hasOwnProperty("highlightClip")) //if endpoint is there, but no replay
+                    {
+                        let endpoint = replayEndpoints.current[replayEndpoints.current.length - (dif - i)];
+                        //add to replay Info
+                        
+                        let goal = endpoint[0];                                                                                                                                             //could be an issue
+                        let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + /*periodFormat(period.periodDescriptor.number)*/+ ")";
+                        
+                        //add to array
+                        tempArr.push([goal.highlightClip, endpoint[1], endpoint[2]], scoreInfo, goal.goalsToDate); // [replayID,team,player, scoreInfo,gtd]
+                        console.log("replay: " +goal.highlightClip + " " + endpoint[1]+ " " + endpoint[2]+ " " + scoreInfo + " " + goal.goalsToDate);
+                    
+                        //set off replay notifcation
+                        setShowReplayNotifcation(true);
+                        setTimeout(() => setShowReplayNotifcation(false), 7000);
+                    
+                    }
+
+
+                }
+                //set to arr
+                setReplayInfo(tempArr);
+            }
+
             //Update scoreboard
             if(homeScore != data.data[0].homeTeam.score)
                 {
@@ -440,6 +516,11 @@ const getAllData = () => {
                 console.log("i: " + i)
                 
             }*/
+
+            
+            //update replay info
+            
+            
         }
         else //in intermission
         {
@@ -650,6 +731,7 @@ const getAllData = () => {
                 setGameClockPing(data.data);
             })};
 
+            /*
     const setRosterAPI = () => {
         axios.post(backendUrl, {
             type: 'roster',
@@ -663,7 +745,7 @@ const getAllData = () => {
         //might crash if no games that day
         setRoster(data.data);
 
-    })};
+    })};*/
 /*
       //gets summary
       const getSummary = () => {
@@ -737,6 +819,17 @@ const getAllData = () => {
     }
 */
    
+     function periodFormat(num)
+     {
+        switch(num){
+            case 1: return '1st';
+            case 2: return '2nd';
+            case 3: return '3rd';
+            case 4: return 'OT';
+            case 5: return 'S/0';
+            default: return num;
+        }
+     }
     //formats UTC date into {mm/dd/yyyy} (not currently in use)
     function formatDate(date)
     {
@@ -879,16 +972,20 @@ const getAllData = () => {
   let scoreboard;
   let settingsForm;
   let helpModal;
+  let replayNotifcation;
   if (score) // if goalight is on or not
   {
+    replayNotifcation = <div></div>;
     settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
     helpModal = <div></div>; //for testing: team={props.game.homeTeam} player={roster[0]}
     display = <ScoreReaction scored={setScore} team={scoreReactionData[0]} player={scoreReactionData[1]}/>;
     info = <p> .</p>;
+
     
   }
   else if(showReplay)
   {
+    replayNotifcation = <div></div>;
     settingsForm = <div></div>; //team={scoreReactionData[0]} player={scoreReactionData[1]}
     helpModal = <div></div>; //for testing: team={props.game.homeTeam} player={roster[0]}
  
@@ -980,6 +1077,9 @@ const getAllData = () => {
                     </div>
                 </div>;
 
+    replayNotifcation = <div className='player-form' style={{display: showReplayNotification ? "flex": "none"}}>
+                                <p>A goal replay is now available</p>
+                        </div>;
     /*
         <div id='score-board'> 
         <div id='score-board-container'> 
@@ -1080,21 +1180,22 @@ const getAllData = () => {
     }
     else if(infoType == 'BOX')
     {
-        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} setShowHelp={setShowHelp} setShowSettings={setShowSettings} show={[showForm,setShowForm]} showTeam={[showTeamForm,setShowTeamForm]}></PlayerHighlight>;
+        info = <PlayerHighlight scores={[homeScore,awayScore]} statInfo={statInfo} roster={roster.current} players={[players,setPlayers]} teamStats={[teamStats,setTeamStats]} teamsInfo={[props.game.homeTeam,props.game.awayTeam]} darkMode={darkMode} setShowHelp={setShowHelp} setShowSettings={setShowSettings} show={[showForm,setShowForm]} showTeam={[showTeamForm,setShowTeamForm]}></PlayerHighlight>;
 
     }
     else if(infoType == 'REP')
         {
             info = <div id="replay-view" >
                     <div id='replay-title'> Goal Replays </div>
-                    <div className='replay-list' >
+                    <div className={darkMode ? 'replay-list-dark': 'replay-list'}>
                         {replayInfo.map((replay, index) => (
                             <div key={index} className='replay-card' id={"color-"+ replay[1].abbrev} onClick={() => {handleReplayCarcClick(replay[0])}}>
-                               {/*} <img className='replay-headshot' src={replay[2].headshot} alt="profile"/> */}
+                               <img className='replay-headshot' src={replay[2].headshot} alt="profile"/> 
                                 <div className='replay-card-text-container'>
-                                    <div> {/*replay[2].firstName.default + " " + replay[2].lastName.default*/}</div>
-                                    <div> {replay[3]}</div> {/* games score + time of goal  */}
+                                    <div className='upper-rc-text'> {replay[2].firstName.default + " " + replay[2].lastName.default + " (" + replay[4] + ")"}</div>
+                                    <div className='lower-rc-text'> {replay[3]}</div> {/* games score + time of goal  */}
                                 </div>
+                                <img className='replay-logo' src={replay[1].logo} alt="profile"/> 
                             </div>
                             ))}
                     </div>;
@@ -1103,7 +1204,7 @@ const getAllData = () => {
         }
     else if(infoType == 'PBP')
     {
-        info = <PlayByPlay playArr={playArr} game={props.game} darkMode={darkMode} roster={roster} period={period} totalGoals={homeScore+awayScore}></PlayByPlay>;
+        info = <PlayByPlay playArr={playArr} game={props.game} darkMode={darkMode} roster={roster.current} period={period} totalGoals={homeScore+awayScore}></PlayByPlay>;
 
         /*
         let pArr = [];
@@ -1435,6 +1536,7 @@ customSelects.forEach(function (select) {
 
     return (
       <div className={darkMode ? 'Game-dark': 'Game'}>
+      {replayNotifcation}
       {settingsForm}
       {helpModal}
       {display}
