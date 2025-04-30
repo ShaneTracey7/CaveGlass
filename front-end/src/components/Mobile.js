@@ -89,7 +89,12 @@ function Mobile(props) {
     function handleOKClick(){
 
         console.log("is connected : " +props.socket.connected);
-        props.socket.emit('remote',[enteredKey,'ok']);
+
+        props.socket.emit('remote',{
+            code: enteredKey,
+            type: 'ok'
+            });
+
         console.log('ok clicked');
     }
 

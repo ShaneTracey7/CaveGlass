@@ -18,18 +18,17 @@ function Main(props)
 
       apiGetGames();//getting today's game data from NHL api
 
-      props.socket.on('remote', (data) => {
-        console.log('socket received:', data);
-        if(data[0] == props.mobileKey)
-        {
-          switch(data[1])
+      props.socket.on('remoteRecieve', (data) => {
+        console.log('socket received:', data.type);
+        
+          switch(data.type)
           {
             case "ok": gameClick(0); break;
-            default: break;
+            default: console.log("wrong type");break;
           }
-        }
+        });
         
-      });
+
 
     }, []);
 

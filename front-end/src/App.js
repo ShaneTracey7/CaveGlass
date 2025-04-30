@@ -29,6 +29,7 @@ function App() {
       {
         apiGetKey();
         
+        
         socket.emit('ping');
         socket.on('pong', () => {
         console.log('Received pong');
@@ -63,6 +64,7 @@ function App() {
 
       useEffect(() => {
         mobileKeyRef.current = mobileKey;
+        socket.emit('register', mobileKeyRef.current); //new
       }, [mobileKey]);
 
   const apiGetKey = () => {
