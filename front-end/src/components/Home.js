@@ -18,7 +18,7 @@ function Main(props)
 
       apiGetGames();//getting today's game data from NHL api
 
-      /*props.socket.on('remote', (data) => {
+      props.socket.on('remote', (data) => {
         console.log('socket received:', data);
         if(data[0] == props.mobileKey)
         {
@@ -29,7 +29,7 @@ function Main(props)
           }
         }
         
-      });*/
+      });
 
     }, []);
 
