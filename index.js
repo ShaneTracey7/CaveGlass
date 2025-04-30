@@ -57,6 +57,7 @@ io.on('connection', (socket) => {
   
   socket.on('register', ({ code }) => {
     userSocketMap[code] = socket.id;
+    console.log("code registered")
     
   });
 
@@ -66,6 +67,11 @@ io.on('connection', (socket) => {
       io.to(toSocketId).emit('receiveRemote', {
         type: type, //type of remote action 
       });
+      console.log("code matches in sendRemote")
+    }
+    else
+    {
+        console.log("code doesn't match in sendRemote")
     }
 });
 
