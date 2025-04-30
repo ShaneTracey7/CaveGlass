@@ -57,7 +57,7 @@ io.on('connection', (socket) => {
   
   socket.on('register', ({ code }) => {
     userSocketMap[code] = socket.id;
-    console.log("code registered")
+    console.log("code: " + code + " registered")
     
   });
 

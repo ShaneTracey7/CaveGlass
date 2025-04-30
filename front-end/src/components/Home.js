@@ -23,7 +23,7 @@ function Main(props)
         
           switch(data.type)
           {
-            case "ok": gameClick(1); break;
+            case "ok": gameClick(1); console.log("case 'ok' "); break;
             default: console.log("wrong type");break;
           }
         });
