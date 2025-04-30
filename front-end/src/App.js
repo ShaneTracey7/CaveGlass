@@ -51,12 +51,12 @@ function App() {
         console.log("mobilekey: " + mobileKey);
       };
     
-      socket.off('pong');
       
+
       window.addEventListener('unload', handleUnload);
     
       return () => {
-        
+        socket.off('pong');
         window.removeEventListener('unload', handleUnload);
       };
       }, []);
