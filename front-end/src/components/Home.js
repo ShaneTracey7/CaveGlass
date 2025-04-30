@@ -8,10 +8,29 @@ function Main(props)
     let backendUrl = "https://caveglass.onrender.com";    //'http://localhost:8080'; //
 
     let loadingSpinner = <div class="loader"></div>;
-    //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
-    const [gameArr, setGameArr] = useState([]); //if true score reaction is displayed,
-    const [gameList, setGameList] = useState(loadingSpinner); //if true score reaction is displayed,
+    
+    const [gameArr, setGameArr] = useState([]); 
+    const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
+    
+    function gameClick(index)
+    {
+      console.log("test" + index)
+      if(gameArr[index].gameState == "FUT" || gameArr[index].gameState == "PRE")
+      {
+        console.log("hasn't started");
+
+        //only availible rn for testing
+       // props.setgame(gameArr[index]);
+       // props.setingame(true);
+      }
+      else // 'LIVE', 'FINAL', 'END' , 'CRIT' or etc
+      {
+        console.log("live or ended");
+        props.setgame(gameArr[index]);
+        props.setingame(true);
+      }
+    }
     
    //This function is called when component is create (called only once)
     useEffect(() => { 
@@ -138,26 +157,6 @@ function Main(props)
     console.log("Delayed for 1 seconds.");
   }, 1000);*/
   }
-
-
-    function gameClick(index)
-    {
-      console.log("test" + index)
-      if(gameArr[index].gameState == "FUT" || gameArr[index].gameState == "PRE")
-      {
-        console.log("hasn't started");
-
-        //only availible rn for testing
-       // props.setgame(gameArr[index]);
-       // props.setingame(true);
-      }
-      else // 'LIVE', 'FINAL', 'END' , 'CRIT' or etc
-      {
-        console.log("live or ended");
-        props.setgame(gameArr[index]);
-        props.setingame(true);
-      }
-    }
 
     //formats UTC date into {hh:mm {AM/PM}}
     function formatTime(date)
