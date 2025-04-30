@@ -67,11 +67,11 @@ io.on('connection', (socket) => {
       io.to(toSocketId).emit('receiveRemote', {
         type: type, //type of remote action 
       });
-      console.log("code matches in sendRemote")
+      console.log(code +" code matches in sendRemote")
     }
     else
     {
-        console.log("code doesn't match in sendRemote")
+        console.log(code + "code doesn't match in sendRemote")
     }
 });
 
