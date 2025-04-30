@@ -56,6 +56,10 @@ io.on('connection', (socket) => {
 
   socket.emit('welcome', 'Hello from WebSocket!');
 
+  socket.on('remote', (data) => {
+    socket.emit('remote',data);
+});
+
   socket.on('ping', () => {
     socket.emit('pong');
   });
@@ -343,6 +347,7 @@ const pool = new Pool({
   });*/
 
   //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
-app.listen(8080, () => {
+  //was app.listen
+server.listen(8080, () => {
       console.log('server listening on port 8080')
-})
+});
