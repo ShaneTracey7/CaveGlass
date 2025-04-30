@@ -18,7 +18,7 @@ function Main(props)
 
       apiGetGames();//getting today's game data from NHL api
 
-      props.socket.on('remoteRecieve', (data) => {
+      props.socket.on('receiveRemote', (data) => {
         console.log('socket received:', data.type);
         
           switch(data.type)
