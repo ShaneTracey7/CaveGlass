@@ -50,23 +50,40 @@ const io = new Server(server, {
   },
 });
 
+const userSocketMap = {};
 // === WebSocket connection ===
 io.on('connection', (socket) => {
   console.log('A client connected:', socket.id);
+  
+  socket.on('register', ({ code }) => {
+    userSocketMap[code] = socket.id;
+    
+  });
 
-  socket.emit('welcome', 'Hello from WebSocket!');
-
-  socket.on('remote', (data) => {
-    socket.emit('remote',data);
+  socket.on('sendRemote', ({code,type}) => {
+    const toSocketId = userSocketMap[code];
+    if (toSocketId) {
+      io.to(toSocketId).emit('receiveRemote', {
+        type: type, //type of remote action 
+      });
+    }
 });
 
-  socket.on('ping', () => {
+    socket.on('ping', () => {
     socket.emit('pong');
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    // Optionally remove user from userSocketMap
+    // More complex logic might be needed for reconnection support
+    for (const userId in userSocketMap) {
+      if (userSocketMap[userId] === socket.id) {
+        delete userSocketMap[userId];
+        break;
+      }
+    }
   });
+ 
 });
 
 app.post("/", (req, res) => {
