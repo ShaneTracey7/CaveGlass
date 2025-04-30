@@ -9,6 +9,7 @@ import './styles.css';
 import axios from 'axios';
 import Mobile from './components/Mobile';
 import { io } from 'socket.io-client';
+import socket from './components/Socket';
 
 function App() {
   
@@ -20,19 +21,17 @@ function App() {
   const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
   let backendUrl = 'https://caveglass.onrender.com';//'http://localhost:8080';// https://caveglass.onrender.com
   
-  const socketRef = useRef(null);
 
    //emit socket stuff inside of home/game (can't access useStates from app.js(here))
    useEffect(() => { 
       //get key from backend
-      socketRef.current = io(backendUrl);
       if(!isMobile)
       {
         apiGetKey();
         
         
-        socketRef.current.emit('ping');
-        socketRef.current.on('pong', () => {
+        socket.emit('ping');
+        socket.on('pong', () => {
         console.log('Received pong');
     });
         /*
@@ -61,8 +60,8 @@ function App() {
       window.addEventListener('unload', handleUnload);
     
       return () => {
-        socketRef.current.off('pong');
-        socketRef.current.disconnect();
+        socket.off('pong');
+        socket.disconnect();
         window.removeEventListener('unload', handleUnload);
       };
       }, []);
@@ -73,7 +72,7 @@ function App() {
             mobileKeyRef.current = mobileKey;
             if (mobileKeyRef.current != 0 && mobileKeyRef.current != "")
             {
-              socketRef.current.emit('register', { code: mobileKey}/*mobileKeyRef.current*/); //new
+              socket.emit('register', { code: mobileKey}/*mobileKeyRef.current*/); //new
             }
             
           }
@@ -144,18 +143,18 @@ function App() {
  
     if (isMobile)
       {
-        display = <Mobile socket={socketRef.current} />;
+        display = <Mobile socket={socket} />;
       }
       else
       {
       
         if( inGame)
           {
-            display = <Game game={game} socket={socketRef.current} setgame={setGame} setingame={setInGame}/>;
+            display = <Game game={game} socket={socket} setgame={setGame} setingame={setInGame}/>;
           }
           else
           {
-            display = <Home mobileKey={mobileKey} socket={socketRef.current} setgame={setGame} setingame={setInGame}/>;
+            display = <Home mobileKey={mobileKey} socket={socket} setgame={setGame} setingame={setInGame}/>;
           }
       }
           
