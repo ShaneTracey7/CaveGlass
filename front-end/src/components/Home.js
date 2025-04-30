@@ -17,11 +17,11 @@ function Main(props)
     useEffect(() => { 
 
       apiGetGames();//getting today's game data from NHL api
-
-      props.socket.on('receiveRemote', (data) => {
-        console.log('socket received:', data.type);
+      
+      props.socket.on('receiveRemote', ({type}) => {
+        console.log('socket received:', type);
         
-          switch(data.type)
+          switch(type)
           {
             case "ok": gameClick(1); console.log("case 'ok' "); break;
             default: console.log("wrong type");break;

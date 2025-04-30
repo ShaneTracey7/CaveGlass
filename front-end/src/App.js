@@ -66,7 +66,11 @@ function App() {
         if(!isMobile)
           {
             mobileKeyRef.current = mobileKey;
-            socket.emit('register', { code: mobileKey}/*mobileKeyRef.current*/); //new
+            if (mobileKeyRef.current != 0 && mobileKeyRef.current != "")
+            {
+              socket.emit('register', { code: mobileKey}/*mobileKeyRef.current*/); //new
+            }
+            
           }
       }, [mobileKey]);
 
