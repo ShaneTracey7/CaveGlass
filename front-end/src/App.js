@@ -64,7 +64,7 @@ function App() {
 
       useEffect(() => {
         mobileKeyRef.current = mobileKey;
-        socket.emit('register', mobileKeyRef.current); //new
+        socket.emit('register', 1001/*mobileKeyRef.current*/); //new
       }, [mobileKey]);
 
   const apiGetKey = () => {
