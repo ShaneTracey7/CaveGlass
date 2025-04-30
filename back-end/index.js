@@ -75,7 +75,6 @@ io.on('connection', (socket) => {
     }
     
     console.log("userSocketMap: " + JSON.stringify(userSocketMap))
-    console.log("userSocketMap.tester: " + userSocketMap.tester)
     console.log("userSocketMap[code]: " + userSocketMap[code])
 });
 
