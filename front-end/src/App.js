@@ -31,8 +31,8 @@ function App() {
         apiGetKey();
         
         
-        socket.emit('ping');
-        socket.on('pong', () => {
+        socketRef.current.emit('ping');
+        socketRef.current.on('pong', () => {
         console.log('Received pong');
     });
         /*
@@ -61,7 +61,7 @@ function App() {
       window.addEventListener('unload', handleUnload);
     
       return () => {
-        socket.off('pong');
+        socketRef.current.off('pong');
         socketRef.current.disconnect();
         window.removeEventListener('unload', handleUnload);
       };
