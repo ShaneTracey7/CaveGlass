@@ -71,10 +71,12 @@ io.on('connection', (socket) => {
     }
     else
     {
-        console.log(code + "code doesn't match in sendRemote")
+        console.log(code + " code doesn't match in sendRemote")
     }
-      console.log("userSocketMap: " + userSocketMap)
-      console.log("userSocketMap[code]: " + userSocketMap[code])
+    
+    console.log("userSocketMap: " + JSON.stringify(userSocketMap))
+    console.log("userSocketMap.tester: " + userSocketMap.tester)
+    console.log("userSocketMap[code]: " + userSocketMap[code])
 });
 
     socket.on('ping', () => {
