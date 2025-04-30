@@ -58,13 +58,16 @@ function Game(props) {
   const [settings, setSettings] = useState([0,true,props.game.homeTeam.placeName.default]) // format: [<delay>,<goallight (true or false)>, <what team> ]
   const [showForm, setShowForm] = useState(false); //playerForm in playerhightlight
   const [showTeamForm, setShowTeamForm] = useState(false); //teamForm in playerhightlight
-  const [showReplayNotification, setShowReplayNotifcation] = useState(false); //to notify user that a goal replay has become available
-
+  
+    //for replay
   const [showReplay, setShowReplay] = useState(false); //to display a fullscreen goal replay
   const replayID = useRef(0); //need to complete url of replay vid (can get from nhl goal sharing url)
-  const replayEndpoints = useRef([]); //array of array // [endpoint,team,player] for the goal in which the replay is for
+  const replayEndpoints = useRef([]); //array of array // [endpoint,team,player,period] for the goal in which the replay is for
   const firstReplayCall = useRef(true); //a flag so replays can be set when appropriote
-  const [replayInfo, setReplayInfo] = useState([]); //array of info [replayID,team,player] for replay cards (goals that have the replay)
+  const [replayInfo, setReplayInfo] = useState([]); //array of info [replayID,team,player,scoreInfo, gtd] for replay cards (goals that have the replay)
+  const [showReplayNotification, setShowReplayNotifcation] = useState(false); //to notify user that a goal replay has become available
+  const replayNotificationInfo = useRef([]);
+
   // for settings form
   const [goalLightOn, setGoalLightOn] = useState(true);
   const [delay, setDelay] = useState(settings[0]);
@@ -226,6 +229,7 @@ function setDelayAllData()
             let endpoint = data[1].summary.scoring[data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
             let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
             let player = roster.current.find(p1 => {return p1.playerId == endpoint.playerId});
+            let period = data.data[1].periodDescriptor.number;
 
             if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
             {
@@ -235,7 +239,7 @@ function setDelayAllData()
 
             //add endpoint to replayEndpoints
             let tempArr = replayEndpoints.current;
-            tempArr.push([endpoint, team, player]);
+            tempArr.push([endpoint, team, player,period]);
             replayEndpoints.current = tempArr;
         }
             //hasn't been tested yet
@@ -250,15 +254,17 @@ function setDelayAllData()
                     {
                         let endpoint = replayEndpoints.current[replayEndpoints.current.length - (dif - i)];
                         //add to replay Info
-                        
+                        let period = endpoint[3];
                         let goal = endpoint[0];                                                                                                                                             //could be an issue
-                        let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + /*periodFormat(period.periodDescriptor.number)*/+ ")";
+                        let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + periodFormat(period.periodDescriptor.number)+ ")";
                         
                         //add to array
-                        tempArr.push([goal.highlightClip, endpoint[1], endpoint[2]], scoreInfo, goal.goalsToDate); // [replayID,team,player, scoreInfo,gtd]
+                        tempArr.push([goal.highlightClip, endpoint[1], endpoint[2], scoreInfo, goal.goalsToDate]); // [replayID,team,player, scoreInfo,gtd]
                         console.log("replay: " +goal.highlightClip + " " + endpoint[1]+ " " + endpoint[2]+ " " + scoreInfo + " " + goal.goalsToDate);
 
                         //set off replay notifcation
+                        replayNotificationInfo.current = [goal.highlightClip, endpoint[1], endpoint[2], scoreInfo, goal.goalsToDate];
+                        
                         setShowReplayNotifcation(true);
                         setTimeout(() => setShowReplayNotifcation(false), 7000); 
             
@@ -404,10 +410,32 @@ const getAllData = () => {
           }
 
           firstReplayCall.current = false;
+
+        /*
+           //its here only for testing 
+            //add last goal as notif info for testing
+            let endpoint = replayEndpoint[replayEndpoint.length - 1];
+            let goal = endpoint.goals[endpoint.goals.length - 1];
+            let team = goal.isHome ? props.game.homeTeam : props.game.awayTeam;
+            //get player data
+            let player = roster.current.find(p => {return p.playerId == goal.playerId}); //can't work because roster is empty
+            //get url
+            let id = goal.highlightClip;
+            //get goalsToDate
+            let gtd = goal.goalsToDate;
+            //get score and time left
+            let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • ";
+            
+            replayNotificationInfo.current = [id,team,player,scoreInfo,gtd];
+            //set off replay notifcation
+            setShowReplayNotifcation(true);
+            */
       }
 
 
-
+     
+                        
+                        
       console.log("first ALL DATA call");
       
     }
@@ -431,6 +459,7 @@ const getAllData = () => {
                 let endpoint = data.data[1].summary.scoring[data.data[1].periodDescriptor.number - 1].goals.reverse()[0];//should be last(most recent goal of period)
                 let team = endpoint.isHome ? props.game.homeTeam : props.game.awayTeam;
                 let player = roster.current.find(p1 => {return p1.playerId == endpoint.playerId});
+                let period = data.data[1].periodDescriptor.number;
 
                 if(settings[1] && (settings[2] == "Both" ||settings[2] == team.placeName.default ))
                 {
@@ -440,7 +469,7 @@ const getAllData = () => {
 
                 //add endpoint to replayEndpoints
                 let tempArr = replayEndpoints.current;
-                tempArr.push([endpoint, team, player]);
+                tempArr.push([endpoint, team, player, period]);
                 replayEndpoints.current = tempArr;
             }
 
@@ -456,15 +485,17 @@ const getAllData = () => {
                     {
                         let endpoint = replayEndpoints.current[replayEndpoints.current.length - (dif - i)];
                         //add to replay Info
-                        
+                        let period = endpoint[3];
+
                         let goal = endpoint[0];                                                                                                                                             //could be an issue
-                        let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + /*periodFormat(period.periodDescriptor.number)*/+ ")";
+                        let scoreInfo =  props.game.homeTeam.abbrev + " " + goal.homeScore + "- " + props.game.awayTeam.abbrev + " " + goal.awayScore + " (" + goal.timeInPeriod + " • " + periodFormat(period.periodDescriptor.number) + ")";
                         
                         //add to array
-                        tempArr.push([goal.highlightClip, endpoint[1], endpoint[2]], scoreInfo, goal.goalsToDate); // [replayID,team,player, scoreInfo,gtd]
+                        tempArr.push([goal.highlightClip, endpoint[1], endpoint[2], scoreInfo, goal.goalsToDate]); // [replayID,team,player, scoreInfo,gtd]
                         console.log("replay: " +goal.highlightClip + " " + endpoint[1]+ " " + endpoint[2]+ " " + scoreInfo + " " + goal.goalsToDate);
                     
                         //set off replay notifcation
+                        replayNotificationInfo.current = [goal.highlightClip, endpoint[1], endpoint[2], scoreInfo, goal.goalsToDate];
                         setShowReplayNotifcation(true);
                         setTimeout(() => setShowReplayNotifcation(false), 7000);
                     
@@ -1077,9 +1108,25 @@ const getAllData = () => {
                     </div>
                 </div>;
 
-    replayNotifcation = <div className='player-form' style={{display: showReplayNotification ? "flex": "none"}}>
-                                <p>A goal replay is now available</p>
-                        </div>;
+ if(showReplayNotification)
+  {
+    replayNotifcation = <div className={darkMode ? 'replay-modal-dark': 'replay-modal'}>
+        <div className='replay-notification-text'>A goal replay is now available</div>
+        <div className='replay-card-notification' id={"color-"+ replayNotificationInfo.current[1].abbrev} onClick={() => {handleReplayCarcClick(replayNotificationInfo.current[0])}}>
+            <img className='replay-headshot' src={replayNotificationInfo.current[2].headshot} alt="profile"/> 
+                <div className='replay-card-text-container'>
+                    <div className='upper-rc-text'> {replayNotificationInfo.current[2].firstName.default + " " + replayNotificationInfo.current[2].lastName.default + " (" + replayNotificationInfo.current[4] + ")"}</div>
+                    <div className='lower-rc-text'> {replayNotificationInfo.current[3]}</div> {/* games score + time of goal  */}
+                </div>
+            <img className='replay-logo' src={replayNotificationInfo.current[1].logo} alt="profile"/> 
+        </div>
+</div>;
+    }
+    else
+    {
+        replayNotifcation = <div></div>;
+    }
+    
     /*
         <div id='score-board'> 
         <div id='score-board-container'> 
@@ -1198,8 +1245,8 @@ const getAllData = () => {
                                 <img className='replay-logo' src={replay[1].logo} alt="profile"/> 
                             </div>
                             ))}
-                    </div>;
-                </div>
+                    </div>
+                </div>;
     
         }
     else if(infoType == 'PBP')

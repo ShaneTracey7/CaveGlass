@@ -1,6 +1,6 @@
 
 @font-face { font-family: Scoreboard; src: url('scoreboard.ttf'); } 
-.mode-button-img
+
 .main-button{
     width: 100px;
     height: 50px;
@@ -16,7 +16,7 @@
 .App{
     height: 100dvh; /* 100vh */
 }
-
+.help-subtitle
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
     /*margin-left: calc(50% - 150px);
@@ -242,16 +242,15 @@
     border: 2px solid gray;
     background-color: white;
     width: 60%;
-    height: fit-content;
-    min-height: 300px;
-    padding-top: 20px;
+    height: 30dvh;
+    min-height: fit-content;
+    padding-top: 10px;
     padding-bottom: 10px;
-    margin-top: -100px;
     margin-left: auto;
     margin-right: auto;
     z-index: 4;
     position: absolute;
-    top: 30%;
+    top: 20dvh;
     left: 20%;
     border-radius: 15px;
 }
@@ -977,7 +976,7 @@
     width: fit-content;
 }
 .help-subtitle{
-    margin-top: 10px;
+    margin-top: 0;
     margin-bottom: 0;
 }
 .help-content{
@@ -1563,6 +1562,17 @@ background-color: transparent;
 .replay-card:hover{
     opacity: 0.8;
 }
+.replay-card-notification{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 80%;
+    /* border-bottom: 2px solid gray; */
+    margin:0;
+}
+.replay-card-notification:hover{
+    filter: brightness(80%);
+}
 .replay-headshot{
     height: 80%;
     width: auto;
@@ -1602,9 +1612,50 @@ background-color: transparent;
 }
 .upper-rc-text{
     font-size: 3dvh;
+    font-weight: bold;
 }
 .lower-rc-text{
     font-size: 2dvh;
+}
+
+.replay-modal{
+    display: flex;
+    flex-direction: column;
+    border: 10px solid black;
+    background-color: white;
+    width: 60%;
+    height: 20dvh;
+    min-height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 4;
+    position: absolute;
+    top: 10dvh;
+    left: 20%;
+    border-radius: 15px;
+    color: black;
+}
+.replay-modal-dark{
+    display: flex;
+    flex-direction: column;
+    border: 10px solid white;
+    background-color: black;
+    width: 60%;
+    height: 20dvh;
+    min-height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 4;
+    position: absolute;
+    top: 10dvh;
+    left: 20%;
+    border-radius: 15px;
+    color: white;
+}
+.replay-notification-text{
+    font-size: 2dvh;
+    margin: auto;
+    font-weight: bold;
 }
 /* * * * * * * * * * * * * * * Score board * * * * * * * * * */
 
