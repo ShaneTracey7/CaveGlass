@@ -17,6 +17,20 @@ function Main(props)
     useEffect(() => { 
 
       apiGetGames();//getting today's game data from NHL api
+
+      props.socket.on('remote', (data) => {
+        console.log('socket received:', data);
+        if(data[0] == props.mobileKey)
+        {
+          switch(data[1])
+          {
+            case "ok": gameClick(0); break;
+            default: break;
+          }
+        }
+        
+      });
+
     }, []);
 
     useEffect(() => {

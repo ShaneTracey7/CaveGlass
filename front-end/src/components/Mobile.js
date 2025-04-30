@@ -86,6 +86,11 @@ function Mobile(props) {
         setShowInput(false);
 
     }
+    function handleOKClick(){
+
+        props.socket.emit('remote',[enteredKey,'ok']);
+        console.log('ok clicked');
+    }
 
     function handleHomeClick(){
 
@@ -103,7 +108,7 @@ function Mobile(props) {
                  <img className="mobile-remote-arrow" id="up-Arrow" src={upArrow} alt="Up Arrow"/>
                  <div className='remote-middle-container'>
                     <img className="mobile-remote-arrow" id="left-Arrow" src={leftArrow} alt="Left Arrow"/>
-                    <img className="mobile-remote-arrow" src={okButton} alt="OK"/>
+                    <img className="mobile-remote-arrow" onClick={() => {handleOKClick()}} src={okButton} alt="OK"/>
                     <img className="mobile-remote-arrow" id="right-Arrow" src={rightArrow} alt="Right Arrow"/>
                  </div>
                  <img className="mobile-remote-arrow" id="down-Arrow" src={downArrow} alt="Down Arrow"/>

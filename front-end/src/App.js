@@ -8,7 +8,7 @@ import { isMobile } from 'react-device-detect';
 import './styles.css';
 import axios from 'axios';
 import Mobile from './components/Mobile';
-
+import { io } from 'socket.io-client';
 
 function App() {
   
@@ -19,12 +19,24 @@ function App() {
   const [enteredKey, setEnteredKey] = useState(0); 
   const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
   let backendUrl = 'https://caveglass.onrender.com';//'http://localhost:8080';// https://caveglass.onrender.com
+  const socket = io(backendUrl);
 
+
+   //emit socket stuff inside of home/game (can't access useStates from app.js(here))
    useEffect(() => { 
       //get key from backend
       if(!isMobile)
       {
         apiGetKey();
+        
+        /*
+        socket.on('remoteMove', (msg) => {
+          //setMessage(msg);
+        });*/
+      }
+      else //is a Mobile device
+      {
+
       }
       const handleUnload = () => {
         const data = { type: 'removeKey', key: mobileKeyRef.current };
@@ -112,18 +124,18 @@ function App() {
  
     if (isMobile)
       {
-        display = <Mobile />;
+        display = <Mobile socket={socket} />;
       }
       else
       {
       
         if( inGame)
           {
-            display = <Game game={game} setgame={setGame} setingame={setInGame}/>;
+            display = <Game game={game} socket={socket} setgame={setGame} setingame={setInGame}/>;
           }
           else
           {
-            display = <Home mobileKey={mobileKey} setgame={setGame} setingame={setInGame}/>;
+            display = <Home mobileKey={mobileKey} socket={socket} setgame={setGame} setingame={setInGame}/>;
           }
       }
           
