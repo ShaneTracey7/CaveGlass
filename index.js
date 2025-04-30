@@ -5,7 +5,9 @@ const cors = require('cors');
 const { Pool } = require('pg'); // Import the pg module
 //const port = process.env.PORT || 3000;
 //const cookieParser = require('cookie-parser');
-
+//new
+const http = require('http');
+const { Server } = require('socket.io');
 //app.use(cookieParser());
 
 /*
@@ -31,6 +33,37 @@ const allowedOrigins = [
   }));
 
 app.use(express.json());
+
+// === Create HTTP server and attach Socket.IO ===
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      credentials: true,
+    methods: ['GET', 'POST'],
+  },
+});
+
+// === WebSocket connection ===
+io.on('connection', (socket) => {
+  console.log('A client connected:', socket.id);
+
+  socket.emit('welcome', 'Hello from WebSocket!');
+
+  socket.on('ping', () => {
+    socket.emit('pong');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+  });
+});
 
 app.post("/", (req, res) => {
     console.log("req.body.type: " + req.body.type);
