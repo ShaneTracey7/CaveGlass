@@ -91,7 +91,7 @@ function Mobile(props) {
         console.log("is connected : " +props.socket.connected);
 
         props.socket.emit('sendRemote',{
-            code: 1001,//enteredKey,
+            code: 'tester',//enteredKey,
             type: 'ok'
             });
 
