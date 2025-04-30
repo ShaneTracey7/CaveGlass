@@ -73,7 +73,8 @@ io.on('connection', (socket) => {
     {
         console.log(code + " code doesn't match in sendRemote")
     }
-    console.log("userSocketMap: " + userSocketMap)
+    
+    console.log("userSocketMap: " + JSON.stringify(userSocketMap))
     console.log("userSocketMap[code]: " + userSocketMap[code])
 });
 
