@@ -83,7 +83,7 @@ function Main(props)
 
       //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
       let gL = <div className='gameList'> {gameArr.map((game, index) => (
-        <div key={index} id={ index == gameIndex ? "selected-gc ": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
+        <div key={index} id={ index == gameIndex ? "selected-gc": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
           {status[index]}
           <div className='cardContainer'>
             <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
