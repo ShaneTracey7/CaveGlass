@@ -94,6 +94,16 @@ function Game(props) {
         goalCount.current = props.game.homeTeam.score + props.game.awayTeam.score;
         setInfoType('SUM');
         getAllData();
+
+        props.socket.on('receiveRemote', ({type}) => {
+            console.log('socket received:', type);
+            
+              switch(type)
+              {
+                case "home": leaveGame(); console.log("case 'home' "); break;
+                default: console.log("wrong type");break;
+              }
+            });
    // }
 
   }, []);

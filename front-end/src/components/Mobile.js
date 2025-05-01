@@ -101,6 +101,10 @@ function Mobile(props) {
     function handleHomeClick(){
 
         //call api and get web version to set inGame is false
+        props.socket.emit('sendRemote',{
+            code: enteredKey,//enteredKey,
+            type: 'home'
+            });
 
         setInGame(false);
     }
