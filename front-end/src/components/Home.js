@@ -14,7 +14,7 @@ function Main(props)
     const isLoading = useRef(true); //needed to create a loading state
     const gameArrRef = useRef([]); //needed to use remote
   
-    const [gameIndex, setGameIndex] = useState(0); //which game card is highlighted (for remote control via mobile)
+    const gameIndex = useRef(0); //which game card is highlighted (for remote control via mobile)
 
     useEffect(() => {    
       gameArrRef.current = gameArr;    
@@ -31,8 +31,8 @@ function Main(props)
           switch(type)
           {
             case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[0]));props.setgame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
-            case "up": if(gameIndex > 0){setGameIndex(gameIndex - 1)}; console.log("case 'up' "); console.log(gameIndex + " > 0");break;
-            case "down": if(gameIndex < (gameArrRef.current.length - 1)){setGameIndex(gameIndex + 1)}; console.log(gameIndex + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
+            case "up": if(gameIndex.current > 0){gameIndex.current = gameIndex.current - 1}; console.log("case 'up' "); console.log(gameIndex.current + " > 0");break;
+            case "down": if(gameIndex.current < (gameArrRef.current.length - 1)){gameIndex.current = gameIndex.current + 1;}; console.log(gameIndex.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
             default: console.log("wrong type");break;
           }
         });
@@ -83,7 +83,7 @@ function Main(props)
 
       //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
       let gL = <div className='gameList'> {gameArr.map((game, index) => (
-        <div key={index} id={ index == gameIndex ? "selected-gc": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
+        <div key={index} id={ index == gameIndex.current ? "selected-gc": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
           {status[index]}
           <div className='cardContainer'>
             <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
