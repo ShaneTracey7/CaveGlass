@@ -100,7 +100,7 @@ function Game(props) {
       props.isRCRef = props.isRC;    
         
           }, [props.isRC]);
-          
+
   useEffect(() => {
 
     /*if(props.game.gameState == "LIVE")
@@ -118,7 +118,7 @@ function Game(props) {
                 case 'pbp':  toolbarClick('PBP'); console.log("case 'pbp' "); break;
                 case 'box':  toolbarClick('BOX'); console.log("case 'box' "); break;
                 case 'sum':  toolbarClick('SUM'); console.log("case 'sum' "); break;
-                case 'ok': console.log("case 'ok' "); break;
+                case 'ok': handleRemoteOK(); console.log("case 'ok' "); break;
                 case "left": if(toolBarIndexRef.current > 0){ setToolBarIndex((toolBarIndexRef.current - 1));toolBarIndexRef.current = toolBarIndexRef.current - 1;}; console.log("case 'left' "); console.log(toolBarIndexRef.current + " > 0");break;
                 case "right": if(toolBarIndexRef.current < 7){ setToolBarIndex((toolBarIndexRef.current + 1));toolBarIndexRef.current = toolBarIndexRef.current + 1;}; console.log(toolBarIndexRef.current + " < 7");console.log("case 'right' "); break;
                 case "stop": props.setIsRC(false); props.isRCRef = false;console.log("case 'stop' "); break;
@@ -128,6 +128,21 @@ function Game(props) {
    // }
 
   }, []);
+
+  function handleRemoteOK(){
+
+    switch(toolBarIndexRef.current)
+    {
+        case 0 : leaveGame(); break;
+        case 1 : toolbarClick('PBP'); break;
+        case 2 : toolbarClick('BOX'); break;
+        case 3 : toolbarClick('SUM'); break;
+        case 4 : console.log('show replay'); break;
+        case 5 : console.log('switch darkMode'); break;
+        case 6 : console.log('show info'); break;
+        case 7 : console.log('show settings'); break;
+    }
+  }
 
   useEffect(() => {
 
