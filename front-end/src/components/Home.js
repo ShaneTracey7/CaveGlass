@@ -31,8 +31,8 @@ function Main(props)
           switch(type)
           {
             case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[0]));props.setgame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
-            case "up": if(gameIndex > 0){setGameIndex(gameIndex - 1)}; console.log("case 'up' "); break;
-            case "down": if(gameIndex < (gameArrRef.current.length - 1)){setGameIndex(gameIndex + 1)}; console.log("case 'down' "); break;
+            case "up": if(gameIndex > 0){setGameIndex(gameIndex - 1)}; console.log("case 'up' "); console.log(gameIndex + " > 0");break;
+            case "down": if(gameIndex < (gameArrRef.current.length - 1)){setGameIndex(gameIndex + 1)}; console.log(gameIndex + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
             default: console.log("wrong type");break;
           }
         });
