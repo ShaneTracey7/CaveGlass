@@ -96,6 +96,11 @@ function Game(props) {
                 
           }, [toolBarIndex]);
 */
+ useEffect(() => {    
+      props.isRCRef = props.isRC;    
+        
+          }, [props.isRC]);
+          
   useEffect(() => {
 
     /*if(props.game.gameState == "LIVE")
