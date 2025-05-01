@@ -25,11 +25,11 @@ function Main(props)
         g.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     };
-/* moved to app.js
+/*// moved to app.js
     useEffect(() => {    
-      isRCRef.current = isRC;    
+      props.isRCRef = props.isRC;    
         
-          }, [isRC]);
+          }, [props.isRC]);
 */
     useEffect(() => {    
       gameArrRef.current = gameArr;    
@@ -50,10 +50,10 @@ function Main(props)
         
           switch(type)
           {
-            case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[gameIndexRef.current]));props.setgame(gameArrRef.current[gameIndexRef.current]); props.setingame(true); if(!props.isRCRef){props.setIsRC(true);}; console.log("case 'ok' "); break;
-            case "up": if(gameIndexRef.current > 0){handleScrollTo((gameIndexRef.current - 1)); setGameIndex((gameIndexRef.current - 1)); if(!props.isRCRef.current){props.setIsRC(true);};}; console.log("case 'up' "); console.log(gameIndexRef.current + " > 0");break;
-            case "down": if(gameIndexRef.current < (gameArrRef.current.length - 1)){ handleScrollTo((gameIndexRef.current + 1)); setGameIndex((gameIndexRef.current + 1)); if(!props.isRCRef){props.setIsRC(true);};}; console.log(gameIndexRef.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
-            case "stop": props.setIsRC(false); console.log("case 'stop' "); break;
+            case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[gameIndexRef.current]));props.setgame(gameArrRef.current[gameIndexRef.current]); props.setingame(true); if(!props.isRCRef){props.setIsRC(true); props.isRCRef = true;}; console.log("case 'ok' "); break;
+            case "up": if(gameIndexRef.current > 0){handleScrollTo((gameIndexRef.current - 1)); setGameIndex((gameIndexRef.current - 1)); if(!props.isRCRef.current){props.setIsRC(true); props.isRCRef = true;};}; console.log("case 'up' "); console.log(gameIndexRef.current + " > 0");break;
+            case "down": if(gameIndexRef.current < (gameArrRef.current.length - 1)){ handleScrollTo((gameIndexRef.current + 1)); setGameIndex((gameIndexRef.current + 1)); if(!props.isRCRef){props.setIsRC(true); props.isRCRef = true;};}; console.log(gameIndexRef.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
+            case "stop": props.setIsRC(false); props.isRCRef = false;console.log("case 'stop' "); break;
             default: console.log("wrong type");break;
           }
         });
