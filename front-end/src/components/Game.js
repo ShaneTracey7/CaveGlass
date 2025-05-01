@@ -134,9 +134,9 @@ function Game(props) {
     switch(toolBarIndexRef.current)
     {
         case 0 : leaveGame(); break;
-        case 1 : toolbarClick('PBP'); break;
+        case 1 : toolbarClick('SUM'); break;
         case 2 : toolbarClick('BOX'); break;
-        case 3 : toolbarClick('SUM'); break;
+        case 3 : toolbarClick('PBP'); break;
         case 4 : console.log('show replay'); break;
         case 5 : console.log('switch darkMode'); break;
         case 6 : console.log('show info'); break;
