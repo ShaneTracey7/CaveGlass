@@ -102,6 +102,13 @@ function Mobile(props) {
 
         console.log('ok clicked');
     }
+    function handleModeClick(mode){
+
+        props.socket.emit('sendRemote',{
+            code: enteredKey,//enteredKey,
+            type: mode
+            });
+    }
 
     function handleHomeClick(){
 
@@ -150,11 +157,11 @@ function Mobile(props) {
                     <input type="number" maxLength='3' id="remote-input" placeholder="Input..." value={remoteInput} onChange={(e) => setRemoteInput(e.target.value)}></input>
                 
                  </div>
-
-                 <div className='remote-row-container' style={{display: inGame ? "flex": "none"}}>
-                    <img className="mobile-remote-button" src={sumButton} alt="Summary"/>
-                    <img className="mobile-remote-button" src={focButton} alt="Player Focus"/>
-                    <img className="mobile-remote-button" src={pbpButton} alt="Play-by-Play"/>
+                                                                        {/* inGame */}
+                 <div className='remote-row-container' style={{display: true ? "flex": "none"}}> {/* was conditionally displayed*/}
+                    <img className="mobile-remote-button" onClick={() => {handleModeClick('sum')}}src={sumButton} alt="Summary"/>
+                    <img className="mobile-remote-button" onClick={() => {handleModeClick('box')}}src={focButton} alt="Player Focus"/>
+                    <img className="mobile-remote-button" onClick={() => {handleModeClick('pbp')}} src={pbpButton} alt="Play-by-Play"/>
                  </div>
 
                  <div className='remote-row-container' id="remote-bottom-container">

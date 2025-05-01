@@ -101,6 +101,9 @@ function Game(props) {
               switch(type)
               {
                 case "home": leaveGame(); console.log("case 'home' "); break;
+                case 'pbp':  toolbarClick('PBP'); console.log("case 'pbp' "); break;
+                case 'box':  toolbarClick('BOX'); console.log("case 'box' "); break;
+                case 'sum':  toolbarClick('SUM'); console.log("case 'sum' "); break;
                 default: console.log("wrong type");break;
               }
             });
