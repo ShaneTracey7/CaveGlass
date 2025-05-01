@@ -79,6 +79,11 @@ function Mobile(props) {
 
     function handleStopClick(){
 
+        props.socket.emit('sendRemote',{
+            code: enteredKey,//enteredKey,
+            type: 'stop'
+            });
+
         //set everything to default
         setMobileConnection(false);
         setEnteredKey("");
