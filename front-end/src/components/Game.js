@@ -116,6 +116,7 @@ function Game(props) {
                 case 'ok': console.log("case 'ok' "); break;
                 case "left": if(toolBarIndexRef.current > 0){ setToolBarIndex((toolBarIndexRef.current - 1));toolBarIndexRef.current = toolBarIndexRef.current - 1;}; console.log("case 'left' "); console.log(toolBarIndexRef.current + " > 0");break;
                 case "right": if(toolBarIndexRef.current < 7){ setToolBarIndex((toolBarIndexRef.current + 1));toolBarIndexRef.current = toolBarIndexRef.current + 1;}; console.log(toolBarIndexRef.current + " < 7");console.log("case 'right' "); break;
+                case "stop": props.setIsRC(false); props.isRCRef = false;console.log("case 'stop' "); break;
                 default: console.log("wrong type");break;
               } //id={ (index == gameIndexRef.current && isRCRef.current) ? "selected-gc": "normal-gc"}
             });
