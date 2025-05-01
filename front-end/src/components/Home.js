@@ -16,6 +16,15 @@ function Main(props)
     const [gameIndex, setGameIndex] = useState(0); 
     const gameIndexRef = useRef(0); //which game card is highlighted (for remote control via mobile)
 
+    const gameRefs = useRef([]); // Array of refs 
+
+    const handleScrollTo = (index) => {
+      const g = gameRefs.current[index];
+      if (g) {
+        g.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+
     useEffect(() => {    
       gameArrRef.current = gameArr;    
         
@@ -36,8 +45,8 @@ function Main(props)
           switch(type)
           {
             case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[gameIndexRef.current]));props.setgame(gameArrRef.current[gameIndexRef.current]); props.setingame(true); console.log("case 'ok' "); break;
-            case "up": if(gameIndexRef.current > 0){setGameIndex((gameIndexRef.current - 1))}; console.log("case 'up' "); console.log(gameIndexRef.current + " > 0");break;
-            case "down": if(gameIndexRef.current < (gameArrRef.current.length - 1)){setGameIndex((gameIndexRef.current + 1))}; console.log(gameIndexRef.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
+            case "up": if(gameIndexRef.current > 0){handleScrollTo((gameIndexRef.current - 1)); setGameIndex((gameIndexRef.current - 1)); }; console.log("case 'up' "); console.log(gameIndexRef.current + " > 0");break;
+            case "down": if(gameIndexRef.current < (gameArrRef.current.length - 1)){ handleScrollTo((gameIndexRef.current + 1)); setGameIndex((gameIndexRef.current + 1))}; console.log(gameIndexRef.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
             default: console.log("wrong type");break;
           }
         });
@@ -88,7 +97,7 @@ function Main(props)
 
       //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
       let gL = <div className='gameList'> {gameArr.map((game, index) => (
-        <div key={index} id={ index == gameIndexRef.current ? "selected-gc": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
+        <div key={index} id={ index == gameIndexRef.current ? "selected-gc": "normal-gc"} ref={(el) => (gameRefs.current[index] = el)} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
           {status[index]}
           <div className='cardContainer'>
             <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
