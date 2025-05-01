@@ -12,26 +12,12 @@ function Main(props)
     const [gameArr, setGameArr] = useState([]); 
     const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
-    
-    function gameClick(index)
-    {
-      console.log("test" + index)
-      if(gameArr[index].gameState == "FUT" || gameArr[index].gameState == "PRE")
-      {
-        console.log("hasn't started");
+    const gameArrRef = useRef([]); //needed to use remote
 
-        //only availible rn for testing
-       // props.setgame(gameArr[index]);
-       // props.setingame(true);
-      }
-      else // 'LIVE', 'FINAL', 'END' , 'CRIT' or etc
-      {
-        console.log("live or ended");
-        props.setgame(gameArr[index]);
-        props.setingame(true);
-      }
-    }
-    
+    useEffect(() => {    
+      gameArrRef.current = gameArr;    
+        
+          }, [gameArr]);
    //This function is called when component is create (called only once)
     useEffect(() => { 
 
@@ -42,7 +28,7 @@ function Main(props)
         
           switch(type)
           {
-            case "ok": gameClick(1); console.log("case 'ok' "); break;
+            case "ok": props.setingame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
             default: console.log("wrong type");break;
           }
         });
@@ -156,6 +142,25 @@ function Main(props)
     //setShowGames((gameArr.length > 0));
     console.log("Delayed for 1 seconds.");
   }, 1000);*/
+  }
+
+  function gameClick(index)
+  {
+    console.log("test" + index)
+    if(gameArr[index].gameState == "FUT" || gameArr[index].gameState == "PRE")
+    {
+      console.log("hasn't started");
+
+      //only availible rn for testing
+     // props.setgame(gameArr[index]);
+     // props.setingame(true);
+    }
+    else // 'LIVE', 'FINAL', 'END' , 'CRIT' or etc
+    {
+      console.log("live or ended");
+      props.setgame(gameArr[index]);
+      props.setingame(true);
+    }
   }
 
     //formats UTC date into {hh:mm {AM/PM}}
