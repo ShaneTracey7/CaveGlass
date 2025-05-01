@@ -25,12 +25,12 @@ function Main(props)
         g.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     };
-/*// moved to app.js
+// moved to app.js
     useEffect(() => {    
       props.isRCRef = props.isRC;    
         
           }, [props.isRC]);
-*/
+
     useEffect(() => {    
       gameArrRef.current = gameArr;    
         
