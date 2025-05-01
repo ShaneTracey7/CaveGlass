@@ -28,7 +28,7 @@ function Main(props)
         
           switch(type)
           {
-            case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[0]));props.setingame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
+            case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[0]));props.setgame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
             default: console.log("wrong type");break;
           }
         });
