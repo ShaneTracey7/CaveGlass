@@ -13,13 +13,18 @@ function Main(props)
     const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
     const gameArrRef = useRef([]); //needed to use remote
-  
-    const gameIndex = useRef(0); //which game card is highlighted (for remote control via mobile)
+    const [gameIndex, setGameIndex] = useState([]); 
+    const gameIndexRef = useRef(0); //which game card is highlighted (for remote control via mobile)
 
     useEffect(() => {    
       gameArrRef.current = gameArr;    
         
           }, [gameArr]);
+    
+    useEffect(() => {    
+            gameIndexRef.current = gameIndex;    
+              
+        }, [gameIndex]);
    //This function is called when component is create (called only once)
     useEffect(() => { 
 
@@ -31,8 +36,8 @@ function Main(props)
           switch(type)
           {
             case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[0]));props.setgame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
-            case "up": if(gameIndex.current > 0){gameIndex.current = gameIndex.current - 1}; console.log("case 'up' "); console.log(gameIndex.current + " > 0");break;
-            case "down": if(gameIndex.current < (gameArrRef.current.length - 1)){gameIndex.current = gameIndex.current + 1;}; console.log(gameIndex.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
+            case "up": if(gameIndexRef.current > 0){setGameIndex(gameIndexRef.current + 1)}; console.log("case 'up' "); console.log(gameIndexRef.current + " > 0");break;
+            case "down": if(gameIndexRef.current < (gameArrRef.current.length - 1)){setGameIndex(gameIndexRef.current + 1)}; console.log(gameIndexRef.current + " < " + (gameArrRef.current.length - 1));console.log("case 'down' "); break;
             default: console.log("wrong type");break;
           }
         });
@@ -83,7 +88,7 @@ function Main(props)
 
       //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
       let gL = <div className='gameList'> {gameArr.map((game, index) => (
-        <div key={index} id={ index == gameIndex.current ? "selected-gc": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
+        <div key={index} id={ index == gameIndexRef.current ? "selected-gc": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
           {status[index]}
           <div className='cardContainer'>
             <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
@@ -112,7 +117,7 @@ function Main(props)
     }
   }
    console.log('in useeffect'); 
-  }, [gameArr, gameIndex.current]);
+  }, [gameArr, gameIndex]);
 
   //data will be the string we send from our server
   const apiGetGames = () => {
