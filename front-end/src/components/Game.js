@@ -87,6 +87,14 @@ function Game(props) {
   const setDelayArrCount = useRef(0); //to keep track where in array allDataArr when setting ui
   const allDataArr = useRef([]); //array of nhl api instances needed for when delay is in use
 
+  const toolBarIndexRef = useRef(1) //keeps track of where remote is on toolbar  default is summary
+  const [toolBarIndex, setToolBarIndex] = useState(1);
+
+  useEffect(() => {    
+        toolBarIndexRef.current = toolBarIndex;    
+                
+          }, [toolBarIndex]);
+
   useEffect(() => {
 
     /*if(props.game.gameState == "LIVE")
@@ -104,8 +112,11 @@ function Game(props) {
                 case 'pbp':  toolbarClick('PBP'); console.log("case 'pbp' "); break;
                 case 'box':  toolbarClick('BOX'); console.log("case 'box' "); break;
                 case 'sum':  toolbarClick('SUM'); console.log("case 'sum' "); break;
+                case 'ok': console.log("case 'ok' "); break;
+                case "left": if(toolBarIndexRef.current > 0){ setToolBarIndex((toolBarIndexRef.current - 1)); }; console.log("case 'left' "); console.log(toolBarIndexRef.current + " > 0");break;
+                case "right": if(toolBarIndexRef.current < 8){ setToolBarIndex((toolBarIndexRef.current + 1));}; console.log(toolBarIndexRef.current + " < 8");console.log("case 'right' "); break;
                 default: console.log("wrong type");break;
-              }
+              } //id={ (index == gameIndexRef.current && isRCRef.current) ? "selected-gc": "normal-gc"}
             });
    // }
 
@@ -1170,18 +1181,18 @@ const getAllData = () => {
     if(showToolbar)
     {
         toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
-                <img id="left-toolbar-buttons" class="mode-button-img" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
-                <img /*className="cg-logo-small" */id="left-toolbar-buttons" class="cg-logo-toolbar"/*onClick={testScore}*/ src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
+                <img className="left-toolbar-buttons" id={ (0 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} class="mode-button-img" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
+                <img /*className="cg-logo-small" */id="left-toolbar-icon" class="cg-logo-toolbar"/*onClick={testScore}*/ src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
-                    <div id="SUM" className='toolbar-button' onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={summaryLogo} alt="summary"/></div>
-                    <div id="BOX" className='toolbar-button' onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={playerFocusLogo} alt="player focus"/></div>
-                    <div id="PBP" className='toolbar-button'/*className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'}*/ onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='mode-button-img' src={playByPlayLogo} alt="play-by-play"/></div>
-                    <img class="mode-button-img" onClick={() => {toolbarClick("REP")}} src={replayIcon} alt="Replay"/>
+                    <div /*id="SUM"*/ id={ (1 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} className='toolbar-button' onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={summaryLogo} alt="summary"/></div>
+                    <div /*id="BOX"*/ id={ (2 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} className='toolbar-button' onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={playerFocusLogo} alt="player focus"/></div>
+                    <div /*id="PBP"*/ id={ (3 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} className='toolbar-button'/*className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'}*/ onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='mode-button-img' src={playByPlayLogo} alt="play-by-play"/></div>
+                    <img className="middle-toolbar-buttons" id={ (4 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} onClick={() => {toolbarClick("REP")}} src={replayIcon} alt="Replay"/>
                     
                 </div> 
-                    <img id="right-toolbar-buttons" class="mode-button-img" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
-                    <img id="right-toolbar-buttons" class="mode-button-img" onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
-                    <img id="right-toolbar-buttons" class="mode-button-img" onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
+                    <img className="right-toolbar-buttons" id={ (5 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"}  onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
+                    <img className="right-toolbar-buttons" id={ (6 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"}  onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
+                    <img className="right-toolbar-buttons"id={ (7 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"}  onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
                
                 
                 <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>

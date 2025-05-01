@@ -19,6 +19,15 @@ function App() {
   const mobileKeyRef = useRef(0);
   const [enteredKey, setEnteredKey] = useState(0); 
   const [mobileConnection, setMobileConnection] = useState(false); //maybe should be ref
+
+  const [isRC, setIsRC] = useState(false); 
+  const isRCRef = useRef(false); 
+
+   useEffect(() => {    
+        isRCRef.current = isRC;    
+          
+            }, [isRC]);
+
   let backendUrl = 'https://caveglass.onrender.com';//'http://localhost:8080';// https://caveglass.onrender.com
   
 
@@ -150,11 +159,11 @@ function App() {
       
         if( inGame)
           {
-            display = <Game game={game} socket={socket} setgame={setGame} setingame={setInGame}/>;
+            display = <Game setIsRC={setIsRC} isRC={isRC} isRCRef={isRCRef.current} game={game} socket={socket} setgame={setGame} setingame={setInGame}/>;
           }
           else
           {
-            display = <Home mobileKey={mobileKey} socket={socket} setgame={setGame} setingame={setInGame}/>;
+            display = <Home setIsRC={setIsRC} isRC={isRC} isRCRef={isRCRef.current} mobileKey={mobileKey} socket={socket} setgame={setGame} setingame={setInGame}/>;
           }
       }
           
