@@ -138,6 +138,22 @@ function Mobile(props) {
             });
 
     }
+    function handleLeftClick(){
+
+        //call api and get web version to set inGame is false
+        props.socket.emit('sendRemote',{
+            code: enteredKey,//enteredKey,
+            type: 'left'
+            });
+    }
+    function handleRightClick(){
+
+        //call api and get web version to set inGame is false
+        props.socket.emit('sendRemote',{
+            code: enteredKey,//enteredKey,
+            type: 'right'
+            });
+    }
 
      useEffect(() => {
         let d ="";
@@ -147,9 +163,9 @@ function Mobile(props) {
             d = <div className='mobile-remote'>
                  <img className="mobile-remote-arrow" onClick={() => {handleUpClick()}} id="up-Arrow" src={upArrow} alt="Up Arrow"/>
                  <div className='remote-middle-container'>
-                    <img className="mobile-remote-arrow" id="left-Arrow" src={leftArrow} alt="Left Arrow"/>
+                    <img className="mobile-remote-arrow" onClick={() => {handleLeftClick()}} id="left-Arrow" src={leftArrow} alt="Left Arrow"/>
                     <img className="mobile-remote-arrow" onClick={() => {handleOKClick()}} src={okButton} alt="OK"/>
-                    <img className="mobile-remote-arrow" id="right-Arrow" src={rightArrow} alt="Right Arrow"/>
+                    <img className="mobile-remote-arrow" onClick={() => {handleRightClick()}} id="right-Arrow" src={rightArrow} alt="Right Arrow"/>
                  </div>
                  <img className="mobile-remote-arrow" onClick={() => {handleDownClick()}}  id="down-Arrow" src={downArrow} alt="Down Arrow"/>
 
