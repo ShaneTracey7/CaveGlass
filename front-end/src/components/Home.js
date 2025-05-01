@@ -13,6 +13,8 @@ function Main(props)
     const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
     const gameArrRef = useRef([]); //needed to use remote
+  
+    const [gameIndex, setGameIndex] = useState(0); //which game card is highlighted (for remote control via mobile)
 
     useEffect(() => {    
       gameArrRef.current = gameArr;    
@@ -29,6 +31,8 @@ function Main(props)
           switch(type)
           {
             case "ok": console.log("gameArrRef.current[0]: " + JSON.stringify(gameArrRef.current[0]));props.setgame(gameArrRef.current[0]); props.setingame(true); console.log("case 'ok' "); break;
+            case "up": if(gameIndex > 0){setGameIndex(gameIndex - 1)}; console.log("case 'up' "); break;
+            case "down": if(gameIndex < (gameArrRef.current.length - 1)){setGameIndex(gameIndex + 1)}; console.log("case 'down' "); break;
             default: console.log("wrong type");break;
           }
         });
@@ -76,9 +80,10 @@ function Main(props)
           status.push(fut)
         }
       });
+
       //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
       let gL = <div className='gameList'> {gameArr.map((game, index) => (
-        <div className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
+        <div key={index} id={ index == gameIndex ? "selected-gc ": "normal-gc"} className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
           {status[index]}
           <div className='cardContainer'>
             <img className="logo" src={game.homeTeam.logo} alt={game.homeTeam.abbrev}/> 
@@ -107,7 +112,7 @@ function Main(props)
     }
   }
    console.log('in useeffect'); 
-  }, [gameArr]);
+  }, [gameArr, gameIndex]);
 
   //data will be the string we send from our server
   const apiGetGames = () => {

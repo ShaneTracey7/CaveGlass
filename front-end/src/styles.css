@@ -16,7 +16,7 @@
 .App{
     height: 100dvh; /* 100vh */
 }
-.help-subtitle
+.gameList
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 #main-home-logo{
     /*margin-left: calc(50% - 150px);
@@ -188,6 +188,10 @@
     margin: auto;
     box-shadow: 5px 5px 10px 1px;
     
+}
+#selected-gc{
+    outline: 10px solid rgb(67, 67, 241);
+    opacity: 80%;
 }
 .cardContainer{
     margin: auto;
