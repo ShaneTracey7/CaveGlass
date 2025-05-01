@@ -90,11 +90,12 @@ function Game(props) {
   const toolBarIndexRef = useRef(1) //keeps track of where remote is on toolbar  default is summary
   const [toolBarIndex, setToolBarIndex] = useState(1);
 
+  /*
   useEffect(() => {    
         toolBarIndexRef.current = toolBarIndex;    
                 
           }, [toolBarIndex]);
-
+*/
   useEffect(() => {
 
     /*if(props.game.gameState == "LIVE")
@@ -113,8 +114,8 @@ function Game(props) {
                 case 'box':  toolbarClick('BOX'); console.log("case 'box' "); break;
                 case 'sum':  toolbarClick('SUM'); console.log("case 'sum' "); break;
                 case 'ok': console.log("case 'ok' "); break;
-                case "left": if(toolBarIndexRef.current > 0){ setToolBarIndex((toolBarIndexRef.current - 1)); }; console.log("case 'left' "); console.log(toolBarIndexRef.current + " > 0");break;
-                case "right": if(toolBarIndexRef.current < 8){ setToolBarIndex((toolBarIndexRef.current + 1));}; console.log(toolBarIndexRef.current + " < 8");console.log("case 'right' "); break;
+                case "left": if(toolBarIndexRef.current > 0){ setToolBarIndex((toolBarIndexRef.current - 1));toolBarIndexRef.current = toolBarIndexRef.current - 1;}; console.log("case 'left' "); console.log(toolBarIndexRef.current + " > 0");break;
+                case "right": if(toolBarIndexRef.current < 7){ setToolBarIndex((toolBarIndexRef.current + 1));toolBarIndexRef.current = toolBarIndexRef.current + 1;}; console.log(toolBarIndexRef.current + " < 7");console.log("case 'right' "); break;
                 default: console.log("wrong type");break;
               } //id={ (index == gameIndexRef.current && isRCRef.current) ? "selected-gc": "normal-gc"}
             });
