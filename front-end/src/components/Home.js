@@ -112,7 +112,7 @@ function Main(props)
     }
   }
    console.log('in useeffect'); 
-  }, [gameArr, gameIndex]);
+  }, [gameArr, gameIndex.current]);
 
   //data will be the string we send from our server
   const apiGetGames = () => {
