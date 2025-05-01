@@ -13,7 +13,7 @@ function Main(props)
     const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
     const gameArrRef = useRef([]); //needed to use remote
-    const [gameIndex, setGameIndex] = useState([]); 
+    const [gameIndex, setGameIndex] = useState(0); 
     const gameIndexRef = useRef(0); //which game card is highlighted (for remote control via mobile)
 
     useEffect(() => {    
