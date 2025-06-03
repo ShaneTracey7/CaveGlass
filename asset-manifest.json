@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/CaveGlass/static/css/main.0a424df6.css",
-    "main.js": "/CaveGlass/static/js/main.5c686a7a.js",
+    "main.js": "/CaveGlass/static/js/main.12b4b9ad.js",
     "static/media/cg-logo-1.png": "/CaveGlass/static/media/cg-logo-1.1e05864be7a942010f01.png",
     "static/media/goal-light.png": "/CaveGlass/static/media/goal-light.8d6b1c3335d4ddd4e791.png",
     "static/media/player-focus.png": "/CaveGlass/static/media/player-focus.9c5c06622d455b1f1708.png",
@@ -14,21 +14,17 @@
     "static/media/whistle.png": "/CaveGlass/static/media/whistle.d555dd32e2fb5ec6d047.png",
     "static/media/scoreboard.ttf": "/CaveGlass/static/media/scoreboard.da0f8a9407b64807f084.ttf",
     "static/media/help.png": "/CaveGlass/static/media/help.6808157e7fa1cb873052.png",
-    "static/media/remote-sum.png": "/CaveGlass/static/media/remote-sum.042b8c73aad21d92d32e.png",
     "static/media/back-arrow.png": "/CaveGlass/static/media/back-arrow.96583ff412e8762ef6bb.png",
     "static/media/cog.svg": "/CaveGlass/static/media/cog.a609073d11f572e10e6fdbe23b69e31c.svg",
     "index.html": "/CaveGlass/index.html",
     "static/media/replay.svg": "/CaveGlass/static/media/replay.cd459519ef735c9c79cba46c5b93ea51.svg",
-    "static/media/left-arrow.svg": "/CaveGlass/static/media/left-arrow.505eb3549a2dd347bb416fd63c927b22.svg",
     "static/media/up-arrow.svg": "/CaveGlass/static/media/up-arrow.0092877aaaf18764c3a09fb68b5d62ea.svg",
     "static/media/down-arrow.svg": "/CaveGlass/static/media/down-arrow.e54a33207a41b70bdc8f5c70dadcbe20.svg",
-    "static/media/right-arrow.svg": "/CaveGlass/static/media/right-arrow.ef7037e25cb19fad09529277b54d17b3.svg",
-    "static/media/home.svg": "/CaveGlass/static/media/home.46250771542041fb7e6f38a7cfb8608d.svg",
     "main.0a424df6.css.map": "/CaveGlass/static/css/main.0a424df6.css.map",
-    "main.5c686a7a.js.map": "/CaveGlass/static/js/main.5c686a7a.js.map"
+    "main.12b4b9ad.js.map": "/CaveGlass/static/js/main.12b4b9ad.js.map"
   },
   "entrypoints": [
     "static/css/main.0a424df6.css",
-    "static/js/main.5c686a7a.js"
+    "static/js/main.12b4b9ad.js"
   ]
 }
