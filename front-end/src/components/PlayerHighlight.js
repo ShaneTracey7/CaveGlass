@@ -217,6 +217,7 @@ function PlayerHighlight(props)
                 //case 'Save %': return Math.round(apiPlayer.savePctg * 1000)/1000; //not always there in api (backup doesn't have it) (shows up a NaN)
                 //default: return statName.toLowerCase();
                 case 'Save': return isNaN(apiPlayer.savePctg) ? 0 + '%' : (apiPlayer.savePctg * 100).toFixed(1) + '%';
+                default: return statName; //this case should not happen
             }
         }
         else
@@ -232,7 +233,7 @@ function PlayerHighlight(props)
                 case 'Shots': return apiPlayer.sog;
                 case 'Blocks': return apiPlayer.blockedShots;
                 case 'Face-off': return (apiPlayer.faceoffWinningPctg * 100).toFixed(0) + '%';
-                //default: return statName.toLowerCase();
+                default: return statName; //this case should not happen
             }
         }
     }  
@@ -246,8 +247,9 @@ function PlayerHighlight(props)
                 case 'Hits': return endpoint[5].homeValue;
                 case 'Penalty minutes': return endpoint[4].homeValue;
                 case 'Blocks': return endpoint[6].homeValue;
-                case 'Goals': return props.scores[0];
-                //goals will have a different endpoint
+                case 'Goals': return props.scores[0]; //goals will have a different endpoint
+                default: return statName; //this case should not happen
+                
             }
         }
         else //away team
@@ -258,8 +260,8 @@ function PlayerHighlight(props)
                 case 'Hits': return endpoint[5].awayValue;
                 case 'Penalty minutes': return endpoint[4].awayValue;
                 case 'Blocks': return endpoint[6].awayValue;
-                case 'Goals': return props.scores[1];
-                //goals will have a different endpoint
+                case 'Goals': return props.scores[1]; //goals will have a different endpoint
+                default: return statName; //this case should not happen
             }
         }
     }  

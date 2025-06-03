@@ -1,15 +1,7 @@
 import '../styles.css';
-import React, {useState,useEffect} from 'react';
-
-
+import React from 'react';
 
 function ProgressBar(props) {
-
-
-    function setLineState()
-    {
-       
-    }
 
     let colorTrue;
     let colorFalse;

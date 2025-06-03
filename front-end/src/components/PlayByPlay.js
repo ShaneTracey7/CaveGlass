@@ -59,7 +59,7 @@ function PlayByPlay(props) {
                     let assistStr;
                     let score1;
                     let score2;
-                    let scTeam;
+                    //let scTeam;
                     
                     if(play.details.eventOwnerTeamId == props.game.homeTeam.id)
                     {
@@ -69,7 +69,7 @@ function PlayByPlay(props) {
                         pic2 = props.game.awayTeam.abbrev
                         pic2_url = props.game.awayTeam.darkLogo;
                         score2 = play.details.awayScore;
-                        scTeam = props.game.homeTeam;
+                        //scTeam = props.game.homeTeam;
                     }
                     else
                     {
@@ -79,7 +79,7 @@ function PlayByPlay(props) {
                         pic2 = props.game.homeTeam.abbrev;
                         pic2_url = props.game.homeTeam.darkLogo;
                         score2 = play.details.homeScore;
-                        scTeam = props.game.awayTeam;
+                        //scTeam = props.game.awayTeam;
                     }
                     if (play.details.hasOwnProperty("assist1PlayerId"))
                     {
@@ -270,10 +270,10 @@ function PlayByPlay(props) {
                             }
                             break;
                         case 'delayed-penalty':
-                            {
-                                description =  "Delayed Penalty";
-                            }
+                            
+                            description =  "Delayed Penalty";
                             break;
+                            
                         case 'blocked-shot':
                             reason = (play.details.hasOwnProperty("reason") ? String(play.details.reason).replaceAll('-', ' ') : "");
                             if (play.details.hasOwnProperty("shootingPlayerId"))

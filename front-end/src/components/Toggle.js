@@ -1,8 +1,6 @@
 import '../styles.css';
 import React, {useState,useEffect} from 'react';
 
-
-
 function Toggle(props) {
 
 
@@ -80,7 +78,7 @@ function Toggle(props) {
     let textBefore;
     let textAfterTrue;
     let textAfterFalse;
-    let display;
+ 
     let lineInput;
     let mainToggle;
 
@@ -172,8 +170,6 @@ function Toggle(props) {
         }
     }
     
-    
-    /*  */
      return (
         <div class={props.size == "small" ? "toggle-switch-container" : "toggle-switch-container-big"}>
             <p class="toggle-left-label">{textBefore}</p>

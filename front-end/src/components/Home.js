@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import '../styles.css';
 import axios from 'axios';
-import qrCode from '../pics/cg-qr-code.png';
 
 function Main(props)
 {

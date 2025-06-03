@@ -87,18 +87,6 @@ function Game(props) {
   const setDelayArrCount = useRef(0); //to keep track where in array allDataArr when setting ui
   const allDataArr = useRef([]); //array of nhl api instances needed for when delay is in use
 
-
-  //probs gonna be gone
-  const toolBarIndexRef = useRef(1) //keeps track of where remote is on toolbar  default is summary
-  const [toolBarIndex, setToolBarIndex] = useState(1);
-
-  /*
-  useEffect(() => {    
-        toolBarIndexRef.current = toolBarIndex;    
-                
-          }, [toolBarIndex]);
-*/
-
   useEffect(() => {
 
     /*if(props.game.gameState == "LIVE")
@@ -874,7 +862,7 @@ const getAllData = () => {
         }
      }
     //formats UTC date into {mm/dd/yyyy} (not currently in use)
-    function formatDate(date)
+   /*function formatDate(date)
     {
       var d = new Date(date);
       var mon = d.getMonth() + 1;
@@ -882,7 +870,7 @@ const getAllData = () => {
       var year = d.getFullYear();
 
       return mon + '/' + day + '/' + year;
-    }
+    }*/
 
     function toolbarClick(type)
     {
@@ -991,11 +979,6 @@ const getAllData = () => {
         setShowOptions(false);
         
     }
-    
-    function testScore()
-    {
-        setScore(true);
-    }
 
     function leaveGame()
     {
@@ -1034,7 +1017,7 @@ const getAllData = () => {
  
     display = <div className='goal-replay-container'>
                   <img id='goal-replay-back-button' onClick={() => {setShowReplay(false)}} src={require("../pics/back-arrow.png")} alt='Back'/>
-                  <iframe className='goal-replay-iframe' src={replayEndpoint + replayID.current} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  <iframe title="goal-replay" className='goal-replay-iframe' src={replayEndpoint + replayID.current} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                 </div> 
     
     //https://www.nhl.com/video/bos-buf-lohrei-scores-goal-against-ukko-pekka-luukkonen-6367913132112
@@ -1170,18 +1153,18 @@ const getAllData = () => {
     if(showToolbar)
     {
         toolbar = <div id="toolbar" style={{backgroundImage: "url(" + require('../pics/boards.png') + ")"}}>
-                <img className="left-toolbar-buttons" id={ (0 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} class="mode-button-img" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
+                <img className="left-toolbar-buttons" id="normal-gc" class="mode-button-img" onClick={() => leaveGame()} src={ require("../pics/back-arrow.png")} alt="Back"/>
                 <img /*className="cg-logo-small" */id="left-toolbar-icon" class="cg-logo-toolbar"/*onClick={testScore}*/ src={ darkMode ? (require("../pics/cg-logo-small-dark.png")) : (require("../pics/cg-logo-small.png"))} alt="CaveGlass"/>
                 <div id='toolbar-button-group' >
-                    <div /*id="SUM"*/ id={ (1 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} className='toolbar-button' onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={summaryLogo} alt="summary"/></div>
-                    <div /*id="BOX"*/ id={ (2 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} className='toolbar-button' onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={playerFocusLogo} alt="player focus"/></div>
-                    <div /*id="PBP"*/ id={ (3 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} className='toolbar-button'/*className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'}*/ onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='mode-button-img' src={playByPlayLogo} alt="play-by-play"/></div>
-                    <img className="middle-toolbar-buttons" id={ (4 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"} onClick={() => {toolbarClick("REP")}} src={replayIcon} alt="Replay"/>
+                    <div /*id="SUM"*/ id="normal-gc" className='toolbar-button' onClick={() => {toolbarClick("SUM")}} style={infoType == "SUM" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "SUM" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={summaryLogo} alt="summary"/></div>
+                    <div /*id="BOX"*/ id="normal-gc" className='toolbar-button' onClick={() => {toolbarClick("BOX")}} style={infoType == "BOX" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} } ><img style={infoType == "BOX" ? {display: 'none'}: {display: 'flex'} } className='view-button-img' src={playerFocusLogo} alt="player focus"/></div>
+                    <div /*id="PBP"*/ id="normal-gc" className='toolbar-button'/*className={infoType == "PBP" ? 'toolbar-button-selected': 'toolbar-button'}*/ onClick={() => {toolbarClick("PBP")}} style={infoType == "PBP" ? {backgroundImage: "url(" + require('../pics/boards-open.png') + ")"}: {backgroundImage: "url(" + require('../pics/boards.png') + ")"} }><img style={infoType == "PBP" ? {display: 'none'}: {display: 'flex'} }className='mode-button-img' src={playByPlayLogo} alt="play-by-play"/></div>
+                    <img className="middle-toolbar-buttons" id="normal-gc" onClick={() => {toolbarClick("REP")}} src={replayIcon} alt="Replay"/>
                     
                 </div> 
-                    <img className="right-toolbar-buttons" id={ (5 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"}  onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
-                    <img className="right-toolbar-buttons" id={ (6 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"}  onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
-                    <img className="right-toolbar-buttons"id={ (7 == toolBarIndexRef.current && props.isRCRef) ? "selected-gc": "normal-gc"}  onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
+                    <img className="right-toolbar-buttons" id="normal-gc" onClick={() => {setDarkMode(!darkMode)}} src={darkMode ? lightModeLogo : darkModeLogo} alt={darkMode ? 'Light Mode' : 'Dark Mode'}/>
+                    <img className="right-toolbar-buttons" id="normal-gc" onClick={() => {handleModalShow('help')}} src={help}  disabled={(showHelp) ?  true : false} alt='help'/>
+                    <img className="right-toolbar-buttons"id="normal-gc" onClick={() => {handleModalShow('settings')}} src={cog}  disabled={(showSettings) ?  true : false} alt='settings'/>
                
                 
                 <img id="hide-arrow" onClick={() => {setShowToolbar(false)}} src={upArrow} alt="hide"/>
