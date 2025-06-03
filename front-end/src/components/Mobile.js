@@ -1,27 +1,17 @@
 import '../mobileStyles.css';
-import React, {useState,useEffect,useRef} from 'react';
-import backArrow from '../pics/back-arrow.png';
-import axios from 'axios';
-import upArrow from '../pics/up-arrow.svg';
-import downArrow from '../pics/down-arrow.svg';
-import leftArrow from '../pics/left-arrow.svg';
-import rightArrow from '../pics/right-arrow.svg';
-import sumButton from '../pics/remote-sum.png';
-import focButton from '../pics/remote-foc.png';
-import pbpButton from '../pics/remote-pbp.png';
-import okButton from '../pics/remote-ok.png';
-import homeButton from '../pics/home.svg';
-import stopButton from '../pics/stop-sign.png';
-
 
 function Mobile(props) { 
     
     return (
-        <div className='mobile'>
-            <div className='mobile-container'>
-                <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
-                <div>Please visit on us on non-mobile device</div>  
-            </div>
+        <div className='mobile' style={{border:"2px solid green"}}>
+            
+            <img id="main-home-logo-mobile"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
+            <div class="mobile-message" >To experience the full funtionality of CaveGlass, please visit us on a laptop or desktop!</div>  
+            <div id="home-footer" style={{marginTop:"auto", marginBottom:"0px"}}>
+                <hr class="footer-line"/>
+                    <img id="footer-main-logo-mobile" src={ require("../pics/cg-logo-small.png")} alt="CaveGlass"/>
+                    <p id="footer-tag"> created by Shane T.</p>
+                </div>
         </div>
   );
 }

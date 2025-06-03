@@ -1116,6 +1116,7 @@ const getAllData = () => {
                             <li>You can change the background of the screen to black &#40; preferred mode  when you click the Dark Mode button </li>
                             <li>CaveGlass is meant to be used in full screen with the browser's toolbar hidden, you can adjust this in your browser's view settings</li>
                             <li>You can set the score reaction &#40; view that pops up when there is a goal &#41; to only fire based off the team you are rooting for in settings</li>
+                            <li>For an optimzied experience, we reccomend you use a remote mouse app on your mobile device for selection and changing views</li>
                         </ul>
                     </div>
                 </div>;

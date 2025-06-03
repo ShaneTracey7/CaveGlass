@@ -1,152 +1,34 @@
 /* stylesheet for mobile views */
+#main-home-logo-mobile{
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5dvh;
+    width: 60vw;
+    height: auto;
+}
 
 .mobile{
     height: 100dvh;
     width: 100vw;
     display: flex;
-}
-#mobile-error-message{
-    color: rgb(195, 11, 11);
-    font-size: 3dvh;
-    font-weight: bold;
-    margin-bottom: 1dvh;
-    margin-left: auto;
-    margin-right:auto
-}
-.mobile-container{
-    width: fit-content;
-    height: fit-content;
-    display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    margin-left:auto;
-    margin-right:auto;
-}
 
-.mobile-container > img{
+}
+.mobile-message{
+    width: 80vw;
     height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    width: 60%;
-    font-size: 5dvh;
-    margin-top: 5dvh;
-    margin-bottom: 5dvh;
+    margin:auto;
+    color: gray
 }
-#mobile-key-input{
-    width: 50%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1dvh;
-    border: 4px solid rgba(221, 233, 244);
-    text-align: center;
-    font-size: 5dvh;
-}
-
-#mobile-enter-button{
-    width: 30%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    color: white;
-    background-color: darkgreen;
-    border-radius: 15px;
-    border: 3px solid black;
-    color: white;
-    font-size: 4dvh;
-    padding-top: 1dvh;
-    padding-bottom: 1dvh;
-    margin-top: 2dvh;
-    margin-bottom: 5dvh;
-}
-#mobile-enter-button:hover{
-    background-color: rgba(0, 100, 0, 0.5);
-}
-/**** * * * * * * * * * * * *  Remote View   * * * * * * * * * * * * ****/
-
-.mobile-remote{
-    width: 80%;
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-}
-.remote-middle-container{
-    display: flex;
-    flex-direction: row;
-    height: fit-content;
-    width: 100%;
-    margin-top: 3dvh;
-    margin-bottom: 3dvh;
-    gap: 5%;
-}
-
-.remote-row-container{
-    display: flex;
-    flex-direction: row;
-    height: fit-content;
-    width: 100%;
-    margin-top: 1.5dvh;
-    margin-bottom: 1.5dvh;
-    gap: 5%;
-}
-
-#remote-bottom-container{
-    margin-top: auto;
-    margin-bottom: 0;
-}
-.mobile-remote-arrow{
-    width: 30%;
-    height: auto;
+#footer-main-logo-mobile{
+    width: auto;
+    height: 8dvh;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
 }
-
-.mobile-remote-arrow:hover{
-    background-color: rgba(0, 0, 0, 0.3);
-}
-#remote-enter-button{
-    width: 30%;
-    height: auto;
-    font-size: 24vw;
-    margin-left: auto;
-    margin-right: auto;
-    color: white;
-    background-color: gray;
-    border-radius: 50%;
-    border: 3px solid black;
-    font-size: 4dvh;
-    padding: 5%;
-}
-
-.mobile-remote-button{
-    width: 30%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-}
-.mobile-remote-button:hover{
-    background-color: rgba(0, 0, 0, 0.3);
-}
-.mobile-remote-button-bottom{
-    width: 25%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-}
-.mobile-remote-button-bottom:hover{
-    background-color: rgba(0, 0, 0, 0.3);
-}
-#remote-input{
-    width: 35%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    border: 4px solid gray;
-    text-align: center;
-    font-size: 5dvh;
-}
-
 
 /**** * * * * * * * * * * * *  Mobile Scorebaord View   * * * * * * * * * * * * ****/
 

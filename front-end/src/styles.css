@@ -20,12 +20,8 @@
     outline: 10px solid rgb(67, 67, 241);
     opacity: 80%;
 }
-.mode-button-img
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
-#main-home-logo{
-    /*margin-left: calc(50% - 150px);
-    margin-right: auto;*/
-}
+
 .home-mobile-info{
     display:flex;
     flex-direction: column;
