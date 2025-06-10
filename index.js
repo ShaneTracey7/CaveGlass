@@ -248,6 +248,6 @@ app.get('/', (req, res) => {
 
   //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
   //was app.listen
-server.listen(8080, () => {
+app.listen(8080, () => {
       console.log('server listening on port 8080')
 });
