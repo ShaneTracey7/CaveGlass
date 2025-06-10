@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/CaveGlass/static/css/main.c9b0dcc6.css",
-    "main.js": "/CaveGlass/static/js/main.2467cf7f.js",
+    "main.css": "/CaveGlass/static/css/main.6615764b.css",
+    "main.js": "/CaveGlass/static/js/main.c283a909.js",
     "static/media/cg-logo-1.png": "/CaveGlass/static/media/cg-logo-1.1e05864be7a942010f01.png",
     "static/media/goal-light.png": "/CaveGlass/static/media/goal-light.8d6b1c3335d4ddd4e791.png",
     "static/media/player-focus.png": "/CaveGlass/static/media/player-focus.9c5c06622d455b1f1708.png",
@@ -18,13 +18,15 @@
     "static/media/cog.svg": "/CaveGlass/static/media/cog.a609073d11f572e10e6fdbe23b69e31c.svg",
     "index.html": "/CaveGlass/index.html",
     "static/media/replay.svg": "/CaveGlass/static/media/replay.cd459519ef735c9c79cba46c5b93ea51.svg",
+    "static/media/left-arrow.svg": "/CaveGlass/static/media/left-arrow.505eb3549a2dd347bb416fd63c927b22.svg",
     "static/media/up-arrow.svg": "/CaveGlass/static/media/up-arrow.0092877aaaf18764c3a09fb68b5d62ea.svg",
     "static/media/down-arrow.svg": "/CaveGlass/static/media/down-arrow.e54a33207a41b70bdc8f5c70dadcbe20.svg",
-    "main.c9b0dcc6.css.map": "/CaveGlass/static/css/main.c9b0dcc6.css.map",
-    "main.2467cf7f.js.map": "/CaveGlass/static/js/main.2467cf7f.js.map"
+    "static/media/right-arrow.svg": "/CaveGlass/static/media/right-arrow.ef7037e25cb19fad09529277b54d17b3.svg",
+    "main.6615764b.css.map": "/CaveGlass/static/css/main.6615764b.css.map",
+    "main.c283a909.js.map": "/CaveGlass/static/js/main.c283a909.js.map"
   },
   "entrypoints": [
-    "static/css/main.c9b0dcc6.css",
-    "static/js/main.2467cf7f.js"
+    "static/css/main.6615764b.css",
+    "static/js/main.c283a909.js"
   ]
 }
