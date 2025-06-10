@@ -212,9 +212,9 @@ app.post("/", (req, res) => {
     
   });
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
 
-    /*
+    
     date = new Date();
     month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
     day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
@@ -238,16 +238,24 @@ app.get('/', (req, res) => {
         console.error('Error:', error);
         res.send('Error!')
     });
-    /*
+    
     fetch("https://api.nhle.com/stats/rest/en/players")
     .then((response) => response.json())
     .then((json) => console.log(json));
     
-   */
-})
+   
+})*/
 
-  //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
+ //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
   //was app.listen
-app.listen(8080, () => {
+/*app.listen(8080, () => {
       console.log('server listening on port 8080')
+});*/
+
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+
+ 
