@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import '../styles.css';
 import axios from 'axios';
+import leftArrow from '../pics/left-arrow.svg';
+import rightArrow from '../pics/right-arrow.svg';
 
 function Main(props)
 {
@@ -11,13 +13,20 @@ function Main(props)
     const [gameArr, setGameArr] = useState([]); 
     const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
-     
+    const [date, setDate] = useState(new Date());
+    
    //This function is called when component is create (called only once)
     useEffect(() => { 
 
-      apiGetGames();//getting today's game data from NHL api
-  
+      apiGetGames();
     }, []);
+
+    // Whenever date changes, fetch games for that date
+       useEffect(() => { 
+      
+      apiGetGames();
+    }, [date]);
+
 
     useEffect(() => {
       
@@ -97,7 +106,13 @@ function Main(props)
 
     isLoading.current = true;
 
-    axios.get(backendUrl).then((data) => {
+    axios.post(backendUrl, {
+            type: 'games',
+            date: date.toISOString().split('T')[0],
+          }, {
+            headers: {
+            'content-type': 'application/json'
+            }}).then((data) => {
       //this console.log will be in our frontend console
       console.log(data)
       //might crash if no games that day
@@ -199,8 +214,10 @@ function Main(props)
               <div className='home-mobile-info'>
                  <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
                  <div id='home-date-container'>
-                     <p id="home-date">{new Date().toDateString()}</p>
-                 </div>
+                    <img className="home-arrows" onClick={() => setDate(new Date(date.getTime() - 24 * 60 * 60 * 1000))} src={leftArrow} alt="previous"/>
+                    <p id="home-date">{date.toDateString()}</p>
+                    <img className="home-arrows" onClick={() => setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000))} src={rightArrow} alt="next"/>
+                    </div>
                </div>
             </div>
             {gameList}

@@ -57,6 +57,38 @@ app.post("/", (req, res) => {
                     res.send('Error!')
                 });
         }
+    else if(req.body.type == "games")
+    {
+        const date = new Date(req.body.date);
+        month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
+        day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
+        formattedDate = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
+        console.log(formattedDate)
+        //maybe add a timeout?
+                                                                    //today //2025-01-28
+        const apiUrl = String("https://api-web.nhle.com/v1/schedule/" + formattedDate); //YYYY-MM-DD
+        fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            //console.log(response.json());
+            return response.json();
+        })
+        .then(data => {
+            res.send(data)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            res.send('Error!')
+        });
+        /*
+        fetch("https://api.nhle.com/stats/rest/en/players")
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+        */
+    }
+
         /*
     else if(req.body.type == "pbp")
     {   let gameID = req.body.game;
@@ -171,21 +203,7 @@ app.post("/", (req, res) => {
                 res.send('Error!')
             });
         }
-    else if(req.body.type == "setKey")
-        {   
-            let key = Math.floor(Math.random() * (9998 - 1001 + 1)) + 1001;
-            //res.cookie('key', key);
-            //res.send('key has been set!');
-            //res.send(key);
-        }
-    else if(req.body.type == "checkKey")
-        {   
-            
-            res.cookie('key', key);
-            res.send('key has been set!');
-            //res.send(key);
-        }
-    
+  
     else
     {   
         console.log("error");
@@ -196,6 +214,7 @@ app.post("/", (req, res) => {
 
 app.get('/', (req, res) => {
 
+    /*
     date = new Date();
     month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
     day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
@@ -223,7 +242,8 @@ app.get('/', (req, res) => {
     fetch("https://api.nhle.com/stats/rest/en/players")
     .then((response) => response.json())
     .then((json) => console.log(json));
-    */
+    
+   */
 })
 
   //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues

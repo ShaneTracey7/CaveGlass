@@ -20,6 +20,7 @@
     outline: 10px solid rgb(67, 67, 241);
     opacity: 80%;
 }
+
 /* * * * * * * * * * * * * * * * * * * * * * * * Home.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 
 .home-mobile-info{
@@ -47,7 +48,7 @@
 .home-header-info{
     display:flex;
     flex-direction: row;
-    margin-left: calc(50% - 150px);
+    margin-left: auto;/*calc(50% - 150px);*/
     margin-right: auto;
     gap:50px;
 }
@@ -222,18 +223,38 @@
     margin-top: 10px;
     margin-bottom: 10px;
     width: fit-content;
-    background-color: rgba(221, 233, 244);
-    padding-left: 20px;
+    display:flex;
+    flex-direction: row;
+    gap:20px;
+    /* padding-left: 20px;
     padding-right: 20px;
     padding-top: 5px;
     padding-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 5px;*/
 }
+.home-arrows{
+    height: 50px;
+    width: auto;
+    margin: auto;
+}
+.home-arrows:hover{
+    background-color: rgba(128, 128, 128, 0.3);
+    border-radius: 50%;
+}
+
 #home-date{
     font-size: 2rem;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: black;
-    padding-bottom: 0;
+    width:fit-content;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    background-color: rgba(221, 233, 244);
+    margin-top: 0;
 }
 /* * * * * * * * * * * * * * * * * * * * * * * * PlayerHighlight.js Component * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -1886,6 +1907,8 @@ background-color: transparent;
     width: 300px;
     height: auto;
     padding-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
 }
 .cg-logo-small{
     width: 10%;
