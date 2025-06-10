@@ -61,7 +61,7 @@ app.post("/", (req, res) => {
     {
         const date = new Date(req.body.date);
         month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
-        day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
+        day_str = date.getDate() > 9 ? String(date.getDate()) : ("0" + String(date.getDate()));
         formattedDate = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
         console.log(formattedDate)
         //maybe add a timeout?
