@@ -13,7 +13,6 @@ function Main(props)
     const [gameArr, setGameArr] = useState([]); 
     const [gameList, setGameList] = useState(loadingSpinner); 
     const isLoading = useRef(true); //needed to create a loading state
-    const [date, setDate] = useState(new Date());
     
    //This function is called when component is create (called only once)
     useEffect(() => { 
@@ -25,7 +24,7 @@ function Main(props)
        useEffect(() => { 
       
       apiGetGames();
-    }, [date]);
+    }, [props.date]);
 
 
     useEffect(() => {
@@ -68,7 +67,6 @@ function Main(props)
         }
       });
 
-      //gameList = <div>{gameArr.map((game, index) => (<div className='gameCard'><p> {game.homeTeam.abbrev} vs. {game.awayTeam.abbrev}</p></div>))}</div>;
       let gL = <div className='gameList'> {gameArr.map((game, index) => (
         <div key={index} id="normal-gc" className={ (game.gameState == "FUT" || game.gameState == "PRE") ? "gameCardFUT" : "gameCard"} onClick={() => gameClick(index)}>
           {status[index]}
@@ -80,22 +78,12 @@ function Main(props)
         </div>))}
         </div>;
       
-        //isLoading.current = false; moved this
-      
       setGameList(gL);
     }
     else
     {
       let gL = <p id="player-highlight-message" > No Games Today</p> ;
       setGameList(gL);
-    /* setTimeout(() => {
-      if(isLoading.current)
-      {
-        setGameList(gL);
-        //isLoading.current = false; moved this
-      }
-    },2000)*/
-      
     }
   }
    console.log('in useeffect'); 
@@ -108,14 +96,13 @@ function Main(props)
 
     axios.post(backendUrl, {
             type: 'games',
-            date: date.toISOString().split('T')[0],
+            date: props.date.toISOString().split('T')[0],
           }, {
             headers: {
             'content-type': 'application/json'
             }}).then((data) => {
       //this console.log will be in our frontend console
       console.log(data)
-      //might crash if no games that day
       let temp = [];
       let games = data.data.gameWeek[0].games;
       games.forEach((element, index)=> {
@@ -127,19 +114,13 @@ function Main(props)
       });
 
       isLoading.current = false;
-      /*if(games.length === 0)
-      {
-        isLoading.current = false;
-      }
-      else
-      {
-        isLoading.current = true;
-      }*/
+      if (games.length == 0)
+        {
+          setGameArr([]) //may not be enough
+        }
+      
    })
-   /*setTimeout(() => {
-    //setShowGames((gameArr.length > 0));
-    console.log("Delayed for 1 seconds.");
-  }, 1000);*/
+   
   }
 
   function gameClick(index)
@@ -149,9 +130,6 @@ function Main(props)
     {
       console.log("hasn't started");
 
-      //only availible rn for testing
-     // props.setgame(gameArr[index]);
-     // props.setingame(true);
     }
     else // 'LIVE', 'FINAL', 'END' , 'CRIT' or etc
     {
@@ -189,6 +167,19 @@ function Main(props)
       return date_str;
     }
 
+  function leftClick()
+  {
+    console.log("left click");
+    setGameList(loadingSpinner);
+    props.setDate(new Date(props.date.getTime() - 24 * 60 * 60 * 1000))
+  }
+  function rightClick()
+  {
+    console.log("right click");
+    setGameList(loadingSpinner);
+    props.setDate(new Date(props.date.getTime() + 24 * 60 * 60 * 1000))
+  }
+
   const footer = <div id="home-footer">
                     <hr class="footer-line"/>
                     <a href='https://www.nhl.com'>
@@ -207,16 +198,15 @@ function Main(props)
                     <p id="footer-tag"> created by Shane T.</p>
                 </div>
 
-   /* <button className="main-button" onClick={apiGetGames}>Test Api call</button> */
     return(
         <div id="home-page">
           <div className='home-header-info'>
               <div className='home-mobile-info'>
                  <img className="cg-logo-1"  id="main-home-logo"src={ require("../pics/cg-logo-1.png")} alt="CaveGlass"/>
                  <div id='home-date-container'>
-                    <img className="home-arrows" onClick={() => setDate(new Date(date.getTime() - 24 * 60 * 60 * 1000))} src={leftArrow} alt="previous"/>
-                    <p id="home-date">{date.toDateString()}</p>
-                    <img className="home-arrows" onClick={() => setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000))} src={rightArrow} alt="next"/>
+                    <img className="home-arrows" onClick={leftClick} src={leftArrow} alt="previous"/>
+                    <p id="home-date">{props.date.toDateString()}</p>
+                    <img className="home-arrows" onClick={rightClick} src={rightArrow} alt="next"/>
                     </div>
                </div>
             </div>

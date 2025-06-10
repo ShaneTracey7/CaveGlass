@@ -6,7 +6,7 @@ function Summary(props) {
 
     //props.teamGameStats = [9] format: {category: , awayValue:, homeValue}] order: sog, faceoffWinningPctg, powerPlay, powerPlayPctg, pim, hits, blockedShots,giveaways,takeaways
         let loadingSpinner = <div class="loader"></div>;
-        //const [showGames, setShowGames] = useState(false); //if true score reaction is displayed,
+        
         const [statList, setStatList] = useState(loadingSpinner); //if true score reaction is displayed,
         const isLoading = useRef(true); //needed to create a loading state
         
@@ -79,13 +79,6 @@ function Summary(props) {
         let sL = <div class="loader"></div>;
         setStatList(sL);
 
-        /*setTimeout(() => {
-          if(isLoading.current)
-          {
-            setStatList(sL);
-            isLoading.current = false;
-          }
-        },2000)*/
       }
     }
        console.log('in useeffect'); 

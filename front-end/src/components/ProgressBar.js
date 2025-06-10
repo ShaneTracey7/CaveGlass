@@ -16,7 +16,6 @@ function ProgressBar(props) {
         colorFalse = 'red';
     }
 
-    /* <p>{props.ou + " " + props.line}</p>*/
      return (
         <div className='progress-bar-container-with-label'>
             <p>{props.ou + " " + props.line}</p>

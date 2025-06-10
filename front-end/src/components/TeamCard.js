@@ -57,22 +57,6 @@ function TeamCard(props) {
     const statArr = [];
     const customStatArr = [];
 
-    /*
-    for(let i = 0; i < stats.length; i++)
-    {
-        if(stats[i][1] == 0) // display style is 'total'
-        {
-            statArr.push( <div className='player-card-container'><p className='player-card-stat'> {stats[i][0] + ":"}</p></div>);
-        }     
-    }
-    for(let i = 0; i < stats.length; i++)
-    {
-        if(stats[i][1] != 0) // display style is 'custom'
-        {
-            statArr.push( <div className='player-card-line-container'><p className='player-card-stat'> {stats[i][0]}</p> <ProgressBar value={Math.round(0.75 * 10) / 10} line={Math.round(stats[i][1] * 10) / 10} ou={stats[i][2]}></ProgressBar></div> );
-        }
-    }
-        */
        const totalStats = [];
        const customStats = [];
     for(let i = 0; i < stats.length; i++)
@@ -93,12 +77,6 @@ function TeamCard(props) {
         let col3 = [];
         //need to go from here
             
-            /*
-            for(let i = 0; i < totalStats.length; i++)
-                {
-                    let temp = <p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>
-                    statArr.push(temp);
-                }*/
             if(totalStats.length > 0)
             {
                 if(totalStats.length == 1)
@@ -129,44 +107,6 @@ function TeamCard(props) {
                 statArr.push(temp2);
                 statArr.push(temp3);
             }
-        /*
-        if(totalStats.length % 2 == 0) //even number
-        {
-            for(let i = 0; i < totalStats.length; i+=2)
-                {
-                    let temp = <div className='player-card-container'>
-                                <p className='player-card-stat'> {totalStats[i][0] + ": "+ totalStats[i][3]}</p>
-                                <p className='player-card-stat'> {totalStats[i+1][0] + ": "+ totalStats[i+1][3]}</p>
-                            </div>;
-                    statArr.push(temp);
-                }
-        }
-        else //odd number
-        {
-            let i = 0;
-            let temp;
-            while( i < totalStats.length)
-                {
-                    if(i == 0)
-                    {
-                        temp = <div className='player-card-container'>
-                                    <p className='player-card-stat'> {totalStats[i][0] + ": " + totalStats[i][3]}</p>
-                                </div>;
-                        statArr.push(temp);
-                        i++;
-                    }
-                    else
-                    {
-                        temp = <div className='player-card-container'>
-                                <p id='player-card-stat-left' className='player-card-stat'> {totalStats[i][0] + ": " + totalStats[i][3]}</p>
-                                <p id='player-card-stat-right' className='player-card-stat'> {totalStats[i+1][0] + ": " + totalStats[i+1][3]}</p>
-                            </div>;
-                        statArr.push(temp);
-                        i+=2;
-                    }
-                }
-        }
-        */
 
         //adding custom stats
     if(customStats.length > 0)
@@ -186,12 +126,12 @@ function TeamCard(props) {
                     }
                 }
             }
-                        //style={{backgroundImage: "url(" + props.teamInfo.logo + ")"}}
+                    
     return (
         <div className='PlayerCard1' style={props.darkMode ? {border: '4px solid white'}: {border: '4px solid black'}} id={"color-" + props.teamInfo.abbrev}>{/*{props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} */}
             
 
-            <div id="player-card-layer2" className='PlayerCard'> {/*{props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} */}
+            <div id="player-card-layer2" className='PlayerCard'> 
                 
                 <div className='bg-player-card-text-container-team'>
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
@@ -199,7 +139,7 @@ function TeamCard(props) {
                     <p id="bg-player-card-text">{props.teamInfo.placeName.default}</p>
                 </div>
 
-                <div id="player-card-layer3"className='PlayerCard'> {/*{props.darkMode ? 'PlayerCard-dark': 'PlayerCard'} */}
+                <div id="player-card-layer3"className='PlayerCard'> 
                     <div className='player-card-stat-container'>
                         <div className='player-card-normal-stat-container'>
                             {statArr}

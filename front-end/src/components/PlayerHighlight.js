@@ -509,7 +509,6 @@ function PlayerHighlight(props)
             setStatListCap((statListCap+1));
         }
         //add to list
-        //let temp = customStats;
         const temp = [...customStats]; // use effect should recognize now
         temp.push([stat,0,"Over",0,false]); //on add need to update custom stats array to see if there are any 'line's set (non total display types)
         setCustomStats(temp);
@@ -596,25 +595,7 @@ function PlayerHighlight(props)
             {buttons}
         </div>
     }
-    /*let playerForm = '';
-    if(showForm)
-    {*/
-   /*
-        const playerOptions = [];
-        let playerDesc;
-        for (let i = 0; i < props.roster.length; i++) 
-        {   
-            playerDesc = props.roster[i].firstName.default + " " + props.roster[i].lastName.default + " #" + props.roster[1].sweaterNumber;
-            playerOptions.push( <option className="player-option" key={i} value={props.roster[i].playerId}><div><p>{playerDesc}</p><img className='player-option-img' src={props.roster[i].headshot} alt=""/></div></option>);
-        }
-        
-        let playerForm = <form className='player-form' style={{display: showForm ? "block": "none"}}>
-            <img id="player-form-cancel"  onClick={() => {setShowForm(false)}} src={redx} alt="X"/>
-            <select id="player-select">
-                {playerOptions}
-            </select>
-        </form>
-                */
+   
         const playerOptions = [];
         let playerDesc;
         for (let i = 0; i < props.roster.length; i++) 
@@ -710,28 +691,10 @@ function PlayerHighlight(props)
             </div>
             
             <div id="player-form-add" onClick={() => {addTeam(selectedTeam[0] == props.teamsInfo[0].id ? props.teamsInfo[0] : props.teamsInfo[1])}}>Add</div>
-            {/*<p>{"statlistcap: " + statListCap}</p>*/} {/* only here for testing*/}
+            
         </form>;
 
-   /*<div class="stat-select-container">
-                <div class="player-select-selected" onClick={() => {setShowStatOptions(true)}} > Select Stats </div>
-                <div class="player-select" style={{display: showStatOptions ? "block": "none"}}>
-                    {statOptions}
-                </div>
-            </div>
-            */
-
-    /*
-    <div class="toggle-switch-container">
-
-                <p>Player Info:</p>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="player-card-style-checkbox" checked={checked} onClick={()=>{ setChecked(!checked)}}/>
-                    <span class="slider"></span>
-                </label>
-                <p>{checked ? 'Custom': 'Default' }</p>
-            </div>
-            */
+   
 
    // stuff for player-select
    // Get all custom select elements

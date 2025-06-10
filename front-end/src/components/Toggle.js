@@ -55,7 +55,6 @@ function Toggle(props) {
         if(value == 'Over' || value == 'Under')
         {
             const temp = [...props.statState[0]]; // use effect should recognize now
-            //temp = props.statState[0];
             temp[props.index][2] = value; //changes value to line input (was [2])
             props.statState[1](temp);
             setOUState(value);
@@ -64,7 +63,6 @@ function Toggle(props) {
         else //idk what scenario this would be invoked
         {
             const temp = [...props.statState[0]]; // use effect should recognize now
-            //temp = props.statState[0];
             temp[props.index][1] = value; //changes value to line input
             props.statState[1](temp);
         }
@@ -117,7 +115,7 @@ function Toggle(props) {
                 </div>
             </div>
 
-        textBefore = "Display Style: ";// + props.index + " "; //new for testing
+        textBefore = "Display Style: ";
         textAfterTrue = "Line:";
         textAfterFalse = "Total";
 
@@ -131,14 +129,9 @@ function Toggle(props) {
         {
             if(props.cap[0] <= 10 || checked)
             {
-                //let temp = props.statState[0];
                 const temp = [...props.statState[0]];
                 temp[props.index][1] = 0; //changes value to line input back to default
                 props.statState[1](temp);
-
-                /*const temp2 = [...props.statState[0]]; // use effect should recognize now
-                temp2[props.index][4] = !checked; //keeps toggle state consistent
-                props.statState[1](temp2);*/
 
                 setChecked(!checked);
 

@@ -11,6 +11,7 @@ function App() {
   
   const [inGame, setInGame] = useState(false); //if true score reaction is displayed,
   const [game, setGame] = useState([]); 
+  const [date, setDate] = useState(new Date()); //date state variable, used to fetch games for that date
 
   let display;
   
@@ -27,7 +28,7 @@ function App() {
           }
           else
           {
-            display = <Home setgame={setGame} setingame={setInGame}/>;
+            display = <Home date={date} setDate={setDate} setgame={setGame} setingame={setInGame}/>;
           }
       }
           

@@ -61,7 +61,7 @@ app.post("/", (req, res) => {
     {
         const date = new Date(req.body.date);
         month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
-        day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
+        day_str = date.getDate() > 9 ? String(date.getDate()) : ("0" + String(date.getDate()));
         formattedDate = String(date.getFullYear()) + '-' + month_str + '-' +  day_str;
         console.log(formattedDate)
         //maybe add a timeout?
@@ -212,9 +212,9 @@ app.post("/", (req, res) => {
     
   });
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
 
-    /*
+    
     date = new Date();
     month_str = date.getMonth() > 8 ? String(date.getMonth() + 1) : ("0" + String(date.getMonth() + 1));
     day_str = date.getDate() > 8 ? String(date.getDate()) : ("0" + String(date.getDate()));
@@ -238,16 +238,24 @@ app.get('/', (req, res) => {
         console.error('Error:', error);
         res.send('Error!')
     });
-    /*
+    
     fetch("https://api.nhle.com/stats/rest/en/players")
     .then((response) => response.json())
     .then((json) => console.log(json));
     
-   */
-})
+   
+})*/
 
-  //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
+ //the port (8080) should prpbs be set to a env variable in render down the road as it may cause issues
   //was app.listen
-server.listen(8080, () => {
+/*app.listen(8080, () => {
       console.log('server listening on port 8080')
+});*/
+
+const PORT = 8080;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+
+ 
